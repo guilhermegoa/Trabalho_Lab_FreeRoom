@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
-import ThemeContainer from './theme/ThemeContainer';
+import ThemeContainer from './style/theme/ThemeContainer';
 
 import Routes from './routes';
 

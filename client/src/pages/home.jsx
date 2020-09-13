@@ -1,15 +1,33 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
-import { Text, Button } from '@chakra-ui/core';
 
-function Home({ history }) {
+import { Text, Button, List, ListItem, Flex } from '@chakra-ui/core';
+import api from '../services/api';
+
+const Home = ({ history }) => {
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    if(!users){
+      api.get('/users').then(res => setUsers(res.data)) ;  
+    }
+  })
+
   return (
     <>
-      <Text fontSize="xl">hello world</Text>
+    <Flex justify="center">
+      <Text fontSize="xl">Usuarios</Text>
+    </Flex>
+    <Flex direction="column" align="center">
+      <List styleType="disc">
+        {users && users.map(user =>   
+        <ListItem key={user.id} >Email: {user.email}</ListItem>) }
+      </List>
       <Button onClick={() => history.push('/paginatest')}>
-        troca de pagina
+        Teste de cadastro
       </Button>
+    </Flex>
     </>
   );
 }
