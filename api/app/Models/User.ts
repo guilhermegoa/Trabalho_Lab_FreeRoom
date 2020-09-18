@@ -12,6 +12,18 @@ export default class User extends BaseModel {
   @column()
   public password: string
 
+  @column()
+  public name: string
+
+  @column()
+  public nick: string
+
+  @column()
+  public avatar: string
+
+  @column({columnName: 'bio'})
+  public biografio: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

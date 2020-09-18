@@ -10,6 +10,10 @@ export default class UsersSchema extends BaseSchema {
       table.string('password', 180).notNullable()
       table.string('remember_me_token').nullable()
       table.timestamps(true)
+      table.string('name').notNullable()
+      table.string('nick').defaultTo(null)
+      table.string('avatar').defaultTo(null)
+      table.string('bio').defaultTo(null)
     })
   }
 

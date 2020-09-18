@@ -33,8 +33,13 @@ export default class AuthController {
     const user = new User()
     user.email = userDetails.email
     user.password = userDetails.password
+    user.name = request.input('name')
 
-    await user.save()
+    try {
+      await user.save()
+    } catch (error) {
+      throw new Error('Ocorreu algum problema ao salvar o usuário')
+    }
 
     response.json('Usuário criado com sucesso!!')
   }
@@ -45,11 +50,22 @@ export default class AuthController {
 
     let token
     try {
-      token = await auth.use('api').attempt(email, password)
+      token = await auth.use('api')
+        .attempt(email, password, {expiresIn: '1 days'})
     } catch (error) {
-      throw new Error('Erro ao obter token')
+      throw new Error('Aconteceu algun erro ao tentar logar.Tente novamente!!')
     }
 
     return token.toJSON()
+  }
+
+  public async logout ({ auth, response }: HttpContextContract) {
+    try {
+      await auth.use('api').logout()
+    } catch (error) {
+      throw new Error('Error ao tentar deslogar')
+    }
+
+    response.json('Saiu com sucesso')
   }
 }
