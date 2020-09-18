@@ -24,5 +24,8 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
+Route.post('/register', 'AuthController.register')
+Route.post('/login' , 'AuthController.login')
+
 Route.get('users', 'UsersController.index')
 Route.post('store', 'UsersController.store')
