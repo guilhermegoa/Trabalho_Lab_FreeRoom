@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="FreeRoom" />
+    <title>Freeroom App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  <script src="/static/js/bundle.js"></script><script src="/static/js/1.chunk.js"></script><script src="/static/js/main.chunk.js"></script><script src="/main.0224c08d2039250d1def.hot-update.js"></script></body>
+</html>
