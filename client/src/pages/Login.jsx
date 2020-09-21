@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
+import { connect } from 'react-redux';
 import {
   Flex,
   Heading,
@@ -15,10 +15,15 @@ import {
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/core';
+import { userLogin } from '../redux/ducks/user';
 import LoginBackground from '../components/LoginBackground/index';
+import Alert, { Types } from '../components/Alert/index';
 
-function Login({ history }) {
+function Login({ history, login }) {
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+
   const handleClick = () => setShow(!show);
 
   const formik = useFormik({
@@ -33,8 +38,16 @@ function Login({ history }) {
       password: Yup.string()
         .required('Necessario preencher este campo.'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      try {
+        await login(values);
+        history.push('/main');
+      } catch (error) {
+        setIsShowAlert(true);
+      } finally {
+        setIsLoading(false);
+      }
     },
   });
 
@@ -46,12 +59,15 @@ function Login({ history }) {
         justifyContent="end"
         height="100%"
       >
+        <Alert
+          show={isShowAlert}
+          setIsShowAlert={setIsShowAlert}
+          status={Types.ERROR}
+          title="Error ao fazer login"
+          message="Tente novamente"
+        />
         <PseudoBox
-          borderRadius="50%"
-          variant="outline"
-          border="none"
-          top="16px"
-          left="-120px"
+          marginRight="304px"
           onClick={() => history.push('/')}
         >
           <Icon
@@ -78,7 +94,7 @@ function Login({ history }) {
           alignItems="center"
           marginTop="24px"
         >
-          <form onSubmit={formik.handleSubmit}>
+          <form autoComplete="off" onSubmit={formik.handleSubmit}>
             <FormControl
               minHeight="70px"
               isInvalid={formik.touched.email && formik.errors.email}
@@ -92,6 +108,11 @@ function Login({ history }) {
                   variant="flushed"
                   placeholder="E-mail"
                   minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+                  id="email"
+                  name="email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.name}
                 />
               </InputGroup>
               <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -110,6 +131,11 @@ function Login({ history }) {
                   color="white"
                   variant="flushed"
                   minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+                  id="password"
+                  name="password"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.name}
                 />
                 <InputRightElement>
                   {show
@@ -124,6 +150,8 @@ function Login({ history }) {
               marginTop="32px"
               variantColor="blue"
               minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+              isLoading={isLoading}
+              loadingText="Submitting"
             >
               Entrar
             </Button>
@@ -134,4 +162,8 @@ function Login({ history }) {
   );
 }
 
-export default Login;
+const mapDispatchToProps = {
+  login: userLogin,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
