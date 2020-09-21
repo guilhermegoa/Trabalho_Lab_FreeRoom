@@ -11,6 +11,7 @@ import {
   Icon,
   InputLeftElement,
   Button,
+  PseudoBox,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/core';
@@ -53,10 +54,7 @@ function CreateAccount({ history }) {
         justifyContent="end"
         height="100%"
       >
-        <Button
-          borderRadius="50%"
-          variant="outline"
-          border="none"
+        <PseudoBox
           top="16px"
           left="-120px"
           onClick={() => history.push('/')}
@@ -67,7 +65,7 @@ function CreateAccount({ history }) {
             height="56px"
             width="200px"
           />
-        </Button>
+        </PseudoBox>
         <Flex flexDirection="column" alignItems="center">
           <Heading
             as="h1"
