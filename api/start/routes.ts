@@ -25,11 +25,8 @@ Route.post('/login', 'AuthController.login')
 
 Route.group(() => {
   Route.get('/users', 'UsersController.index')
-
-  Route.get('/logout', 'AuthController.logout')
   Route.get('/logout' , 'AuthController.logout')
   Route.get('/checkToken' , 'AuthController.checkToken')
-
 }).middleware('auth:api')
 
 Route.get('/users/:user_id', 'UsersController.show')
