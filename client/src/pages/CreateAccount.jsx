@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
 import {
   Flex,
   Heading,
@@ -11,13 +10,19 @@ import {
   Icon,
   InputLeftElement,
   Button,
+  PseudoBox,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/core';
+import api from '../services/api';
 import LoginBackground from '../components/LoginBackground/index';
+import Alert, { Types } from '../components/Alert/index';
 
 function CreateAccount({ history }) {
   const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+
   const handleClick = () => setShow(!show);
 
   const formik = useFormik({
@@ -25,7 +30,7 @@ function CreateAccount({ history }) {
       name: '',
       email: '',
       password: '',
-      confirmPassword: '',
+      password_confirmation: '',
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -36,12 +41,20 @@ function CreateAccount({ history }) {
         .required('Necessario preencher este campo.'),
       password: Yup.string()
         .required('Necessario preencher este campo.'),
-      confirmPassword: Yup.string()
+      password_confirmation: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Senhas não são iguais.')
         .required('Necessario preencher este campo.'),
     }),
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      setIsLoading(true);
+      try {
+        await api.post('/register', values);
+        history.push('/login');
+      } catch (error) {
+        setIsShowAlert(true);
+      } finally {
+        setIsLoading(false);
+      }
     },
   });
 
@@ -53,12 +66,15 @@ function CreateAccount({ history }) {
         justifyContent="end"
         height="100%"
       >
-        <Button
-          borderRadius="50%"
-          variant="outline"
-          border="none"
-          top="16px"
-          left="-120px"
+        <Alert
+          show={isShowAlert}
+          setIsShowAlert={setIsShowAlert}
+          status={Types.ERROR}
+          title="Error ao criar cadastro."
+          message="Tente novamente"
+        />
+        <PseudoBox
+          marginRight="304px"
           onClick={() => history.push('/')}
         >
           <Icon
@@ -67,7 +83,7 @@ function CreateAccount({ history }) {
             height="56px"
             width="200px"
           />
-        </Button>
+        </PseudoBox>
         <Flex flexDirection="column" alignItems="center">
           <Heading
             as="h1"
@@ -84,14 +100,14 @@ function CreateAccount({ history }) {
           justifyContent="center"
           alignItems="center"
         >
-          <form onSubmit={formik.handleSubmit}>
+          <form autoComplete="off" onSubmit={formik.handleSubmit}>
             <FormControl
               minHeight="70px"
               isInvalid={formik.touched.name && formik.errors.name}
             >
               <InputGroup size="md">
                 <InputLeftElement>
-                  <Icon name="at-sign" color="blue.500" />
+                  <Icon name="info-outline" color="blue.500" />
                 </InputLeftElement>
                 <Input
                   color="white"
@@ -159,38 +175,40 @@ function CreateAccount({ history }) {
             </FormControl>
             <FormControl
               minHeight="70px"
-              isInvalid={formik.touched.confirmPassword && formik.errors.confirmPassword}
+              isInvalid={formik.touched.password_confirmation
+                && formik.errors.password_confirmation}
             >
               <InputGroup size="md">
                 <InputLeftElement>
                   <Icon name="lock" color="blue.500" />
                 </InputLeftElement>
                 <Input
-                  type={show ? 'text' : 'password'}
+                  type="password"
                   placeholder="* Confirmar senha"
                   color="white"
                   variant="flushed"
                   minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
-                  id="confirmPassword"
-                  name="confirmPassword"
+                  id="password_confirmation"
+                  name="password_confirmation"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.confirmPassword}
+                  value={formik.values.password_confirmation}
                 />
               </InputGroup>
-              <FormErrorMessage>{formik.errors.confirmPassword}</FormErrorMessage>
+              <FormErrorMessage>{formik.errors.password_confirmation}</FormErrorMessage>
             </FormControl>
             <Button
               type="submit"
               marginTop="32px"
               variantColor="blue"
               minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+              isLoading={isLoading}
+              loadingText="Cadastrando"
             >
               Cadastrar
             </Button>
           </form>
         </Flex>
-
       </Flex>
     </LoginBackground>
   );
