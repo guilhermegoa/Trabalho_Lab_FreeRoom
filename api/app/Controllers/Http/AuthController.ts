@@ -9,7 +9,7 @@ export default class AuthController {
     try {
       token = await auth.use('api')
         .attempt(email, password, {expiresIn: '1 days'})
-        .then(data => ({ type: data.type, token: data.token }))
+        .then(data => data.token)
     } catch (error) {
       throw new Error('Aconteceu algun erro ao tentar logar.Tente novamente!!')
     }
@@ -24,6 +24,10 @@ export default class AuthController {
       throw new Error('Error ao tentar deslogar')
     }
 
-    response.json('Saiu com sucesso')
+    response.status(200)
+  }
+
+  public async checkToken () {
+    return true
   }
 }
