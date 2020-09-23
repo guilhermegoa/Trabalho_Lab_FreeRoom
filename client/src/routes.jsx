@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Cadastrar from './pages/CreateAccount';
 import Main from './pages/Main';
+import Community from './pages/Community';
 
 const Routes = () => (
   <BrowserRouter>
@@ -14,6 +15,7 @@ const Routes = () => (
       <Route exact path="/login" component={Login} />
       <Route exact path="/cadastrar" component={Cadastrar} />
       <PrivateRoute exact path="/main" component={Main} />
+      <Route exact path="/communities/:id" component={Community} />
     </Switch>
   </BrowserRouter>
 );
