@@ -1,7 +1,8 @@
-// import { combineReducers } from 'redux';
+import { combineReducers } from 'redux';
 
 import user from './user';
+import community from './community'
 
-// const rootReducers = combineReducers(user);
+const rootReducers = combineReducers({ user, community });
 
-export default user;
+export default rootReducers;
