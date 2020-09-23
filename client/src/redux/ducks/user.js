@@ -1,4 +1,5 @@
 import api from '../../services/api';
+import { setToken, clearToken } from '../../services/auth';
 
 // Action Types
 
@@ -11,7 +12,6 @@ export const Types = {
 
 const initialState = {
   isLogged: false,
-  token: null,
   user: {},
 };
 
@@ -21,7 +21,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLogged: true,
-        token: action.payload,
       };
     case Types.LOGOUT:
       return { ...initialState };
@@ -32,15 +31,23 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 
-const loginUser = (data) => ({ type: Types.LOGIN, payload: data });
+const loginUser = () => ({ type: Types.LOGIN });
 
 const logoutUser = () => ({ type: Types.LOGOUT });
 
 // Thunk
 export const userLogin = (dataLogin) => (dispatch) => api
   .post('/login', dataLogin)
-  .then(({ data }) => dispatch(loginUser(data)));
+  .then(({ data }) => {
+    setToken(data);
+    dispatch(loginUser());
+  });
 
-export const UserLogout = () => (dispatch, state) => api
-  .get('/logout', state.token)
-  .then(dispatch(logoutUser));
+export const userLogout = () => (dispatch) => api
+  .get('/logout')
+  .then(() => {
+    clearToken();
+    dispatch(logoutUser);
+  });
+
+export const userLogged = () => (dispatch) => dispatch(loginUser);
