@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 
+import Loading from '../components/Loading/index'
+
 import { fetchCommunity } from '../redux/ducks/community'
 
 class Community extends Component {
@@ -15,7 +17,7 @@ class Community extends Component {
       community ?
         <h1>
           comunidade {community.name}
-        </h1> : <h1>loading</h1>
+        </h1> : <Loading></Loading>
     )
   }
 }
