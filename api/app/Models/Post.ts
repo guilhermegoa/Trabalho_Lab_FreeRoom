@@ -30,6 +30,9 @@ export default class Post extends BaseModel {
 
   @column()
   public likes: number
+  
+  @column()
+  public unlikes: number
 
   @column()
   public comments: number

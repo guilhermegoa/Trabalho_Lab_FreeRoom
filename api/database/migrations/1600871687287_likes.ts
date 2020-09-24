@@ -6,6 +6,7 @@ export default class Likes extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
+      table.boolean('is_like').notNullable()
       table
         .integer('user_id')
         .notNullable()

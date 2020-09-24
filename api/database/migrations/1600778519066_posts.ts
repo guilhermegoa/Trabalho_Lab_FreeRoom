@@ -11,6 +11,7 @@ export default class Posts extends BaseSchema {
       table.string('title', 255).notNullable()
       table.string('content').notNullable()
       table.integer('likes').defaultTo(0)
+      table.integer('unlikes').defaultTo(0)
       table.integer('comments').defaultTo(0)
       table.timestamps(true)
     })
