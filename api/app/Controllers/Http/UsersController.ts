@@ -60,7 +60,7 @@ export default class UsersController {
   }
 
   public async show ({ params }: HttpContextContract) {
-    const { user_id : string } = params
+    const { user_id } = params
     const user = User.query().where('id', user_id).preload('posts')
     return user
   }
