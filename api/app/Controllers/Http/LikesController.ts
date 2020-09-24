@@ -14,7 +14,11 @@ export default class LikesController {
       ])
 
       if (!user_id || !post_id || is_like === undefined || is_like === null)
-        return response.status(400)
+        return response.status(400).json(
+          `${post_id ? '' : 'missing post_id\n'}
+          ${user_id ? '' : 'missing user_id\n'}
+          ${is_like ? '' : 'missing is_like\n'}`
+        )
 
       const likes = await Like.query().where({ user_id, post_id, is_like })
 
@@ -126,7 +130,11 @@ export default class LikesController {
     try {
       const { user_id, post_id } = params
 
-      if (!user_id || !post_id) return response.status(400)
+      if (!user_id || !post_id)
+        return response.status(400).json(
+          `${post_id ? '' : 'missing post_id\n'}
+        ${user_id ? '' : 'missing user_id\n'}`
+        )
 
       const like = await Like.query().where({ user_id, post_id }).first()
 
