@@ -57,7 +57,15 @@ class Community extends Component {
   showModal = () =>
     this.setState({ modalVisible: true })
 
-  hideModal = () => this.setState({ modalVisible: false })
+  hideModal = () => {
+    this.setState({
+      modalVisible: false,
+      title: "",
+      content: "",
+      picture: null,
+      picture_name: "Nenhuma imagem escolhida"
+    })
+  }
 
   redirectToLogin = () => this.props.history.push('/login')
 
@@ -112,7 +120,7 @@ class Community extends Component {
         <Modal blockScrollOnMount={false} isOpen={this.state.modalVisible} onClose={this.hideModal}>
           <ModalOverlay />
           <ModalContent >
-            <ModalHeader>Criar Post</ModalHeader>
+            <ModalHeader>Criar Post na comunidade "{community.name}"</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
 

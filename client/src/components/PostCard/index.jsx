@@ -4,7 +4,7 @@ import {
   Box, Tag, Avatar, Image,
 } from '@chakra-ui/core';
 
-import { MdFavorite, MdModeComment } from 'react-icons/md';
+import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
 function PostCard({ post, image }) {
   const property = {
@@ -12,6 +12,7 @@ function PostCard({ post, image }) {
     content: post.content,
     created: post.created_data,
     likes: 0,
+    dislikes: 0,
     comments: 0,
     user: post.user ? post.user.name : 'Desconhecido',
     image_url: image,
@@ -44,12 +45,15 @@ function PostCard({ post, image }) {
             textTransform="uppercase"
             ml="2"
           >
+            <Box display="inline" mr="3px" size="14px" as={MdThumbUp} color="purple.800" />
             {property.likes}
-            {' '}
-            <Box display="inline" size="14px" as={MdFavorite} color="purple.800" />
+
+            <Box display="inline" mr="3px" ml="10px" size="14px" as={MdThumbDown} color="purple.800" />
+            {property.dislikes}
+
+            <Box display="inline" mr="3px" ml="10px" size="14px" as={MdModeComment} color="purple.800" />
             {property.comments}
-            {' '}
-            <Box display="inline" size="14px" as={MdModeComment} color="purple.800" />
+
           </Box>
         </Box>
 
