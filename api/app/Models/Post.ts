@@ -26,6 +26,9 @@ export default class Post extends BaseModel {
   @column()
   public comments: number
 
+  @column()
+  public image_url: string
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

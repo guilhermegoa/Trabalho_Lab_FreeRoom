@@ -1,29 +1,34 @@
-import React from 'react'
+import React from 'react';
 
-import { Box, Tag, Avatar } from '@chakra-ui/core'
+import {
+  Box, Tag, Avatar, Image,
+} from '@chakra-ui/core';
 
-import { MdFavorite, MdModeComment } from "react-icons/md"
+import { MdFavorite, MdModeComment } from 'react-icons/md';
 
-function PostCard({ post }) {
-
+function PostCard({ post, image }) {
   const property = {
     title: post.title,
     content: post.content,
     created: post.created_data,
     likes: 0,
     comments: 0,
-    user: post.user ? post.user.name : "Desconhecido"
-  }
+    user: post.user ? post.user.name : 'Desconhecido',
+    image_url: image,
+  };
 
   return (
     <Box borderWidth="1px" rounded="lg" overflow="hidden">
-      {/* <Image src={property.imageUrl} alt={property.imageAlt} /> */}
+
+      {property.image_ulr
+        ? <Image src={property.image_url} alt={property.title} />
+        : <></>}
 
       <Box p="6">
         <Box d="flex" alignItems="baseline">
           <Tag variantColor="purple" rounded="full">
             <Avatar
-              src={property.image ? property.image : ""}
+              src={property.image ? property.image : ''}
               size="xs"
               name={property.user}
               ml={-1}
@@ -39,8 +44,12 @@ function PostCard({ post }) {
             textTransform="uppercase"
             ml="2"
           >
-            {property.likes} <Box display="inline" size="14px" as={MdFavorite} color="purple.800" />
-            {property.comments} <Box display="inline" size="14px" as={MdModeComment} color="purple.800" />
+            {property.likes}
+            {' '}
+            <Box display="inline" size="14px" as={MdFavorite} color="purple.800" />
+            {property.comments}
+            {' '}
+            <Box display="inline" size="14px" as={MdModeComment} color="purple.800" />
           </Box>
         </Box>
 
@@ -67,7 +76,7 @@ function PostCard({ post }) {
 
       </Box>
     </Box>
-  )
+  );
 }
 
-export default PostCard
+export default PostCard;

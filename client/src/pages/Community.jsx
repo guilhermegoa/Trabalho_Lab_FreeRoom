@@ -3,14 +3,6 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import api from "../services/api"
 
-// import { Text } from "@chakra-ui/core";
-
-import Loading from '../components/Loading/index'
-import PostList from '../components/PostList/index'
-import ButtonCreatePost from '../components/ButtonCreatePost/index'
-
-import { fetchCommunity } from '../redux/ducks/community'
-
 import {
   Modal,
   ModalOverlay,
@@ -26,6 +18,15 @@ import {
   Textarea
 } from "@chakra-ui/core";
 
+// import { Text } from "@chakra-ui/core";
+import ImageUploader from 'react-images-upload';
+
+import Loading from '../components/Loading/index'
+import PostList from '../components/PostList/index'
+import ButtonCreatePost from '../components/ButtonCreatePost/index'
+
+import { fetchCommunity } from '../redux/ducks/community'
+
 class Community extends Component {
   constructor(props) {
     super(props)
@@ -33,6 +34,8 @@ class Community extends Component {
       modalVisible: false,
       title: "",
       content: "",
+      picture: null,
+      picture_name: "Nenhuma imagem escolhida"
     }
   }
 
@@ -43,6 +46,10 @@ class Community extends Component {
   handleChangeTitle = event => this.setState({ title: event.target.value });
   handleChangeContent = event => this.setState({ content: event.target.value });
 
+  onDrop = picture =>
+    this.setState({ picture, picture_name: picture[0].name })
+
+
   showModal = () =>
     this.setState({ modalVisible: true })
 
@@ -52,7 +59,26 @@ class Community extends Component {
 
   sendPost = async () => {
     if (this.state.title && this.state.content) {
-      const data = { title: this.state.title, content: this.state.content }
+
+      let url = null
+
+      if (this.state.picture) {
+        const dataFile = new FormData()
+        console.log('State = ', this.state)
+        dataFile.append('file', this.state.picture[0])
+        dataFile.append('upload_preset', 'freeroom')
+
+        const res = await fetch("https://api.cloudinary.com/v1_1/matheusfm/image/upload", {
+          method: "POST",
+          body: dataFile
+        })
+
+        const file = await res.json()
+        url = file.url
+      }
+
+      const data = { title: this.state.title, content: this.state.content, image_url: url }
+
       try {
         await api.post(`/posts/1/create/${this.props.match.params.id}`, data)
         console.log(this.props)
@@ -74,7 +100,7 @@ class Community extends Component {
     return (
       community ? (<>
         <PostList element={community}></PostList>
-        <div onClick={this.props.user.isLogged ? this.showModal : this.redirectToLogin}>
+        <div onClick={this.props.user.isLogged ? this.showModal : this.showModal /*this.redirectToLogin*/}>
           <ButtonCreatePost ></ButtonCreatePost>
         </div>
         <Modal blockScrollOnMount={false} isOpen={this.state.modalVisible} onClose={this.hideModal}>
@@ -90,11 +116,25 @@ class Community extends Component {
                   onChange={this.handleChangeTitle} focusBorderColor="purple.500" placeholder="Digite um título..." />
               </FormControl>
 
-              <FormControl mt={4} isRequired>
+              <FormControl mt={4} mb={4} isRequired>
                 <FormLabel>Conteúdo</FormLabel>
                 <Textarea value={this.state.content}
                   onChange={this.handleChangeContent} focusBorderColor="purple.500" placeholder="Digite o seu texto" />
               </FormControl>
+
+              {/* <input type="file" name="file" placeholder="Upload image" onChange={this.onImage} /> */}
+              <FormLabel>{this.state.picture_name}</FormLabel>
+              <ImageUploader
+                withIcon={true}
+                buttonText='Escolher Imagem'
+                onChange={this.onDrop}
+                imgExtension={['.jpg', '.jpeg', '.png', '.gif']}
+                maxFileSize={5242880}
+                fileTypeError='Esse tipo de arquivo não é permitido'
+                fileSizeError='Esse arquivo é muito grande'
+                label='Tamanho máximo: 5mb - Arquivos: jpg | png | gif'
+                singleImage={true}
+              />
 
             </ModalBody>
             <ModalFooter>
