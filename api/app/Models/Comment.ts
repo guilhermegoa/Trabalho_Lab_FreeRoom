@@ -1,20 +1,20 @@
-import Post from 'App/Models/Post'
-import User from 'App/Models/User'
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, BelongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import User from './User'
+import Post from './Post'
 
-export default class Like extends BaseModel {
+export default class Comment extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
-  @column()
-  public is_like: boolean
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @column()
+  public text: string
 
   @column()
   public post_id: number

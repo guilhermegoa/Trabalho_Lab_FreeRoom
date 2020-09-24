@@ -11,6 +11,7 @@ import {
 import User from 'App/Models/User'
 import Community from 'App/Models/Community'
 import Like from './Like'
+import Comment from './Comment'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -30,7 +31,7 @@ export default class Post extends BaseModel {
 
   @column()
   public likes: number
-  
+
   @column()
   public unlikes: number
 
@@ -57,4 +58,9 @@ export default class Post extends BaseModel {
     foreignKey: 'post_id',
   })
   public likesArray: HasMany<typeof Like>
+
+  @hasMany(() => Comment, {
+    foreignKey: 'post_id',
+  })
+  public commentsArray: HasMany<typeof Comment>
 }
