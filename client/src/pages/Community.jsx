@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from "react-redux";
 import api from "../services/api"
+import cloudinary from "../services/cloudinary"
 
 import {
   Modal,
@@ -15,7 +16,8 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Textarea
+  Textarea,
+  Tabs, TabList, TabPanels, Tab, TabPanel
 } from "@chakra-ui/core";
 
 // import { Text } from "@chakra-ui/core";
@@ -44,6 +46,30 @@ class Community extends Component {
     this.props.dispatch(fetchCommunity(this.props.match.params.id));
   }
 
+  calculateHot(post) {
+    const dateTime = new Date() - new Date(post.created_at)
+    const likes = post.likes === 0 ? 1 : post.likes
+    return dateTime / likes
+  }
+
+  hotPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => this.calculateHot(a) - this.calculateHot(b));
+    return newPosts
+  }
+
+  newPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return newPosts
+  }
+
+  topPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => a.likes - b.likes);
+    return newPosts
+  }
+
   handleChangeTitle = event => this.setState({ title: event.target.value });
   handleChangeContent = event => this.setState({ content: event.target.value });
 
@@ -52,7 +78,6 @@ class Community extends Component {
     await this.setState({ picture, picture_name: picture[0].name })
     this.setState({ loading: false })
   }
-
 
   showModal = () =>
     this.setState({ modalVisible: true })
@@ -81,13 +106,9 @@ class Community extends Component {
         dataFile.append('file', this.state.picture[0])
         dataFile.append('upload_preset', 'freeroom')
 
-        const res = await fetch("https://api.cloudinary.com/v1_1/matheusfm/image/upload", {
-          method: "POST",
-          body: dataFile
-        })
+        const file = await cloudinary.post(`/image/upload`, dataFile)
 
-        const file = await res.json()
-        url = file.url
+        url = file.data.url
       }
 
       const data = { title: this.state.title, content: this.state.content, image_url: url }
@@ -112,8 +133,25 @@ class Community extends Component {
   render() {
     const { community } = this.props
     return (
-      community ? (<>
-        <PostList element={community}></PostList>
+      community ? (<Tabs m="10px" variantColor="purple" variant="soft-rounded">
+        <TabList>
+          <Tab>Calientes</Tab>
+          <Tab>Novos</Tab>
+          <Tab>Top</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <PostList posts={this.hotPosts(community.posts)}></PostList>
+          </TabPanel>
+          <TabPanel>
+            <PostList posts={this.newPosts(community.posts)}></PostList>
+          </TabPanel>
+          <TabPanel>
+            <PostList posts={this.topPosts(community.posts)}></PostList>
+          </TabPanel>
+        </TabPanels>
+
         <div onClick={this.props.user.isLogged ? this.showModal : this.showModal /*this.redirectToLogin*/}>
           <ButtonCreatePost ></ButtonCreatePost>
         </div>
@@ -136,7 +174,6 @@ class Community extends Component {
                   onChange={this.handleChangeContent} focusBorderColor="purple.500" placeholder="Digite o seu texto" />
               </FormControl>
 
-              {/* <input type="file" name="file" placeholder="Upload image" onChange={this.onImage} /> */}
               <FormLabel>{this.state.picture_name}</FormLabel>
               <ImageUploader
                 withIcon={true}
@@ -159,7 +196,7 @@ class Community extends Component {
             </ModalFooter>
           </ModalContent>
         </Modal>
-      </>
+      </Tabs>
 
       )
         : <Loading></Loading>

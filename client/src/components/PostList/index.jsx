@@ -5,8 +5,7 @@ import { Flex, SimpleGrid } from '@chakra-ui/core';
 import PostCard from '../PostCard/index';
 import NoPost from '../NoPost/index';
 
-function PostList({ element }) {
-  const { posts } = element;
+function PostList({ posts }) {
   return (
     <Flex align="center" justify="center">
       <SimpleGrid spacing="40px" maxW="md" w="100%">
