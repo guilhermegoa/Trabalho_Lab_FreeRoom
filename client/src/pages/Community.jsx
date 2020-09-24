@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import { connect } from "react-redux";
 import api from "../services/api"
 
@@ -47,11 +48,14 @@ class Community extends Component {
 
   hideModal = () => this.setState({ modalVisible: false })
 
+  redirectToLogin = () => this.props.history.push('/login')
+
   sendPost = async () => {
     if (this.state.title && this.state.content) {
       const data = { title: this.state.title, content: this.state.content }
       try {
         await api.post(`/posts/1/create/${this.props.match.params.id}`, data)
+        console.log(this.props)
         this.props.dispatch(fetchCommunity(this.props.match.params.id));
       } catch (error) {
         console.log(error)
@@ -70,7 +74,7 @@ class Community extends Component {
     return (
       community ? (<>
         <PostList element={community}></PostList>
-        <div onClick={this.showModal}>
+        <div onClick={this.props.user.isLogged ? this.showModal : this.redirectToLogin}>
           <ButtonCreatePost ></ButtonCreatePost>
         </div>
         <Modal blockScrollOnMount={false} isOpen={this.state.modalVisible} onClose={this.hideModal}>
@@ -100,7 +104,9 @@ class Community extends Component {
               <Button variantColor="purple" onClick={this.sendPost}>Publicar</Button>
             </ModalFooter>
           </ModalContent>
-        </Modal></>
+        </Modal>
+      </>
+
       )
         : <Loading></Loading>
     )
@@ -109,6 +115,7 @@ class Community extends Component {
 
 const mapStateToProps = state => ({
   community: state.community[0],
+  user: state.user
 })
 
 export default connect(mapStateToProps)(Community);
