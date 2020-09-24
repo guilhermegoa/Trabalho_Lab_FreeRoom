@@ -1,16 +1,10 @@
 import React from 'react'
 
-import { Box, Badge } from '@chakra-ui/core'
+import { Box, Tag, Avatar } from '@chakra-ui/core'
 
 import { MdFavorite, MdModeComment } from "react-icons/md"
 
-
-function getUserName() {
-  return 'teste'
-}
-
 function PostCard({ post }) {
-  console.log(post)
 
   const property = {
     title: post.title,
@@ -18,18 +12,25 @@ function PostCard({ post }) {
     created: post.created_data,
     likes: 0,
     comments: 0,
-    user: getUserName(post.user)
+    user: post.user ? post.user.name : "Desconhecido"
   }
 
   return (
-    <Box maxW="xl" borderWidth="1px" rounded="lg" overflow="hidden">
+    <Box borderWidth="1px" rounded="lg" overflow="hidden">
       {/* <Image src={property.imageUrl} alt={property.imageAlt} /> */}
 
       <Box p="6">
         <Box d="flex" alignItems="baseline">
-          <Badge rounded="full" px="2" variantColor="purple">
+          <Tag variantColor="purple" rounded="full">
+            <Avatar
+              src={property.image ? property.image : ""}
+              size="xs"
+              name={property.user}
+              ml={-1}
+              mr={2}
+            />
             {property.user}
-          </Badge>
+          </Tag>
           <Box
             color="gray.500"
             fontWeight="semibold"
@@ -44,7 +45,7 @@ function PostCard({ post }) {
         </Box>
 
         <Box
-          mt="1"
+          mt="5"
           fontWeight="semibold"
           lineHeight="tight"
           isTruncated

@@ -9,7 +9,7 @@ export default class CommunitiesController {
 
   public async show({ params }: HttpContextContract) {
     const { community_id } = params
-    const community = await Community.query().where('id', community_id).preload('posts')
+    const community = await Community.query().where('id', community_id).preload('posts', (query) => { query.preload('user') })
 
     return community
   }
