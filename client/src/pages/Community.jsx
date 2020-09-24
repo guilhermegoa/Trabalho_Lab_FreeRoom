@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/core";
 
 // import { Text } from "@chakra-ui/core";
-import ImageUploader from 'react-images-upload';
+import ImageUploader from 'react-images-upload'
 
 import Loading from '../components/Loading/index'
 import PostList from '../components/PostList/index'
@@ -35,6 +35,7 @@ class Community extends Component {
       title: "",
       content: "",
       picture: null,
+      loading: false,
       picture_name: "Nenhuma imagem escolhida"
     }
   }
@@ -46,8 +47,11 @@ class Community extends Component {
   handleChangeTitle = event => this.setState({ title: event.target.value });
   handleChangeContent = event => this.setState({ content: event.target.value });
 
-  onDrop = picture =>
-    this.setState({ picture, picture_name: picture[0].name })
+  onDrop = async picture => {
+    this.setState({ loading: true })
+    await this.setState({ picture, picture_name: picture[0].name })
+    this.setState({ loading: false })
+  }
 
 
   showModal = () =>
@@ -58,6 +62,7 @@ class Community extends Component {
   redirectToLogin = () => this.props.history.push('/login')
 
   sendPost = async () => {
+    this.setState({ loading: true })
     if (this.state.title && this.state.content) {
 
       let url = null
@@ -89,6 +94,7 @@ class Community extends Component {
         this.hideModal()
       }
     }
+    this.setState({ loading: false })
   }
 
   /*<LoginBackground>
@@ -141,7 +147,7 @@ class Community extends Component {
               <Button variant="ghost" mr={3} onClick={this.hideModal}>
                 Cancelar
             </Button>
-              <Button variantColor="purple" onClick={this.sendPost}>Publicar</Button>
+              <Button variantColor="purple" isLoading={this.state.loading} onClick={this.sendPost}>Publicar</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

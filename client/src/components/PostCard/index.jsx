@@ -20,7 +20,7 @@ function PostCard({ post, image }) {
   return (
     <Box borderWidth="1px" rounded="lg" overflow="hidden">
 
-      {property.image_ulr
+      {property.image_url
         ? <Image src={property.image_url} alt={property.title} />
         : <></>}
 
