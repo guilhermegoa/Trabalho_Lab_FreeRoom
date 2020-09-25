@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
+import AppLayout from './style/AppLayout';
 import PrivateRoute from './components/PrivateRoutes/index';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -14,8 +15,10 @@ const Routes = () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/cadastrar" component={Cadastrar} />
-      <PrivateRoute exact path="/main" component={Main} />
-      <Route exact path="/communities/:id" component={Community} />
+      <AppLayout>
+        <PrivateRoute exact path="/main" component={Main} />
+        <PrivateRoute exact path="/communities/:id" component={Community} />
+      </AppLayout>
     </Switch>
   </BrowserRouter>
 );

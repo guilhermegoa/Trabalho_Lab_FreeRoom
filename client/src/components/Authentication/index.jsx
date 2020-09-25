@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { validedToken } from '../../redux/ducks/user';
 
-function Authentication({ isLogged, validedtoken }) {
+function Authentication({ isLogged, validedToken }) {
   const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
     if (!isLogged && !verifying) {
-      validedtoken();
+      validedToken();
       setVerifying(true);
     } else if (isLogged) {
       setVerifying(false);
@@ -22,7 +22,7 @@ const mapStateToProps = ({ user }) => ({
 });
 
 const mapDispatchToProps = {
-  validedtoken: validedToken,
+  validedToken,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);
