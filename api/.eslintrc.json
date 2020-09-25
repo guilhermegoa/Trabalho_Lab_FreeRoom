@@ -1,5 +1,6 @@
 {
   "extends": [
     "plugin:adonis/typescriptApp"
-  ]
+  ],
+  "properties": "never"
 }

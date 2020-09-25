@@ -1,27 +1,33 @@
 import React, { Component } from 'react';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { fetchCommunity } from '../redux/ducks/community'
+import { fetchCommunity } from '../redux/ducks/community';
 
 class Community extends Component {
-
   componentDidMount() {
     this.props.dispatch(fetchCommunity(this.props.match.params.id));
   }
 
   render() {
-    const { community } = this.props
+    const { community } = this.props;
     return (
-      community ?
-        <h1>
-          comunidade {community.name}
-        </h1> : <h1>loading</h1>
-    )
+      community
+        ? (
+          <>
+            <h1>
+              comunidade
+              {' '}
+              {community.name}
+            </h1>
+            <button onClick={() => this.props.history.push('/main')}>teste</button>
+          </>
+        ) : <h1>loading</h1>
+    );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   community: state.community[0],
-})
+});
 
 export default connect(mapStateToProps)(Community);
