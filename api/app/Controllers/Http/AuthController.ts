@@ -27,7 +27,7 @@ export default class AuthController {
     response.status(200)
   }
 
-  public async checkToken () {
-    return true
+  public async checkToken ({ auth}: HttpContextContract) {
+    return auth.check()
   }
 }
