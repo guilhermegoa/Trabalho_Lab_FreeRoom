@@ -13,7 +13,7 @@ export const Types = {
 
 const initialState = {
   isLogged: false,
-  isvalidToken: false,
+  isValidToken: false,
   user: {},
 };
 
@@ -23,14 +23,14 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLogged: true,
-        isvalidToken: true,
+        isValidToken: true,
       };
     case Types.LOGOUT:
       return { ...initialState };
     case Types.VALIDTOKEN:
       return {
         ...state,
-        isvalidToken: true,
+        isValidToken: true,
       };
     default:
       return state;

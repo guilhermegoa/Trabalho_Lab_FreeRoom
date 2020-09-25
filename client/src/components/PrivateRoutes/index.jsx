@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
 const PrivateRoute = ({
-  path, exact, component, isLogged, isvalidToken,
+  path, exact, component, isLogged, isValidToken,
 }) => {
   const renderComponent = () => (isLogged
     ? <Route path={path} exact={exact} component={component} />
@@ -11,7 +11,7 @@ const PrivateRoute = ({
 
   return (
     <>
-      {!isvalidToken
+      {!isValidToken
         ? <h1>Carregando</h1>
         : renderComponent()}
     </>
@@ -20,7 +20,7 @@ const PrivateRoute = ({
 
 const mapStateToProps = ({ user }) => ({
   isLogged: user.isLogged,
-  isvalidToken: user.isvalidToken,
+  isValidToken: user.isValidToken,
 });
 
 export default connect(mapStateToProps, null)(PrivateRoute);
