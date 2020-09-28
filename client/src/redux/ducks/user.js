@@ -13,6 +13,7 @@ export const Types = {
 
 const initialState = {
   isLogged: false,
+  isValidToken: false,
   user: {},
 };
 
@@ -22,11 +23,17 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLogged: true,
+        isValidToken: true,
       };
     case Types.LOGOUT:
       return { ...initialState };
     case Types.FETCH:
       return action.payload;
+    case Types.VALIDTOKEN:
+      return {
+        ...state,
+        isValidToken: true,
+      };
     default:
       return state;
   }
@@ -39,6 +46,7 @@ const loginUser = () => ({ type: Types.LOGIN });
 const logoutUser = () => ({ type: Types.LOGOUT });
 
 const userFetched = (data) => ({ type: Types.FETCH, payload: data });
+const validToken = () => ({ type: Types.VALIDTOKEN });
 
 // Thunk
 export const userLogin = (dataLogin) => (dispatch) => api
@@ -52,11 +60,27 @@ export const userLogout = () => (dispatch) => api
   .get('/logout')
   .then(() => {
     clearToken();
-    dispatch(logoutUser);
+    dispatch(logoutUser());
   });
-
-export const userLogged = () => (dispatch) => dispatch(loginUser);
 
 export const fetchUser = (id) => (dispatch) => api
   .get(`/users/${id}`)
   .then(({ data }) => dispatch(userFetched(data)));
+
+export const userLogged = () => (dispatch) => dispatch(loginUser());
+
+export const tokenValid = () => (dispatch) => dispatch(validToken());
+
+export const validedToken = () => (dispatch) => {
+  api.get('checktoken')
+    .then((res) => {
+      if (res?.data === true) {
+        dispatch(userLogged());
+      }
+      dispatch(tokenValid());
+    })
+    .catch(() => {
+      clearToken();
+      dispatch(tokenValid());
+    });
+};

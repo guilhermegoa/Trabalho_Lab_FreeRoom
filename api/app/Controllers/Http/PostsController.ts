@@ -13,7 +13,11 @@ export default class PostsController {
 
   public async show({ params }: HttpContextContract) {
     const { post_id } = params
-    const post = await Post.query().where('id', post_id).preload('community').preload('user')
+    const post = await Post.query()
+      .where('id', post_id)
+      .preload('community')
+      .preload('user')
+      .preload('commentsArray')
 
     return post
   }
@@ -21,6 +25,7 @@ export default class PostsController {
   public async store({ params, request, response }: HttpContextContract) {
 
     const data = request.only(['title', 'content', 'image_url'])
+
     const { user_id, community_id } = params
 
     const user = await User.find(user_id)
@@ -47,13 +52,11 @@ export default class PostsController {
     }
 
     response.json('Post publicado com sucesso')
-
   }
 
   public async delete({ params }: HttpContextContract) {
     const { post_id } = params
     const post = await Post.findOrFail(post_id)
     await post.delete()
-
   }
 }

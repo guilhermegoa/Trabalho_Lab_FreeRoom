@@ -27,7 +27,7 @@ import Loading from '../components/Loading/index'
 import PostList from '../components/PostList/index'
 import ButtonCreatePost from '../components/ButtonCreatePost/index'
 
-import { fetchCommunity } from '../redux/ducks/community'
+import { fetchCommunity } from '../redux/ducks/community';
 
 class Community extends Component {
   constructor(props) {
@@ -131,7 +131,7 @@ class Community extends Component {
         </LoginBackground>*/
 
   render() {
-    const { community } = this.props
+    const { community } = this.props;
     return (
       community ? (<Tabs m="10px" variantColor="purple" variant="soft-rounded">
         <TabList>
@@ -204,9 +204,10 @@ class Community extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   community: state.community[0],
   user: state.user
 })
+
 
 export default connect(mapStateToProps)(Community);
