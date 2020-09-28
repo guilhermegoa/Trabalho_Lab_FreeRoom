@@ -6,6 +6,7 @@ import { setToken, clearToken } from '../../services/auth';
 export const Types = {
   LOGIN: 'auth/LOGIN',
   LOGOUT: 'auth/LOGOUT',
+  VALIDTOKEN: 'auth/VALIDTOKEN',
   FETCH: 'users/fetch',
 };
 
