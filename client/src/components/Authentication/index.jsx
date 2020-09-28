@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { validedToken } from '../../redux/ducks/user';
+import { validedToken, retriveUser } from '../../redux/ducks/user';
 
-function Authentication({ isLogged, validedToken }) {
+function Authentication({ isLogged, validedToken, retriveUser }) {
   const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
@@ -10,6 +10,7 @@ function Authentication({ isLogged, validedToken }) {
       validedToken();
       setVerifying(true);
     } else if (isLogged) {
+      retriveUser();
       setVerifying(false);
     }
   }, [isLogged, verifying, validedToken]);
@@ -23,6 +24,7 @@ const mapStateToProps = ({ user }) => ({
 
 const mapDispatchToProps = {
   validedToken,
+  retriveUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);

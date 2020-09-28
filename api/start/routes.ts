@@ -27,6 +27,7 @@ Route.group(() => {
   Route.get('/users', 'UsersController.index')
   Route.get('/logout', 'AuthController.logout')
   Route.get('/checktoken', 'AuthController.checkToken')
+  Route.get('/retriveuser', 'AuthController.retriveUserByToken')
 }).middleware('auth:api')
 
 Route.get('/users/:user_id', 'UsersController.show')
