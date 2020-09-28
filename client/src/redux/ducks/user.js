@@ -6,7 +6,7 @@ import { setToken, clearToken } from '../../services/auth';
 export const Types = {
   LOGIN: 'auth/LOGIN',
   LOGOUT: 'auth/LOGOUT',
-  VALIDTOKEN: 'auth/VALIDTOKEN',
+  FETCH: 'users/fetch',
 };
 
 // Reducer
@@ -27,6 +27,8 @@ export default function reducer(state = initialState, action) {
       };
     case Types.LOGOUT:
       return { ...initialState };
+    case Types.FETCH:
+      return action.payload;
     case Types.VALIDTOKEN:
       return {
         ...state,
@@ -43,6 +45,7 @@ const loginUser = () => ({ type: Types.LOGIN });
 
 const logoutUser = () => ({ type: Types.LOGOUT });
 
+const userFetched = (data) => ({ type: Types.FETCH, payload: data });
 const validToken = () => ({ type: Types.VALIDTOKEN });
 
 // Thunk
@@ -59,6 +62,10 @@ export const userLogout = () => (dispatch) => api
     clearToken();
     dispatch(logoutUser());
   });
+
+export const fetchUser = (id) => (dispatch) => api
+  .get(`/users/${id}`)
+  .then(({ data }) => dispatch(userFetched(data)));
 
 export const userLogged = () => (dispatch) => dispatch(loginUser());
 

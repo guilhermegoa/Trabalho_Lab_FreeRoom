@@ -3,7 +3,7 @@ import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class UsersController {
-  public async register ({ request, response }: HttpContextContract) {
+  public async register({ request, response }: HttpContextContract) {
     /**
      * Validate user details
      */
@@ -43,7 +43,7 @@ export default class UsersController {
     response.json('Usuário criado com sucesso!!')
   }
 
-  public async index () {
+  public async index() {
     const users = await User.query()
       .select([
         'id',
@@ -59,7 +59,7 @@ export default class UsersController {
     return users
   }
 
-  public async show ({ params }: HttpContextContract) {
+  public async show({ params }: HttpContextContract) {
     const { user_id } = params
     const user = User.query().where('id', user_id).preload('posts')
     return user

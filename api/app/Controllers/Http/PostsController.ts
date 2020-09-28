@@ -23,7 +23,9 @@ export default class PostsController {
   }
 
   public async store({ params, request, response }: HttpContextContract) {
-    const data = request.only(['title', 'content'])
+
+    const data = request.only(['title', 'content', 'image_url'])
+
     const { user_id, community_id } = params
 
     const user = await User.find(user_id)
@@ -40,6 +42,7 @@ export default class PostsController {
     post.content = data.content
     post.community_id = community_id
     post.user_id = user_id
+    post.image_url = data.image_url
 
     try {
       await post.related('user').associate(user)
