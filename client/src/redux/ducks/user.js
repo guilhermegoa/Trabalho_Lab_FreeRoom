@@ -29,7 +29,10 @@ export default function reducer(state = initialState, action) {
     case Types.LOGOUT:
       return { ...initialState };
     case Types.FETCH:
-      return action.payload;
+      return {
+        ...state,
+        user: action.payload,
+      };
     case Types.VALIDTOKEN:
       return {
         ...state,
@@ -46,8 +49,9 @@ const loginUser = () => ({ type: Types.LOGIN });
 
 const logoutUser = () => ({ type: Types.LOGOUT });
 
-const userFetched = (data) => ({ type: Types.FETCH, payload: data });
 const validToken = () => ({ type: Types.VALIDTOKEN });
+
+const userFetched = (data) => ({ type: Types.FETCH, payload: data });
 
 // Thunk
 export const userLogin = (dataLogin) => (dispatch) => api
@@ -85,3 +89,7 @@ export const validedToken = () => (dispatch) => {
       dispatch(tokenValid());
     });
 };
+
+export const retriveUser = () => (dispatch) => api
+  .get('/retriveuser')
+  .then(({ data }) => dispatch(userFetched(data)));

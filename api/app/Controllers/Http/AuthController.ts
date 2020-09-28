@@ -30,4 +30,17 @@ export default class AuthController {
   public async checkToken ({ auth}: HttpContextContract) {
     return auth.check()
   }
+
+  public async retriveUserByToken ({ auth}: HttpContextContract) {
+    const user =  auth.user
+    
+    return {
+      id: user?.id,
+      name: user?.name, 
+      nick: user?.nick, 
+      email: user?.email,
+      biografia: user?.biografio,
+      avatar: user?.avatar,
+    }
+  }
 }
