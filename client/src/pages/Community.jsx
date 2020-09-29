@@ -102,7 +102,6 @@ class Community extends Component {
 
       if (this.state.picture) {
         const dataFile = new FormData()
-        console.log('State = ', this.state)
         dataFile.append('file', this.state.picture[0])
         dataFile.append('upload_preset', 'freeroom')
 
@@ -114,8 +113,7 @@ class Community extends Component {
       const data = { title: this.state.title, content: this.state.content, image_url: url }
 
       try {
-        await api.post(`/posts/1/create/${this.props.match.params.id}`, data)
-        console.log(this.props)
+        await api.post(`/posts/${this.props.user.id}/create/${this.props.match.params.id}`, data)
         this.props.dispatch(fetchCommunity(this.props.match.params.id));
       } catch (error) {
         console.log(error)
@@ -152,7 +150,7 @@ class Community extends Component {
           </TabPanel>
         </TabPanels>
 
-        <div onClick={this.props.user.isLogged ? this.showModal : this.showModal /*this.redirectToLogin*/}>
+        <div onClick={this.props.isLogged ? this.showModal : this.redirectToLogin}>
           <ButtonCreatePost ></ButtonCreatePost>
         </div>
         <Modal blockScrollOnMount={false} isOpen={this.state.modalVisible} onClose={this.hideModal}>
@@ -206,7 +204,8 @@ class Community extends Component {
 
 const mapStateToProps = (state) => ({
   community: state.community[0],
-  user: state.user
+  user: state.user.user,
+  isLogged: state.user.isLogged
 })
 
 

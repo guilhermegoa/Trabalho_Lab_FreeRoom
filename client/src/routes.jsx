@@ -15,9 +15,9 @@ const Routes = () => (
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/cadastrar" component={Cadastrar} />
+      <Route exact path="/communities/:id" component={Community} />
       <AppLayout>
         <PrivateRoute exact path="/main" component={Main} />
-        <PrivateRoute exact path="/communities/:id" component={Community} />
       </AppLayout>
     </Switch>
   </BrowserRouter>

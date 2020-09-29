@@ -5,7 +5,6 @@ import {
 } from '@chakra-ui/core';
 
 function PostCard() {
-  console.log('no post');
   return (
     <Box borderWidth="1px" rounded="lg" overflow="hidden">
       <Box p="6">
