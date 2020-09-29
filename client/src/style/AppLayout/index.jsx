@@ -2,17 +2,15 @@ import React from 'react';
 
 import Header from '../../components/Header';
 
-import { Container, Layout, Content } from './styles';
+import { Container, Content } from './styles';
 
 function AppLayout({ children }) {
   return (
     <Container>
-      <Header />
-      <Layout>
-        <Content>
-          {children}
-        </Content>
-      </Layout>
+      <Content>
+        <Header />
+        {children}
+      </Content>
     </Container>
   );
 }
