@@ -84,7 +84,7 @@ export const validedToken = () => (dispatch) => {
       }
       dispatch(tokenValid());
     })
-    .catch(() => {
+    .catch((error) => {
       clearToken();
       dispatch(tokenValid());
     });
@@ -92,4 +92,4 @@ export const validedToken = () => (dispatch) => {
 
 export const retriveUser = () => (dispatch) => api
   .get('/retriveuser')
-  .then(({ data }) => dispatch(userFetched(data)));
+  .then(({ data }) => dispatch(userFetched(data)))
