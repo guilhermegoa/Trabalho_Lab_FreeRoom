@@ -8,7 +8,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class PostsController {
   public async index() {
-    return Post.all()
+    return Post.query().preload('likesArray')
   }
 
   public async show({ params }: HttpContextContract) {
@@ -17,13 +17,13 @@ export default class PostsController {
       .where('id', post_id)
       .preload('community')
       .preload('user')
+      .preload('likesArray')
       .preload('commentsArray')
 
     return post
   }
 
   public async store({ params, request, response }: HttpContextContract) {
-
     const data = request.only(['title', 'content', 'image_url'])
 
     const { user_id, community_id } = params

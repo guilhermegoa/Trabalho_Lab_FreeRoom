@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
-import { connect } from "react-redux";
-import api from "../services/api"
-import cloudinary from "../services/cloudinary"
+import { connect } from 'react-redux'
+import api from '../services/api'
+import cloudinary from '../services/cloudinary'
 
 import {
   Modal,
@@ -17,8 +17,12 @@ import {
   FormLabel,
   Input,
   Textarea,
-  Tabs, TabList, TabPanels, Tab, TabPanel
-} from "@chakra-ui/core";
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel
+} from '@chakra-ui/core'
 
 // import { Text } from "@chakra-ui/core";
 import ImageUploader from 'react-images-upload'
@@ -27,23 +31,25 @@ import Loading from '../components/Loading/index'
 import PostList from '../components/PostList/index'
 import ButtonCreatePost from '../components/ButtonCreatePost/index'
 
-import { fetchCommunity } from '../redux/ducks/community';
+import { fetchCommunity } from '../redux/ducks/community'
+import { retriveUser } from '../redux/ducks/user'
 
 class Community extends Component {
   constructor(props) {
     super(props)
     this.state = {
       modalVisible: false,
-      title: "",
-      content: "",
+      title: '',
+      content: '',
       picture: null,
       loading: false,
-      picture_name: "Nenhuma imagem escolhida"
+      picture_name: 'Nenhuma imagem escolhida'
     }
   }
 
-  componentDidMount() {
-    this.props.dispatch(fetchCommunity(this.props.match.params.id));
+  async componentDidMount() {
+    await this.props.dispatch(retriveUser())
+    this.props.dispatch(fetchCommunity(this.props.match.params.id))
   }
 
   calculateHot(post) {
@@ -52,26 +58,30 @@ class Community extends Component {
     return dateTime / likes
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.community === null) return false
+  // }
+
   hotPosts(posts) {
     const newPosts = [...posts]
-    newPosts.sort((a, b) => this.calculateHot(a) - this.calculateHot(b));
+    newPosts.sort((a, b) => this.calculateHot(a) - this.calculateHot(b))
     return newPosts
   }
 
   newPosts(posts) {
     const newPosts = [...posts]
-    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     return newPosts
   }
 
   topPosts(posts) {
     const newPosts = [...posts]
-    newPosts.sort((a, b) => a.likes - b.likes);
+    newPosts.sort((a, b) => a.likes - b.likes)
     return newPosts
   }
 
-  handleChangeTitle = event => this.setState({ title: event.target.value });
-  handleChangeContent = event => this.setState({ content: event.target.value });
+  handleChangeTitle = event => this.setState({ title: event.target.value })
+  handleChangeContent = event => this.setState({ content: event.target.value })
 
   onDrop = async picture => {
     this.setState({ loading: true })
@@ -79,16 +89,15 @@ class Community extends Component {
     this.setState({ loading: false })
   }
 
-  showModal = () =>
-    this.setState({ modalVisible: true })
+  showModal = () => this.setState({ modalVisible: true })
 
   hideModal = () => {
     this.setState({
       modalVisible: false,
-      title: "",
-      content: "",
+      title: '',
+      content: '',
       picture: null,
-      picture_name: "Nenhuma imagem escolhida"
+      picture_name: 'Nenhuma imagem escolhida'
     })
   }
 
@@ -97,7 +106,6 @@ class Community extends Component {
   sendPost = async () => {
     this.setState({ loading: true })
     if (this.state.title && this.state.content) {
-
       let url = null
 
       if (this.state.picture) {
@@ -110,11 +118,18 @@ class Community extends Component {
         url = file.data.url
       }
 
-      const data = { title: this.state.title, content: this.state.content, image_url: url }
+      const data = {
+        title: this.state.title,
+        content: this.state.content,
+        image_url: url
+      }
 
       try {
-        await api.post(`/posts/${this.props.user.id}/create/${this.props.match.params.id}`, data)
-        this.props.dispatch(fetchCommunity(this.props.match.params.id));
+        await api.post(
+          `/posts/${this.props.user.id}/create/${this.props.match.params.id}`,
+          data
+        )
+        this.props.dispatch(fetchCommunity(this.props.match.params.id))
       } catch (error) {
         console.log(error)
       } finally {
@@ -129,9 +144,9 @@ class Community extends Component {
         </LoginBackground>*/
 
   render() {
-    const { community } = this.props;
-    return (
-      community ? (<Tabs m="10px" variantColor="purple" variant="soft-rounded">
+    const { community } = this.props
+    return community ? (
+      <Tabs m="10px" variantColor="purple" variant="soft-rounded">
         <TabList>
           <Tab>Calientes</Tab>
           <Tab>Novos</Tab>
@@ -150,63 +165,81 @@ class Community extends Component {
           </TabPanel>
         </TabPanels>
 
-        <div onClick={this.props.isLogged ? this.showModal : this.redirectToLogin}>
-          <ButtonCreatePost ></ButtonCreatePost>
+        <div
+          onClick={this.props.isLogged ? this.showModal : this.redirectToLogin}
+        >
+          <ButtonCreatePost></ButtonCreatePost>
         </div>
-        <Modal blockScrollOnMount={false} isOpen={this.state.modalVisible} onClose={this.hideModal}>
+        <Modal
+          blockScrollOnMount={false}
+          isOpen={this.state.modalVisible}
+          onClose={this.hideModal}
+        >
           <ModalOverlay />
-          <ModalContent >
-            <ModalHeader>Criar Post na comunidade "{community.name}"</ModalHeader>
+          <ModalContent>
+            <ModalHeader>
+              Criar Post na comunidade "{community.name}"
+            </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-
               <FormControl isRequired>
                 <FormLabel>Título</FormLabel>
-                <Input value={this.state.title}
-                  onChange={this.handleChangeTitle} focusBorderColor="purple.500" placeholder="Digite um título..." />
+                <Input
+                  value={this.state.title}
+                  onChange={this.handleChangeTitle}
+                  focusBorderColor="purple.500"
+                  placeholder="Digite um título..."
+                />
               </FormControl>
 
               <FormControl mt={4} mb={4} isRequired>
                 <FormLabel>Conteúdo</FormLabel>
-                <Textarea value={this.state.content}
-                  onChange={this.handleChangeContent} focusBorderColor="purple.500" placeholder="Digite o seu texto" />
+                <Textarea
+                  value={this.state.content}
+                  onChange={this.handleChangeContent}
+                  focusBorderColor="purple.500"
+                  placeholder="Digite o seu texto"
+                />
               </FormControl>
 
               <FormLabel>{this.state.picture_name}</FormLabel>
               <ImageUploader
                 withIcon={true}
-                buttonText='Escolher Imagem'
+                buttonText="Escolher Imagem"
                 onChange={this.onDrop}
                 imgExtension={['.jpg', '.jpeg', '.png', '.gif']}
                 maxFileSize={5242880}
-                fileTypeError='Esse tipo de arquivo não é permitido'
-                fileSizeError='Esse arquivo é muito grande'
-                label='Tamanho máximo: 5mb - Arquivos: jpg | png | gif'
+                fileTypeError="Esse tipo de arquivo não é permitido"
+                fileSizeError="Esse arquivo é muito grande"
+                label="Tamanho máximo: 5mb - Arquivos: jpg | png | gif"
                 singleImage={true}
               />
-
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" mr={3} onClick={this.hideModal}>
                 Cancelar
-            </Button>
-              <Button variantColor="purple" isLoading={this.state.loading} onClick={this.sendPost}>Publicar</Button>
+              </Button>
+              <Button
+                variantColor="purple"
+                isLoading={this.state.loading}
+                onClick={this.sendPost}
+              >
+                Publicar
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
       </Tabs>
-
-      )
-        : <Loading></Loading>
+    ) : (
+      <Loading></Loading>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   community: state.community[0],
   user: state.user.user,
   isLogged: state.user.isLogged
 })
 
-
-export default connect(mapStateToProps)(Community);
+export default connect(mapStateToProps)(Community)
