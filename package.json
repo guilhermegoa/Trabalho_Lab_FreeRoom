@@ -1,0 +1,34 @@
+{
+  "name": "freeroom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "yarn --cwd api/ test",
+    "api:start": "yarn --cwd api/ start",
+    "client:start": "yarn --cwd client/ start",
+    "start": "concurrently \"yarn:api:start\" \"yarn:client:start\"",
+    "api:lint": "yarn --cwd api/ lint",
+    "client:lint": "yarn --cwd api/ lint",
+    "lint": "yarn api:lint && yarn client:lint",
+    "api:install": "yarn --cwd api/ install",
+    "client:install": "yarn --cwd client/ install",
+    "install:all": "yarn install && npm run client:install && npm run api:install",
+    "build": "yarn --cwd client/ build && node movePublic.js && yarn --cwd api/ node ace migration:run --force",
+    "api:migrate":"yarn --cwd api/ node ace migration:run --force"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guilhermegoa/Trabalho_Lab_FreeRoom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guilhermegoa/Trabalho_Lab_FreeRoom/issues"
+  },
+  "homepage": "https://github.com/guilhermegoa/Trabalho_Lab_FreeRoom#readme"
+}
