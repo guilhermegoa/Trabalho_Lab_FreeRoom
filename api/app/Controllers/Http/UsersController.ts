@@ -12,9 +12,7 @@ export default class UsersController {
         rules.email(),
         rules.unique({ table: 'users', column: 'email' }),
       ]),
-      password: schema.string({ trim: true }, [
-        rules.confirmed(),
-      ]),
+      password: schema.string({ trim: true }, [rules.confirmed()]),
     })
 
     let userDetails
@@ -44,24 +42,26 @@ export default class UsersController {
   }
 
   public async index() {
-    const users = await User.query()
-      .select([
-        'id',
-        'email',
-        'name',
-        'nick',
-        'avatar',
-        'bio',
-        'created_at',
-        'updated_at',
-      ])
+    const users = await User.query().select([
+      'id',
+      'email',
+      'name',
+      'nick',
+      'avatar',
+      'bio',
+      'created_at',
+      'updated_at',
+    ])
 
     return users
   }
 
   public async show({ params }: HttpContextContract) {
     const { user_id } = params
-    const user = User.query().where('id', user_id).preload('posts')
+    const user = User.query()
+      .where('id', user_id)
+      .preload('posts')
+      .preload('likesArray')
     return user
   }
 }

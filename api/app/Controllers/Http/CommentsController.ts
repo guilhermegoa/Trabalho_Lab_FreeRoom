@@ -94,6 +94,9 @@ export default class CommentsController {
       await comment.related('user').associate(user)
       await comment.related('post').associate(post)
 
+      post.comments++
+      await post.save()
+
       return response.status(201).json(comment)
     } catch (e) {
       return response.status(500).json(e.message)
