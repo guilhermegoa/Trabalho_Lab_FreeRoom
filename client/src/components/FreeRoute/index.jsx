@@ -1,23 +1,22 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import React from 'react'
+import { connect } from 'react-redux'
+import { Route, Redirect } from 'react-router-dom'
 
-const FreeRoute = ({
-  path, exact, component, isLogged,
-}) => {
+const FreeRoute = ({ path, exact, component, isLogged }) => {
   return (
     <>
-      {!isLogged
-      ? <Route path={path} exact={exact} component={component} />
-      : <Redirect to="/main" />
-      }
+      {!isLogged ? (
+        <Route path={path} exact={exact} component={component} />
+      ) : (
+        <Redirect to="/communities/1" />
+      )}
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = ({ user }) => ({
   isLogged: user.isLogged,
-  isValidToken: user.isValidToken,
-});
+  isValidToken: user.isValidToken
+})
 
-export default connect(mapStateToProps, null)(FreeRoute);
+export default connect(mapStateToProps, null)(FreeRoute)
