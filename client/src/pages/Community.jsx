@@ -76,7 +76,7 @@ class Community extends Component {
 
   topPosts(posts) {
     const newPosts = [...posts]
-    newPosts.sort((a, b) => a.likes - b.likes)
+    newPosts.sort((a, b) => b.likes - a.likes)
     return newPosts
   }
 

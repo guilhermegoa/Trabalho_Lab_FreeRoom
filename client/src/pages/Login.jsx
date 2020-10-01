@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { connect } from 'react-redux';
+import React, { useState } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { connect } from 'react-redux'
 import {
   Flex,
   Heading,
@@ -13,43 +13,42 @@ import {
   Button,
   PseudoBox,
   FormControl,
-  FormErrorMessage,
-} from '@chakra-ui/core';
-import { userLogin } from '../redux/ducks/user';
-import LoginBackground from '../components/LoginBackground/index';
-import Alert, { Types } from '../components/Alert/index';
+  FormErrorMessage
+} from '@chakra-ui/core'
+import { userLogin } from '../redux/ducks/user'
+import LoginBackground from '../components/LoginBackground/index'
+import Alert, { Types } from '../components/Alert/index'
 
 function Login({ history, login }) {
-  const [show, setShow] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isShowAlert, setIsShowAlert] = useState(false);
+  const [show, setShow] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isShowAlert, setIsShowAlert] = useState(false)
 
-  const handleClick = () => setShow(!show);
+  const handleClick = () => setShow(!show)
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('Email invalido')
         .required('Necessario preencher este campo.'),
-      password: Yup.string()
-        .required('Necessario preencher este campo.'),
+      password: Yup.string().required('Necessario preencher este campo.')
     }),
-    onSubmit: async (values) => {
-      setIsLoading(true);
+    onSubmit: async values => {
+      setIsLoading(true)
       try {
-        await login(values);
-        history.push('/main');
+        await login(values)
+        history.push('/communities/1')
       } catch (error) {
-        setIsShowAlert(true);
+        setIsShowAlert(true)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    },
-  });
+    }
+  })
 
   return (
     <LoginBackground>
@@ -66,10 +65,7 @@ function Login({ history, login }) {
           title="Error ao fazer login"
           message="Tente novamente"
         />
-        <PseudoBox
-          marginRight="304px"
-          onClick={() => history.push('/')}
-        >
+        <PseudoBox marginRight="304px" onClick={() => history.push('/')}>
           <Icon
             name="arrow-back"
             color="blue.400"
@@ -78,13 +74,7 @@ function Login({ history, login }) {
           />
         </PseudoBox>
         <Flex flexDirection="column" alignItems="center">
-          <Heading
-            as="h1"
-            size="xl"
-            fontSize="40px"
-            margin="16"
-            color="white"
-          >
+          <Heading as="h1" size="xl" fontSize="40px" margin="16" color="white">
             Faça login em sua conta
           </Heading>
         </Flex>
@@ -138,9 +128,15 @@ function Login({ history, login }) {
                   value={formik.values.name}
                 />
                 <InputRightElement>
-                  {show
-                    ? <Icon name="view-off" onClick={handleClick} color="blue.500" />
-                    : <Icon name="view" onClick={handleClick} color="blue.500" />}
+                  {show ? (
+                    <Icon
+                      name="view-off"
+                      onClick={handleClick}
+                      color="blue.500"
+                    />
+                  ) : (
+                    <Icon name="view" onClick={handleClick} color="blue.500" />
+                  )}
                 </InputRightElement>
               </InputGroup>
               <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
@@ -159,11 +155,11 @@ function Login({ history, login }) {
         </Flex>
       </Flex>
     </LoginBackground>
-  );
+  )
 }
 
 const mapDispatchToProps = {
-  login: userLogin,
-};
+  login: userLogin
+}
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login)
