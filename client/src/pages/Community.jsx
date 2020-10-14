@@ -30,6 +30,7 @@ import ImageUploader from 'react-images-upload'
 import Loading from '../components/Loading/index'
 import PostList from '../components/PostList/index'
 import ButtonCreatePost from '../components/ButtonCreatePost/index'
+// import Header from '../components/Header/index'
 
 import { fetchCommunity } from '../redux/ducks/community'
 import { retriveUser } from '../redux/ducks/user'
@@ -146,8 +147,11 @@ class Community extends Component {
   render() {
     const { community } = this.props
     return community ? (
-      <Tabs m="10px" variantColor="purple" variant="soft-rounded">
-        <TabList>
+      <Tabs variantColor="purple" variant="soft-rounded">
+
+        {/* <Header></Header> */}
+
+        <TabList justifyContent="center" my="30px" >
           <Tab>Calientes</Tab>
           <Tab>Novos</Tab>
           <Tab>Top</Tab>
