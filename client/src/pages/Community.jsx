@@ -24,13 +24,11 @@ import {
   TabPanel
 } from '@chakra-ui/core'
 
-// import { Text } from "@chakra-ui/core";
 import ImageUploader from 'react-images-upload'
 
 import Loading from '../components/Loading/index'
 import PostList from '../components/PostList/index'
 import ButtonCreatePost from '../components/ButtonCreatePost/index'
-// import Header from '../components/Header/index'
 
 import { fetchCommunity } from '../redux/ducks/community'
 import { retriveUser } from '../redux/ducks/user'

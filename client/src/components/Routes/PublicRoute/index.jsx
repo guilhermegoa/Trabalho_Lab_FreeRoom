@@ -2,13 +2,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 
-const FreeRoute = ({ path, exact, component, isLogged }) => {
+const PublicRoute = ({ path, exact, component, isLogged }) => {
   return (
     <>
       {!isLogged ? (
         <Route path={path} exact={exact} component={component} />
       ) : (
-        <Redirect to="/communities/1" />
+        <Redirect to="main" />
       )}
     </>
   )
@@ -19,4 +19,4 @@ const mapStateToProps = ({ user }) => ({
   isValidToken: user.isValidToken
 })
 
-export default connect(mapStateToProps, null)(FreeRoute)
+export default connect(mapStateToProps, null)(PublicRoute)

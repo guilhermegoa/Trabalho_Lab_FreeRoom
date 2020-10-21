@@ -41,7 +41,7 @@ function Login({ history, login }) {
       setIsLoading(true)
       try {
         await login(values)
-        history.push('/communities/1')
+        history.push('main')
       } catch (error) {
         setIsShowAlert(true)
       } finally {

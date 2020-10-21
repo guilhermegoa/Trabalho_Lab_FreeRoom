@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Switch } from 'react-router-dom'
 
-import PrivateRoute from './components/PrivateRoutes/index'
-import FreeRoute from './components/FreeRoute/index'
+import PrivateRoute from './components/Routes/PrivateRoutes'
+import PublicRoute from './components/Routes/PublicRoute'
 
 import AppLayout from './style/AppLayout'
 import Home from './pages/Home'
@@ -14,9 +14,9 @@ import Community from './pages/Community'
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <FreeRoute exact path="/" component={Home} />
-      <FreeRoute exact path="/login" component={Login} />
-      <FreeRoute exact path="/cadastrar" component={Cadastrar} />
+      <PublicRoute exact path="/" component={Home} />
+      <PublicRoute exact path="/login" component={Login} />
+      <PublicRoute exact path="/cadastrar" component={Cadastrar} />
 
       <AppLayout>
         <PrivateRoute exact path="/main" component={Main} />
