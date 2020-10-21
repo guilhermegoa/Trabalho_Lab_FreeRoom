@@ -1,16 +1,29 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter, Switch } from 'react-router-dom'
 
-import Home from './pages/home';
-import Paginateste from './pages/pagintest';
+import PrivateRoute from './components/PrivateRoutes/index'
+import FreeRoute from './components/FreeRoute/index'
+
+import AppLayout from './style/AppLayout'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Cadastrar from './pages/CreateAccount'
+import Main from './pages/Main'
+import Community from './pages/Community'
 
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/paginatest" component={Paginateste} />
+      <FreeRoute exact path="/" component={Home} />
+      <FreeRoute exact path="/login" component={Login} />
+      <FreeRoute exact path="/cadastrar" component={Cadastrar} />
+
+      <AppLayout>
+        <PrivateRoute exact path="/main" component={Main} />
+        <PrivateRoute exact path="/communities/:id" component={Community} />
+      </AppLayout>
     </Switch>
   </BrowserRouter>
-);
+)
 
-export default Routes;
+export default Routes

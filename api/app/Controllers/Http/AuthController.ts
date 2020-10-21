@@ -1,55 +1,65 @@
-import User from '../../Models/User'
-
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import User from 'App/Models/User'
 
 export default class AuthController {
-  public async register ({ request, response }: HttpContextContract) {
-    /**
-     * Validate user details
-     */
-    const validationSchema = schema.create({
-      email: schema.string({ trim: true }, [
-        rules.email(),
-        rules.unique({ table: 'users', column: 'email' }),
-      ]),
-      password: schema.string({ trim: true }, [
-        rules.confirmed(),
-      ]),
-    })
-
-    let userDetails
-    try {
-      userDetails = await request.validate({
-        schema: validationSchema,
-      })
-    } catch (error) {
-      throw new Error('Dados para criação errados.')
-    }
-
-    /**
-     * Create a new user
-     */
-    const user = new User()
-    user.email = userDetails.email
-    user.password = userDetails.password
-
-    await user.save()
-
-    response.json('Usuário criado com sucesso!!')
-  }
-
-  public async login ({ request, auth }: HttpContextContract) {
+  public async login({ request, auth }: HttpContextContract) {
     const email = request.input('email')
     const password = request.input('password')
 
     let token
     try {
-      token = await auth.use('api').attempt(email, password)
+      token = await auth
+        .use('api')
+        .attempt(email, password, { expiresIn: '1 days' })
+        .then((data) => data.token)
     } catch (error) {
-      throw new Error('Erro ao obter token')
+      throw new Error('Aconteceu algun erro ao tentar logar.Tente novamente!!')
     }
 
-    return token.toJSON()
+    return token
+  }
+
+  public async logout({ auth, response }: HttpContextContract) {
+    try {
+      await auth.use('api').logout()
+    } catch (error) {
+      throw new Error('Error ao tentar deslogar')
+    }
+
+    response.status(200)
+  }
+
+  public async checkToken({ auth }: HttpContextContract) {
+    return auth.check()
+  }
+
+  public async retriveUserByToken({ auth, response }: HttpContextContract) {
+    const user_id = auth.user?.id
+    if (!user_id) return response.status(404).json('User id not found')
+
+    const user = await User.query()
+      .where('id', user_id)
+      .preload('posts')
+      .preload('likesArray')
+      .first()
+
+    if (!user) return response.status(404).json('User not found')
+
+    const { password, ...userJSON } = user.toJSON()
+
+    userJSON.likesArray = user.likesArray.map(({ post_id, is_like }) => ({
+      post_id,
+      is_like,
+    }))
+
+    return response.json(userJSON)
+    // return {
+    //   id: user?.id,
+    //   name: user?.name,
+    //   nick: user?.nick,
+    //   email: user?.email,
+    //   biografia: user?.biografio,
+    //   avatar: user?.avatar,
+    // }
   }
 }
