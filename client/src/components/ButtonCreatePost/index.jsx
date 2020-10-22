@@ -1,8 +1,7 @@
 import React from 'react';
-import { MdAdd } from 'react-icons/md'
+import { MdAdd } from 'react-icons/md';
 
-import { IconButton } from '@chakra-ui/core'
-
+import { IconButton } from '@chakra-ui/core';
 
 function ButtonCreatePost() {
   return (
@@ -17,7 +16,7 @@ function ButtonCreatePost() {
       bottom="20px"
       right="20px"
     />
-  )
+  );
 }
 
 export default ButtonCreatePost;

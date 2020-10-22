@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { connect } from 'react-redux'
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { connect } from 'react-redux';
 import {
   Flex,
   Heading,
@@ -13,42 +13,42 @@ import {
   Button,
   PseudoBox,
   FormControl,
-  FormErrorMessage
-} from '@chakra-ui/core'
-import { userLogin } from '../redux/ducks/user'
-import LoginBackground from '../components/LoginBackground/index'
-import Alert, { Types } from '../components/Alert/index'
+  FormErrorMessage,
+} from '@chakra-ui/core';
+import { userLogin } from '../redux/ducks/user';
+import LoginBackground from '../components/LoginBackground/index';
+import Alert, { Types } from '../components/Alert/index';
 
 function Login({ history, login }) {
-  const [show, setShow] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isShowAlert, setIsShowAlert] = useState(false)
+  const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowAlert, setIsShowAlert] = useState(false);
 
-  const handleClick = () => setShow(!show)
+  const handleClick = () => setShow(!show);
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('Email invalido')
         .required('Necessario preencher este campo.'),
-      password: Yup.string().required('Necessario preencher este campo.')
+      password: Yup.string().required('Necessario preencher este campo.'),
     }),
-    onSubmit: async values => {
-      setIsLoading(true)
+    onSubmit: async (values) => {
+      setIsLoading(true);
       try {
-        await login(values)
-        history.push('/communities/1')
+        await login(values);
+        history.push('main');
       } catch (error) {
-        setIsShowAlert(true)
+        setIsShowAlert(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
-  })
+    },
+  });
 
   return (
     <LoginBackground>
@@ -155,11 +155,11 @@ function Login({ history, login }) {
         </Flex>
       </Flex>
     </LoginBackground>
-  )
+  );
 }
 
 const mapDispatchToProps = {
-  login: userLogin
-}
+  login: userLogin,
+};
 
-export default connect(null, mapDispatchToProps)(Login)
+export default connect(null, mapDispatchToProps)(Login);

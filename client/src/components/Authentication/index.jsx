@@ -2,9 +2,11 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { validedToken, retriveUser } from '../../redux/ducks/user';
 
-function Authentication({ isLogged, validedToken, retriveUser, user }) {
+function Authentication({
+  isLogged, validedToken, retriveUser,
+}) {
   const [verifying, setVerifying] = useState(false);
-  const userRetrive = useCallback(retriveUser,[])
+  const userRetrive = useCallback(retriveUser, []);
 
   useEffect(() => {
     if (!isLogged && !verifying) {
@@ -21,7 +23,7 @@ function Authentication({ isLogged, validedToken, retriveUser, user }) {
 
 const mapStateToProps = ({ user }) => ({
   isLogged: user.isLogged,
-  user: user.user
+  user: user.user,
 });
 
 const mapDispatchToProps = {
