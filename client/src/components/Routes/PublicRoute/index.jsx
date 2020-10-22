@@ -9,7 +9,7 @@ const PublicRoute = ({
     {!isLogged ? (
       <Route path={path} exact={exact} component={component} />
     ) : (
-      <Redirect to="/communities/1" />
+      <Redirect to="/main" />
     )}
   </>
 );
