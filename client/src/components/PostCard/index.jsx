@@ -114,9 +114,9 @@ function PostCard({
 
   return (
     <Box borderWidth="1px" rounded="lg" overflow="hidden">
-      {post.image_url ? <Image src={post.image_url} alt={post.title} /> : <></>}
+      {post.image_url ? <Image src={post.image_url} alt={post.title} backgroundColor="white" /> : <></>}
 
-      <Box p="6">
+      <Box p="6" backgroundColor="white">
         <Box d="flex" alignItems="baseline">
           <Tag variantColor="purple" rounded="full">
             <Avatar
