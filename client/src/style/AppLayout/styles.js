@@ -9,6 +9,6 @@ export const Container = styled.div`
 export const Content = styled.div`
   height: 100vh;
   overflow: auto;
-  background-color: #C7CAD5;
+  background-color: #E2E8F0;
   color: #090979;
 `;

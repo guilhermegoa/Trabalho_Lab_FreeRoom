@@ -288,10 +288,10 @@ function PostCard({
   );
 }
 
-const mapStateToProps = (state) => ({
-  user: state.user.user,
-  isLogged: state.user.isLogged,
-  community: state.community[0],
+const mapStateToProps = ({ user, community }) => ({
+  user: user.user,
+  isLogged: user.isLogged,
+  community: community.community,
 });
 
 const mapDispatchToProps = {

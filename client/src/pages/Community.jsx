@@ -140,16 +140,11 @@ class Community extends Component {
     this.setState({ loading: false })
   }
 
-  /*<LoginBackground>
-          <Text fontSize="6xl" color="#FFF" fontWeight="700">{community.name}</Text>
-        </LoginBackground>*/
 
   render() {
     const { community } = this.props
     return community ? (
       <Tabs variantColor="purple" variant="soft-rounded">
-
-        {/* <Header></Header> */}
 
         <TabList justifyContent="center" my="30px" >
           <Tab>Calientes</Tab>

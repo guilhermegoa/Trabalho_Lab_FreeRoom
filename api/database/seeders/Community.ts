@@ -5,11 +5,11 @@ export default class CommunitySeeder extends BaseSeeder {
   public async run() {
     await Community.createMany([
         { 
-          name: 'Consoles & Jogos - Discussão geral', 
+          name: 'Consoles & Jogos', 
           description:'Fale sobre Nintendos, Playstations, Xboxes, portáteis etc.' 
         },
         { 
-          name: 'PC, Hardware & Gadgets - Discussão geral',
+          name: 'PC, Hardware & Gadgets',
           description:'Fale sobre Nintendos, Playstations, Xboxes, portáteis etc.' 
         },
         { 
