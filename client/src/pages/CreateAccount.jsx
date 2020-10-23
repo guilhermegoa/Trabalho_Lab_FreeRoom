@@ -10,7 +10,6 @@ import {
   Icon,
   InputLeftElement,
   Button,
-  PseudoBox,
   FormControl,
   FormErrorMessage,
 } from '@chakra-ui/core';
@@ -73,17 +72,6 @@ function CreateAccount({ history }) {
           title="Error ao criar cadastro."
           message="Tente novamente"
         />
-        <PseudoBox
-          marginRight="304px"
-          onClick={() => history.push('/')}
-        >
-          <Icon
-            name="arrow-back"
-            color="blue.400"
-            height="56px"
-            width="200px"
-          />
-        </PseudoBox>
         <Flex flexDirection="column" alignItems="center">
           <Heading
             as="h1"
@@ -208,6 +196,17 @@ function CreateAccount({ history }) {
               Cadastrar
             </Button>
           </form>
+          <Button
+            type="submit"
+            marginTop="32px"
+            variantColor="blue"
+            minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+            isLoading={isLoading}
+            loadingText="Cadastrando"
+            onClick={() => history.push('/login')}
+          >
+            Voltar para a tela de login
+          </Button>
         </Flex>
       </Flex>
     </LoginBackground>

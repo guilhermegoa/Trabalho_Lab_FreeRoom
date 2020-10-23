@@ -11,9 +11,9 @@ import {
   Icon,
   InputLeftElement,
   Button,
-  PseudoBox,
   FormControl,
   FormErrorMessage,
+  Text,
 } from '@chakra-ui/core';
 import { userLogin } from '../redux/ducks/user';
 import LoginBackground from '../components/LoginBackground/index';
@@ -65,14 +65,6 @@ function Login({ history, login }) {
           title="Error ao fazer login"
           message="Tente novamente"
         />
-        <PseudoBox marginRight="304px" onClick={() => history.push('/')}>
-          <Icon
-            name="arrow-back"
-            color="blue.400"
-            height="56px"
-            width="200px"
-          />
-        </PseudoBox>
         <Flex flexDirection="column" alignItems="center">
           <Heading as="h1" size="xl" fontSize="40px" margin="16" color="white">
             Faça login em sua conta
@@ -152,7 +144,17 @@ function Login({ history, login }) {
               Entrar
             </Button>
           </form>
+          <Button
+            minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+            variantColor="blue"
+            rightIcon="arrow-forward"
+            marginTop="16px"
+            onClick={() => history.push('/cadastrar')}
+          >
+            <Text textAlign="center">Não possui uma conta</Text>
+          </Button>
         </Flex>
+        {/* <Text color="blue.400">Entrar como visitante</Text> */}
       </Flex>
     </LoginBackground>
   );
