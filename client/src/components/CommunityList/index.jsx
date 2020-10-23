@@ -34,10 +34,12 @@ function CommunityList({ communities, fetchCommunities }) {
           display="flex"
           justifyContent="center"
           alignItems="center"
+          flexDirection="column"
           margin="16px"
           padding="16px"
           cursor="pointer"
           onClick={() => handleOnClick(community.id)}
+          key={`${community.name}_${community.id}`}
         >
           <Text
             textAlign="center"
@@ -45,6 +47,14 @@ function CommunityList({ communities, fetchCommunities }) {
             color="white"
           >
             {community.name}
+          </Text>
+          <Text
+            textAlign="center"
+            fontSize="sm"
+            color="white"
+            marginTop="8px"
+          >
+            {`Seguidores: ${community.followers}`}
           </Text>
         </Box>
       ))}
