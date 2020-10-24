@@ -29,36 +29,37 @@ Route.group(() => {
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
   
-  Route.get('/users/:user_id', 'UsersController.show')
-  
-  Route.get('/communities', 'CommunitiesController.index')
-  Route.get('/communities/:community_id', 'CommunitiesController.show')
-  Route.post('/communities', 'CommunitiesController.store')
-  Route.delete('/communities/:community_id', 'CommunitiesController.delete')
-  
-  Route.get('/posts', 'PostsController.index')
-  Route.get('/posts/:post_id', 'PostsController.show')
-  Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
-  Route.delete('/posts/:post_id', 'PostsController.delete')
-  
-  Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
-  Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')
-  Route.get(
-    '/likes/user/:user_id/post/:post_id',
-    'LikesController.retriveByPostAndUser'
-  )
-  Route.get('/likes', 'LikesController.retriveAll')
-  Route.post('/likes', 'LikesController.create')
-  Route.delete('/likes/user/:user_id/post/:post_id', 'LikesController.delete')
-  
-  Route.get('/comments/post/:post_id', 'CommentsController.retriveByPost')
-  Route.get('/comments/user/:user_id', 'CommentsController.retriveByUser')
-  Route.get(
-    '/comments/user/:user_id/post/:post_id',
-    'CommentsController.retriveByPostAndUser'
-  )
-  Route.get('/comments', 'CommentsController.retriveAll')
-  Route.post('/comments', 'CommentsController.create')
-  Route.delete('/comments/:id', 'CommentsController.delete')
 }).middleware('auth:api')
+
+Route.get('/users/:user_id', 'UsersController.show')
+
+Route.get('/communities', 'CommunitiesController.index')
+Route.get('/communities/:community_id', 'CommunitiesController.show')
+Route.post('/communities', 'CommunitiesController.store')
+Route.delete('/communities/:community_id', 'CommunitiesController.delete')
+
+Route.get('/posts', 'PostsController.index')
+Route.get('/posts/:post_id', 'PostsController.show')
+Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
+Route.delete('/posts/:post_id', 'PostsController.delete')
+
+Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
+Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')
+Route.get(
+  '/likes/user/:user_id/post/:post_id',
+  'LikesController.retriveByPostAndUser'
+)
+Route.get('/likes', 'LikesController.retriveAll')
+Route.post('/likes', 'LikesController.create')
+Route.delete('/likes/user/:user_id/post/:post_id', 'LikesController.delete')
+
+Route.get('/comments/post/:post_id', 'CommentsController.retriveByPost')
+Route.get('/comments/user/:user_id', 'CommentsController.retriveByUser')
+Route.get(
+  '/comments/user/:user_id/post/:post_id',
+  'CommentsController.retriveByPostAndUser'
+)
+Route.get('/comments', 'CommentsController.retriveAll')
+Route.post('/comments', 'CommentsController.create')
+Route.delete('/comments/:id', 'CommentsController.delete')
 

@@ -28,6 +28,7 @@ function Header() {
         padding="0 32px"
         width="100vw"
         height="56px"
+        zIndex="10"
       >
         <Box marginRight="16px">
           <Text color="white">FREEROOM</Text>

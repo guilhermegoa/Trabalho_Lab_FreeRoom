@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { Box, Text, Avatar } from '@chakra-ui/core';
 import { fetchCommunities } from '../../redux/ducks/communities';
 
-function CommunityList({ communities, fetchCommunities }) {
+function PostsRecentes({ communities, fetchCommunities }) {
   const getCommunities = useCallback(fetchCommunities, []);
   const history = useHistory();
 
@@ -25,14 +25,13 @@ function CommunityList({ communities, fetchCommunities }) {
       flexDirection="column"
       justifyContent="center"
       overflow="hidden"
-      marginRight="8px"
     >
       <Text
         fontSize="2xl"
         backgroundColor="white"
         paddingLeft="8px"
       >
-        Categorias
+        Recentes
       </Text>
       {communities
       && communities.map((community) => (
@@ -40,8 +39,8 @@ function CommunityList({ communities, fetchCommunities }) {
           borderWidth="1px"
           overflow="hidden"
           backgroundColor="white"
-          height="160px"
-          width="600px"
+          height="120px"
+          width="400px"
           display="flex"
           padding="16px"
           borderLeft="4px"
@@ -51,7 +50,7 @@ function CommunityList({ communities, fetchCommunities }) {
           key={`${community.name}_${community.id}`}
         >
           <Box>
-            <Avatar size="2xl" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+            <Avatar size="lg" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
           </Box>
           <Box marginLeft="16px">
             <Text
@@ -65,11 +64,6 @@ function CommunityList({ communities, fetchCommunities }) {
               fontSize="sm"
             >
               {community.description}
-            </Text>
-            <Text
-              fontSize="sm"
-            >
-              {`Seguidores: ${community.followers}`}
             </Text>
           </Box>
         </Box>
@@ -88,4 +82,4 @@ const mapDispatchToProps = {
   fetchCommunities,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommunityList);
+export default connect(mapStateToProps, mapDispatchToProps)(PostsRecentes);
