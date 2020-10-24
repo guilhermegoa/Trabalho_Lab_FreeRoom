@@ -20,13 +20,11 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../../../services/api';
-import Alert, { Types } from '../../Alert';
 
 function Register() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isShowAlert, setIsShowAlert] = useState(false);
 
   const handleClick = () => setShow(!show);
 
@@ -56,7 +54,8 @@ function Register() {
         await api.post('/register', values);
         onClose();
       } catch (error) {
-        setIsShowAlert(true);
+        // eslint-disable-next-line no-console
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -64,13 +63,6 @@ function Register() {
   });
   return (
     <>
-      <Alert
-        show={isShowAlert}
-        setIsShowAlert={setIsShowAlert}
-        status={Types.ERROR}
-        title="Error ao criar cadastro."
-        message="Tente novamente"
-      />
       <Button onClick={onOpen}>
         <Text textAlign="center">Registrar</Text>
       </Button>
