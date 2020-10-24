@@ -1,50 +1,78 @@
 import React from 'react';
 
 import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   Box,
-  Grid,
-  Avatar,
-  Drawer,
-  DrawerBody,
-  useDisclosure,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
+  Text,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Icon,
   Button,
 } from '@chakra-ui/core';
 
 function Header() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
-
   return (
     <>
-      <Grid templateColumns="repeat(2, 1fr)" h="300px" gap={1} bg="blue.500">
-        <Box w="100%" h="100%" display="flex" alignItems="space-between" justifyContent="flex-start" pt="30px" pl="20px">
-          <Button ref={btnRef} variantColor="teal" onClick={onOpen}>
-            =
+      <Box
+        as="header"
+        position="fixed"
+        backgroundColor="#1A365D"
+        display="flex"
+        justifyContent="space-evenly"
+        alignItems="center"
+        padding="0 32px"
+        width="100vw"
+        height="56px"
+      >
+        <Box marginRight="16px">
+          <Text color="white">FREEROOM</Text>
+        </Box>
+        <Box marginRight="16px">
+          <InputGroup size="md">
+            <InputLeftElement>
+              <Icon name="search" color="blue.500" />
+            </InputLeftElement>
+            <Input minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="phone" placeholder="Phone number" />
+          </InputGroup>
+        </Box>
+        <Box>
+          <Menu>
+            <MenuButton
+              px={4}
+              py={2}
+              transition="all 0.2s"
+              rounded="md"
+              borderWidth="1px"
+              backgroundColor="#E2E8F0"
+              _focus={{ outline: 0, boxShadow: 'outline' }}
+            >
+              Menu
+              {' '}
+              <Icon name="chevron-down" />
+            </MenuButton>
+            <MenuList backgroundColor="#E2E8F0">
+              <MenuItem>New File</MenuItem>
+              <MenuItem>New Window</MenuItem>
+              <MenuDivider />
+              <MenuItem>Open...</MenuItem>
+              <MenuItem>Save File</MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        <Box>
+          <Button marginRight="16px">
+            <Text textAlign="center">Login</Text>
           </Button>
-          <Drawer
-            isOpen={isOpen}
-            placement="left"
-            onClose={onClose}
-            finalFocusRef={btnRef}
-          >
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerBody />
-            </DrawerContent>
-          </Drawer>
-          <Box>
-            <h1>Olá Goa</h1>
-            <h3>Encontra topicos que você gosta de ler</h3>
-          </Box>
+          <Button>
+            <Text textAlign="center">Registrar</Text>
+          </Button>
         </Box>
-        <Box w="100%" h="100%" display="flex" justifyContent="flex-end" p="20px">
-          <Avatar size="lg" name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-        </Box>
-      </Grid>
+      </Box>
     </>
   );
 }
