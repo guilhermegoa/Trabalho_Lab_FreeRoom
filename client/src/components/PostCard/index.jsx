@@ -31,11 +31,9 @@ import { fetchCommunity } from '../../redux/ducks/community';
 import { retriveUser } from '../../redux/ducks/user';
 
 function PostCard({
-  user, isLogged, post, image, fetchUser, community,
+  user, isLogged, post, fetchUser, community,
 }) {
   const redirectToLogin = () => this.props.history.push('/login');
-
-  if (!isLogged) redirectToLogin();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setIsLoading] = useState(false);

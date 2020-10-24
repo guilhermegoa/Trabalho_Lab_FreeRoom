@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useHistory } from 'react-router-dom';
 import {
   Menu,
   MenuButton,
@@ -12,10 +12,13 @@ import {
   InputLeftElement,
   Input,
   Icon,
-  Button,
 } from '@chakra-ui/core';
+import Register from './Modais/Register';
+import Login from './Modais/Login';
 
 function Header() {
+  const history = useHistory();
+
   return (
     <>
       <Box
@@ -31,7 +34,13 @@ function Header() {
         zIndex="10"
       >
         <Box marginRight="16px">
-          <Text color="white">FREEROOM</Text>
+          <Text
+            color="white"
+            onClick={() => history.push('/')}
+            cursor="pointer"
+          >
+            FREEROOM
+          </Text>
         </Box>
         <Box marginRight="16px">
           <InputGroup size="md">
@@ -66,13 +75,12 @@ function Header() {
           </Menu>
         </Box>
         <Box>
-          <Button marginRight="16px">
-            <Text textAlign="center">Login</Text>
-          </Button>
-          <Button>
-            <Text textAlign="center">Registrar</Text>
-          </Button>
+          <Login />
         </Box>
+        <Box>
+          <Register />
+        </Box>
+
       </Box>
     </>
   );
