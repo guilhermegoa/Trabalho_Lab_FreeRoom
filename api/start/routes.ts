@@ -28,6 +28,7 @@ Route.group(() => {
   Route.get('/logout', 'AuthController.logout')
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
+  
 }).middleware('auth:api')
 
 Route.get('/users/:user_id', 'UsersController.show')
@@ -61,3 +62,4 @@ Route.get(
 Route.get('/comments', 'CommentsController.retriveAll')
 Route.post('/comments', 'CommentsController.create')
 Route.delete('/comments/:id', 'CommentsController.delete')
+

@@ -1,11 +1,14 @@
 import React from 'react';
+import { Flex } from '@chakra-ui/core';
+import CommunityList from '../components/CommunityList';
+import PostsRecentes from '../components/PostsRecentes';
 
-function Main({ history }) {
+function Main() {
   return (
-    <>
-      <h1>Main page</h1>
-      <button type="button" onClick={() => history.push('main')}>teste</button>
-    </>
+    <Flex justifyContent="center" alignItems="flex-start" overflow="hidden">
+      <CommunityList />
+      <PostsRecentes />
+    </Flex>
   );
 }
 

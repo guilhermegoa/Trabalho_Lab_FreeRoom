@@ -31,11 +31,9 @@ import { fetchCommunity } from '../../redux/ducks/community';
 import { retriveUser } from '../../redux/ducks/user';
 
 function PostCard({
-  user, isLogged, post, image, fetchUser, community,
+  user, isLogged, post, fetchUser, community,
 }) {
   const redirectToLogin = () => this.props.history.push('/login');
-
-  if (!isLogged) redirectToLogin();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setIsLoading] = useState(false);
@@ -288,10 +286,10 @@ function PostCard({
   );
 }
 
-const mapStateToProps = (state) => ({
-  user: state.user.user,
-  isLogged: state.user.isLogged,
-  community: state.community[0],
+const mapStateToProps = ({ user, community }) => ({
+  user: user.user,
+  isLogged: user.isLogged,
+  community: community.community,
 });
 
 const mapDispatchToProps = {
