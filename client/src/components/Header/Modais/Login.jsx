@@ -20,9 +20,9 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { userLogin, retriveUser, validedToken } from '../../../redux/ducks/user';
+import { userLogin, retriveUser } from '../../../redux/ducks/user';
 
-function Login({ login, retriveUser, validedToken }) {
+function Login({ login, retriveUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [show, setShow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,8 +44,8 @@ function Login({ login, retriveUser, validedToken }) {
       setIsLoading(true);
       try {
         await login(values);
-        await validedToken();
         await retriveUser();
+        onClose();
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
@@ -143,7 +143,6 @@ function Login({ login, retriveUser, validedToken }) {
 const mapDispatchToProps = {
   login: userLogin,
   retriveUser,
-  validedToken,
 };
 
 export default connect(null, mapDispatchToProps)(Login);

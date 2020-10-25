@@ -14,6 +14,7 @@ import {
   FormLabel,
   Textarea,
   IconButton,
+  useToast,
 } from '@chakra-ui/core';
 import ImageUploader from 'react-images-upload';
 import { MdAdd } from 'react-icons/md';
@@ -22,8 +23,12 @@ import api from '../../services/api';
 import cloudinary from '../../services/cloudinary';
 import { fetchCommunity } from '../../redux/ducks/community';
 
-function CreatePost({ community, user, fetchCommunity }) {
+function CreatePost({
+  community, user, fetchCommunity, isLogged,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -82,6 +87,22 @@ function CreatePost({ community, user, fetchCommunity }) {
     setLoading(false);
   };
 
+  const handleOnCLick = () => {
+    if (isLogged) {
+      return onOpen();
+    }
+
+    return (
+      toast({
+        title: 'Usuario não logado.',
+        description: 'Necessario estar logado.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+    );
+  };
+
   return (
     <>
       <IconButton
@@ -94,7 +115,7 @@ function CreatePost({ community, user, fetchCommunity }) {
         position="fixed"
         bottom="20px"
         right="20px"
-        onClick={onOpen}
+        onClick={handleOnCLick}
       />
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">

@@ -54,6 +54,13 @@ const validToken = () => ({ type: Types.VALIDTOKEN });
 const userFetched = (data) => ({ type: Types.FETCH, payload: data });
 
 // Thunk
+export const retriveUser = () => (dispatch) => api
+  .get('/retriveuser')
+  .then(({ data }) => {
+    dispatch(userFetched(data));
+    dispatch(loginUser());
+  });
+
 export const userLogin = (dataLogin) => (dispatch) => api
   .post('/login', dataLogin)
   .then(({ data }) => {
@@ -81,6 +88,7 @@ export const validedToken = () => (dispatch) => {
     .then((res) => {
       if (res?.data === true) {
         dispatch(userLogged());
+        dispatch(retriveUser());
       }
       dispatch(tokenValid());
     })
@@ -88,7 +96,3 @@ export const validedToken = () => (dispatch) => {
       clearToken();
     });
 };
-
-export const retriveUser = () => (dispatch) => api
-  .get('/retriveuser')
-  .then(({ data }) => dispatch(userFetched(data)));

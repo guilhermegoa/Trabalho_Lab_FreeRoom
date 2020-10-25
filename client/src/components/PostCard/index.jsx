@@ -20,7 +20,6 @@ import {
   useToast,
   Text,
 } from '@chakra-ui/core';
-// import ImageUploader from 'react-images-upload';
 
 import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
@@ -31,10 +30,8 @@ import { fetchCommunity } from '../../redux/ducks/community';
 import { retriveUser } from '../../redux/ducks/user';
 
 function PostCard({
-  user, isLogged, post, fetchUser, community,
+  user, post, fetchUser, community,
 }) {
-  const redirectToLogin = () => this.props.history.push('/login');
-
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const [text, setText] = useState('');
@@ -55,6 +52,7 @@ function PostCard({
         setIsLoading(false);
         setText('');
 
+        // eslint-disable-next-line no-unused-expressions
         res.status === 201
           ? toast({
             title: 'Comentario enviado',
@@ -94,7 +92,7 @@ function PostCard({
     community(post.community_id);
   };
 
-  const handleCommentClick = async (post_id) => {
+  const handleCommentClick = async () => {
     setModalVisible(true);
   };
 
@@ -203,14 +201,13 @@ function PostCard({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Comentários '
+            Comentários
             {post.title}
-            '
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {post.commentsArray.length > 0 ? (
-              post.commentsArray.map((comment, i) => (comment.user_id === user.id ? (
+              post.commentsArray.map((comment) => (comment.user_id === user.id ? (
                 <Box
                   key={comment.id}
                   align="right"
@@ -247,18 +244,8 @@ function PostCard({
                 Ninguém comentou ainda
               </Box>
             )}
-            {/* */}
           </ModalBody>
           <ModalFooter>
-            {/* <FormControl isRequired>
-              <Input
-                value={title}
-                onChange={handleChangeTitle}
-                focusBorderColor="purple.500"
-                placeholder="Digite um título..."
-              />
-            </FormControl> */}
-
             <FormControl mt={4} mb={4} isRequired>
               <FormLabel>Comentário</FormLabel>
               <Textarea
