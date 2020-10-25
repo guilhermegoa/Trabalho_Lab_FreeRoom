@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   Box,
   Tag,
   Avatar,
   Image,
-  Modal,
-  Button,
-  FormLabel,
-  ModalFooter,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  Textarea,
-  useToast,
-  Text,
+  // Modal,
+  // Button,
+  // FormLabel,
+  // ModalFooter,
+  // ModalOverlay,
+  // ModalContent,
+  // ModalHeader,
+  // ModalCloseButton,
+  // ModalBody,
+  // FormControl,
+  // Textarea,
+  // Text,
+  // useToast,
 } from '@chakra-ui/core';
 
 import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
 import LikeService from '../../services/LikeService';
-import CommentsService from '../../services/CommentsService';
+// import CommentsService from '../../services/CommentsService';
 
 import { fetchCommunity } from '../../redux/ducks/community';
 import { retriveUser } from '../../redux/ducks/user';
@@ -32,47 +33,48 @@ import { retriveUser } from '../../redux/ducks/user';
 function PostCard({
   user, post, fetchUser, community,
 }) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [loading, setIsLoading] = useState(false);
-  const [text, setText] = useState('');
+  const history = useHistory();
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [loading, setIsLoading] = useState(false);
+  // const [text, setText] = useState('');
 
-  const toast = useToast();
+  // const toast = useToast();
 
-  const commentFunc = {
-    hideModal: () => {
-      setModalVisible(false);
-      setText('');
-    },
-    handleChangeText: (e) => {
-      setText(e.target.value);
-    },
-    handleSubmit: async () => {
-      setIsLoading(true);
-      CommentsService.comment(post.id, user.id, text).then((res) => {
-        setIsLoading(false);
-        setText('');
+  // const commentFunc = {
+  //   hideModal: () => {
+  //     setModalVisible(false);
+  //     setText('');
+  //   },
+  //   handleChangeText: (e) => {
+  //     setText(e.target.value);
+  //   },
+  //   handleSubmit: async () => {
+  //     setIsLoading(true);
+  //     CommentsService.comment(post.id, user.id, text).then((res) => {
+  //       setIsLoading(false);
+  //       setText('');
 
-        // eslint-disable-next-line no-unused-expressions
-        res.status === 201
-          ? toast({
-            title: 'Comentario enviado',
-            description: 'Seu comentário foi registrado',
-            status: 'success',
-            duration: 5000,
-            isClosable: true,
-          })
-          : toast({
-            title: 'Algo de errado ocorreu',
-            description: 'Seu comentário não foi registrado',
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          });
+  //       // eslint-disable-next-line no-unused-expressions
+  //       res.status === 201
+  //         ? toast({
+  //           title: 'Comentario enviado',
+  //           description: 'Seu comentário foi registrado',
+  //           status: 'success',
+  //           duration: 5000,
+  //           isClosable: true,
+  //         })
+  //         : toast({
+  //           title: 'Algo de errado ocorreu',
+  //           description: 'Seu comentário não foi registrado',
+  //           status: 'error',
+  //           duration: 5000,
+  //           isClosable: true,
+  //         });
 
-        community(post.community_id);
-      });
-    },
-  };
+  //       community(post.community_id);
+  //     });
+  //   },
+  // };
 
   const handleLike = async (post_id) => {
     await LikeService.like(user.id, post_id);
@@ -92,9 +94,9 @@ function PostCard({
     community(post.community_id);
   };
 
-  const handleCommentClick = async () => {
-    setModalVisible(true);
-  };
+  // const handleCommentClick = async () => {
+  //   setModalVisible(true);
+  // };
 
   const includesPostLike = (is_like) => {
     for (let i = 0; i < post.likesArray.length; i++) {
@@ -109,7 +111,13 @@ function PostCard({
   };
 
   return (
-    <Box borderWidth="1px" rounded="lg" overflow="hidden">
+    <Box
+      borderWidth="1px"
+      rounded="lg"
+      overflow="hidden"
+      cursor="pointer"
+      onClick={() => history.push(`${history.location.pathname}/post/${post.id}`)}
+    >
       {post.image_url ? <Image src={post.image_url} alt={post.title} backgroundColor="white" /> : <></>}
 
       <Box p="6" backgroundColor="white">
@@ -162,8 +170,8 @@ function PostCard({
             {post.unlikes}
 
             <Box
-              onClick={() => handleCommentClick(post.id)}
-              cursor="pointer"
+              // onClick={() => handleCommentClick(post.id)}
+              // cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
@@ -192,8 +200,7 @@ function PostCard({
         </Box>
       </Box>
 
-      <Modal
-        // blockScrollOnMount={false}
+      {/* <Modal
         isOpen={modalVisible}
         onClose={commentFunc.hideModal}
         scrollBehavior="inside"
@@ -268,7 +275,7 @@ function PostCard({
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </Box>
   );
 }
