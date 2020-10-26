@@ -28,7 +28,7 @@ Route.group(() => {
   Route.get('/logout', 'AuthController.logout')
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
-  
+
 }).middleware('auth:api')
 
 Route.get('/users/:user_id', 'UsersController.show')
@@ -38,7 +38,7 @@ Route.get('/communities/:community_id', 'CommunitiesController.show')
 Route.post('/communities', 'CommunitiesController.store')
 Route.delete('/communities/:community_id', 'CommunitiesController.delete')
 
-Route.get('/posts', 'PostsController.index')
+Route.get('/posts/:search?', 'PostsController.index')
 Route.get('/posts/:post_id', 'PostsController.show')
 Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
 Route.delete('/posts/:post_id', 'PostsController.delete')
