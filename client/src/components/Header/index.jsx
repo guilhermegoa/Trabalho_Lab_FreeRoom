@@ -1,22 +1,21 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
   Box,
   Text,
   InputGroup,
   InputLeftElement,
   Input,
   Icon,
+  Avatar,
+  Button,
 } from '@chakra-ui/core';
 import Register from './Modais/Register';
 import Login from './Modais/Login';
+import { userLogout } from '../../redux/ducks/user';
 
-function Header() {
+function Header({ isLogged, userLogout }) {
   const history = useHistory();
 
   return (
@@ -50,40 +49,43 @@ function Header() {
             <Input minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="phone" placeholder="Phone number" />
           </InputGroup>
         </Box>
-        <Box>
-          <Menu>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              rounded="md"
-              borderWidth="1px"
-              backgroundColor="#E2E8F0"
-              _focus={{ outline: 0, boxShadow: 'outline' }}
-            >
-              Menu
-              {' '}
-              <Icon name="chevron-down" />
-            </MenuButton>
-            <MenuList backgroundColor="#E2E8F0">
-              <MenuItem>New File</MenuItem>
-              <MenuItem>New Window</MenuItem>
-              <MenuDivider />
-              <MenuItem>Open...</MenuItem>
-              <MenuItem>Save File</MenuItem>
-            </MenuList>
-          </Menu>
-        </Box>
-        <Box>
-          <Login />
-        </Box>
-        <Box>
-          <Register />
-        </Box>
+        {isLogged ? (
+          <>
+            <Box>
+              <Avatar
+                size="md"
+                name="Segun Adebayo"
+              />
+            </Box>
+            <Button onClick={userLogout}>
+              <Text textAlign="center">Sair</Text>
+            </Button>
+          </>
+        )
+          : (
+            <>
+              <Box>
+                <Login />
+              </Box>
+              <Box>
+                <Register />
+              </Box>
+            </>
+          )}
 
       </Box>
     </>
   );
 }
 
-export default Header;
+const mapStateToProps = ({ user }) => ({
+  user: user.user,
+  isLogged: user.isLogged,
+
+});
+
+const mapDispatchToProps = {
+  userLogout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
