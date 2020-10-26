@@ -4,12 +4,7 @@ import Community from 'App/Models/Community'
 
 export default class CommunitiesController {
   public async index() {
-    return Community.query().select([
-      'id',
-      'name',
-      'description',
-      'followers'
-    ])
+    return Community.all()
   }
 
   public async show({ params }: HttpContextContract) {
@@ -18,7 +13,7 @@ export default class CommunitiesController {
       .where('id', community_id)
       .preload('posts', (query) => {
         query
-          .preload('user')
+          .preload('user', (query) => query.select('id', 'name', 'avatar'))
           .preload('likesArray')
           .preload('commentsArray', (query) => {
             query.preload('user')

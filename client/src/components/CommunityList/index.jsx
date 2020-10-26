@@ -45,13 +45,13 @@ function CommunityList({ communities, fetchCommunities }) {
           display="flex"
           padding="16px"
           borderLeft="4px"
-          borderLeftColor="Black"
+          borderLeftColor={community.color}
           cursor="pointer"
           onClick={() => handleOnClick(community.id)}
           key={`${community.name}_${community.id}`}
         >
           <Box>
-            <Avatar size="2xl" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+            <Avatar size="2xl" name="Segun Adebayo" src={community.image_url} />
           </Box>
           <Box marginLeft="16px">
             <Text

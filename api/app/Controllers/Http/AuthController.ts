@@ -53,13 +53,5 @@ export default class AuthController {
     }))
 
     return response.json(userJSON)
-    // return {
-    //   id: user?.id,
-    //   name: user?.name,
-    //   nick: user?.nick,
-    //   email: user?.email,
-    //   biografia: user?.biografio,
-    //   avatar: user?.avatar,
-    // }
   }
 }

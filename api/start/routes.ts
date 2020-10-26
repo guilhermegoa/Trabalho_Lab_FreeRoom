@@ -43,6 +43,8 @@ Route.get('/posts/:post_id', 'PostsController.show')
 Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
 Route.delete('/posts/:post_id', 'PostsController.delete')
 
+Route.get('/recentposts', 'PostsController.recentPosts')
+
 Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
 Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')
 Route.get(

@@ -1,22 +1,20 @@
-import React, { useEffect, useCallback } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import { Box, Text, Avatar } from '@chakra-ui/core';
-import { fetchCommunities } from '../../redux/ducks/communities';
+import api from '../../services/api';
 
-function PostsRecentes({ communities, fetchCommunities }) {
-  const getCommunities = useCallback(fetchCommunities, []);
+function CommunityList() {
+  const [recentPosts, setRecentPosts] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
-    if (!communities) {
-      getCommunities();
+    if (!recentPosts) {
+      api.get('/recentposts').then((res) => setRecentPosts(res.data));
     }
-  }, [communities, getCommunities]);
+  }, []);
 
-  const handleOnClick = (id) => {
-    history.push(`/communities/${id}`);
+  const handleOnClick = (post) => {
+    history.push(`/communities/${post.community.id}/posts/${post.id}`);
   };
 
   return (
@@ -25,6 +23,7 @@ function PostsRecentes({ communities, fetchCommunities }) {
       flexDirection="column"
       justifyContent="center"
       overflow="hidden"
+      marginRight="8px"
     >
       <Text
         fontSize="2xl"
@@ -33,8 +32,8 @@ function PostsRecentes({ communities, fetchCommunities }) {
       >
         Recentes
       </Text>
-      {communities
-      && communities.map((community) => (
+      {recentPosts
+      && recentPosts.map((post) => (
         <Box
           borderWidth="1px"
           overflow="hidden"
@@ -44,13 +43,13 @@ function PostsRecentes({ communities, fetchCommunities }) {
           display="flex"
           padding="16px"
           borderLeft="4px"
-          borderLeftColor="Black"
+          borderLeftColor={post.community.color}
           cursor="pointer"
-          onClick={() => handleOnClick(community.id)}
-          key={`${community.name}_${community.id}`}
+          onClick={() => handleOnClick(post)}
+          key={`${post.name}_${post.id}`}
         >
           <Box>
-            <Avatar size="lg" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+            <Avatar size="lg" name="Segun Adebayo" src={post.image_url} />
           </Box>
           <Box marginLeft="16px">
             <Text
@@ -58,12 +57,17 @@ function PostsRecentes({ communities, fetchCommunities }) {
               marginBottom="8px"
               fontWeight="bold"
             >
-              {community.name}
+              {post.title}
             </Text>
             <Text
               fontSize="sm"
             >
-              {community.description}
+              {post.content}
+            </Text>
+            <Text
+              fontSize="sm"
+            >
+              {`Comentários: ${post.comments}`}
             </Text>
           </Box>
         </Box>
@@ -74,12 +78,4 @@ function PostsRecentes({ communities, fetchCommunities }) {
   );
 }
 
-const mapStateToProps = ({ communities }) => ({
-  communities,
-});
-
-const mapDispatchToProps = {
-  fetchCommunities,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostsRecentes);
+export default CommunityList;
