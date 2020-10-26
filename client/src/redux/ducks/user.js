@@ -15,7 +15,7 @@ export const Types = {
 const initialState = {
   isLogged: false,
   isValidToken: false,
-  user: {},
+  user: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -89,8 +89,8 @@ export const validedToken = () => (dispatch) => {
       if (res?.data === true) {
         dispatch(userLogged());
         dispatch(retriveUser());
+        dispatch(tokenValid());
       }
-      dispatch(tokenValid());
     })
     .catch(() => {
       clearToken();

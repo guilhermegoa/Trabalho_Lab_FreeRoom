@@ -5,10 +5,13 @@ import {
   column,
   HasMany,
   hasMany,
+  ManyToMany,
+  manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Post from 'App/Models/Post'
 import Like from './Like'
+import Community from "./Community";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -54,5 +57,10 @@ export default class User extends BaseModel {
     foreignKey: 'user_id',
   })
   public likesArray: HasMany<typeof Like>
+
+  @manyToMany(() => Community, {
+    pivotTable: 'pivot_user_communities',
+  })
+  public user_community: ManyToMany<typeof Community>
 
 }

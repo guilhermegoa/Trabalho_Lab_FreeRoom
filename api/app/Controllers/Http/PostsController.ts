@@ -48,7 +48,7 @@ export default class PostsController {
       await post.related('user').associate(user)
       await post.related('community').associate(community)
     } catch (error) {
-      throw new Error('Ocorreu algum erro ao criar o post')
+      throw new Error(error)
     }
 
     response.json('Post publicado com sucesso')
