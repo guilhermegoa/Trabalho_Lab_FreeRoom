@@ -39,6 +39,8 @@ export default class AuthController {
 
     const user = await User.query()
       .where('id', user_id)
+      .preload('user_community', (query) => query
+        .select('id'))
       .preload('posts')
       .preload('likesArray')
       .first()
@@ -52,14 +54,13 @@ export default class AuthController {
       is_like,
     }))
 
+    userJSON.user_community = userJSON
+      .user_community
+      .map(id => Object.values(id))
+      .flat()
+      
+    userJSON.user_community = [...new Set(userJSON.user_community)]
+
     return response.json(userJSON)
-    // return {
-    //   id: user?.id,
-    //   name: user?.name,
-    //   nick: user?.nick,
-    //   email: user?.email,
-    //   biografia: user?.biografio,
-    //   avatar: user?.avatar,
-    // }
   }
 }

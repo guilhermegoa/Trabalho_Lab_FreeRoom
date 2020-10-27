@@ -10,7 +10,7 @@ export default class Posts extends BaseSchema {
       table.integer('community_id').notNullable().references('id').inTable('communities').onDelete('CASCADE')
       table.string('title', 255).notNullable()
       table.string('image_url')
-      table.string('content').notNullable()
+      table.text('content').notNullable()
       table.integer('likes').defaultTo(0)
       table.integer('unlikes').defaultTo(0)
       table.integer('comments').defaultTo(0)

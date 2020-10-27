@@ -24,7 +24,7 @@ import {
 
 import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
-import LikeService from '../../services/LikeService';
+// import LikeService from '../../services/LikeService';
 // import CommentsService from '../../services/CommentsService';
 
 import { fetchCommunity } from '../../redux/ducks/community';
@@ -76,39 +76,39 @@ function PostCard({
   //   },
   // };
 
-  const handleLike = async (post_id) => {
-    await LikeService.like(user.id, post_id);
-    await fetchUser();
-    community(post.community_id);
-  };
+  // const handleLike = async (post_id) => {
+  //   await LikeService.like(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
-  const handleUnlike = async (post_id) => {
-    await LikeService.unlike(user.id, post_id);
-    await fetchUser();
-    community(post.community_id);
-  };
+  // const handleUnlike = async (post_id) => {
+  //   await LikeService.unlike(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
-  const handleLikeDelete = async (post_id) => {
-    await LikeService.deleteLike(user.id, post_id);
-    await fetchUser();
-    community(post.community_id);
-  };
+  // const handleLikeDelete = async (post_id) => {
+  //   await LikeService.deleteLike(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
   // const handleCommentClick = async () => {
   //   setModalVisible(true);
   // };
 
-  const includesPostLike = (is_like) => {
-    for (let i = 0; i < post.likesArray.length; i++) {
-      if (
-        post.likesArray[i].user_id === user.id
-        && post.likesArray[i].is_like === is_like
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
+  // const includesPostLike = (is_like) => {
+  //   for (let i = 0; i < post.likesArray.length; i++) {
+  //     if (
+  //       post.likesArray[i].user_id === user.id
+  //       && post.likesArray[i].is_like === is_like
+  //     ) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   return (
     <Box
@@ -141,31 +141,31 @@ function PostCard({
             ml="2"
           >
             <Box
-              onClick={() => (includesPostLike(true)
-                ? handleLikeDelete(post.id)
-                : handleLike(post.id))}
-              disabled={includesPostLike(true)}
+              // onClick={() => (includesPostLike(true)
+              //   ? handleLikeDelete(post.id)
+              //   : handleLike(post.id))}
+              // disabled={includesPostLike(true)}
               cursor="pointer"
               display="inline"
               mr="3px"
               size="14px"
               as={MdThumbUp}
-              color={includesPostLike(true) ? 'red:800' : 'purple.800'}
+              // color={includesPostLike(true) ? 'red:800' : 'purple.800'}
             />
             {post.likes}
 
             <Box
-              onClick={() => (includesPostLike(false)
-                ? handleLikeDelete(post.id)
-                : handleUnlike(post.id))}
-              disabled={includesPostLike(false)}
+              // onClick={() => (includesPostLike(false)
+              //   ? handleLikeDelete(post.id)
+              //   : handleUnlike(post.id))}
+              // disabled={includesPostLike(false)}
               cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
               size="14px"
               as={MdThumbDown}
-              color={includesPostLike(false) ? 'red:800' : 'purple.800'}
+              // color={includesPostLike(false) ? 'red:800' : 'purple.800'}
             />
             {post.unlikes}
 

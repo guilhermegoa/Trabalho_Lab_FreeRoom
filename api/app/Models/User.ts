@@ -5,10 +5,13 @@ import {
   column,
   HasMany,
   hasMany,
+  ManyToMany,
+  manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Hash from '@ioc:Adonis/Core/Hash'
 import Post from 'App/Models/Post'
 import Like from './Like'
+import Community from "./Community";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -17,7 +20,7 @@ export default class User extends BaseModel {
   @column()
   public email: string
 
-  @column()
+  @column({ serializeAs: null })
   public password: string
 
   @column()
@@ -30,12 +33,12 @@ export default class User extends BaseModel {
   public avatar: string
 
   @column({ columnName: 'bio' })
-  public biografio: string
+  public biografia: string
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: null })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime
 
   @beforeSave()
@@ -55,7 +58,9 @@ export default class User extends BaseModel {
   })
   public likesArray: HasMany<typeof Like>
 
-  static get hidden() {
-    return ['password']
-  }
+  @manyToMany(() => Community, {
+    pivotTable: 'pivot_user_communities',
+  })
+  public user_community: ManyToMany<typeof Community>
+
 }
