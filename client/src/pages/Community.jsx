@@ -1,89 +1,249 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+
+import { connect } from 'react-redux'
+import api from '../services/api'
+import cloudinary from '../services/cloudinary'
+
 import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
   Tabs,
   TabList,
   TabPanels,
   Tab,
-  TabPanel,
-} from '@chakra-ui/core';
-import Loading from '../components/Loading/index';
-import PostList from '../components/PostList/index';
-import CreatePost from '../components/CreatePost';
+  TabPanel
+} from '@chakra-ui/core'
 
-import { fetchCommunity } from '../redux/ducks/community';
+// import { Text } from "@chakra-ui/core";
+import ImageUploader from 'react-images-upload'
 
-function Community({ fetchCommunity, community }) {
-  const location = useLocation();
+import Loading from '../components/Loading/index'
+import PostList from '../components/PostList/index'
+import ButtonCreatePost from '../components/ButtonCreatePost/index'
+// import Header from '../components/Header/index'
 
-  useEffect(() => {
-    const param = location.pathname.replace('/communities/', '');
-    if (community?.id !== param) {
-      fetchCommunity(param);
+import { fetchCommunity } from '../redux/ducks/community'
+import { retriveUser } from '../redux/ducks/user'
+
+class Community extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      modalVisible: false,
+      title: '',
+      content: '',
+      picture: null,
+      loading: false,
+      picture_name: 'Nenhuma imagem escolhida'
     }
-    // eslint-disable-next-line
-  }, [community?.id, location.pathname]);
+  }
 
-  const calculateHot = (post) => {
-    const dateTime = new Date() - new Date(post.created_at);
-    const likes = post.likes === 0 ? 1 : post.likes;
-    return dateTime / likes;
-  };
+  async componentDidMount() {
+    await this.props.dispatch(retriveUser())
+    this.props.dispatch(fetchCommunity(this.props.match.params.id))
+  }
 
-  const hotPosts = (posts) => {
-    const newPosts = [...posts];
-    newPosts.sort((a, b) => calculateHot(a) - calculateHot(b));
-    return newPosts;
-  };
+  calculateHot(post) {
+    const dateTime = new Date() - new Date(post.created_at)
+    const likes = post.likes === 0 ? 1 : post.likes
+    return dateTime / likes
+  }
 
-  const newPosts = (posts) => {
-    const newPosts = [...posts];
-    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    return newPosts;
-  };
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.community === null) return false
+  // }
 
-  const topPosts = (posts) => {
-    const newPosts = [...posts];
-    newPosts.sort((a, b) => b.likes - a.likes);
-    return newPosts;
-  };
+  hotPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => this.calculateHot(a) - this.calculateHot(b))
+    return newPosts
+  }
 
-  return community ? (
-    <Tabs variantColor="purple" variant="soft-rounded">
+  newPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    return newPosts
+  }
 
-      <TabList justifyContent="center" my="30px">
-        <Tab>Calientes</Tab>
-        <Tab>Novos</Tab>
-        <Tab>Top</Tab>
-      </TabList>
+  topPosts(posts) {
+    const newPosts = [...posts]
+    newPosts.sort((a, b) => b.likes - a.likes)
+    return newPosts
+  }
 
-      <TabPanels>
-        <TabPanel>
-          <PostList posts={hotPosts(community.posts)} />
-        </TabPanel>
-        <TabPanel>
-          <PostList posts={newPosts(community.posts)} />
-        </TabPanel>
-        <TabPanel>
-          <PostList posts={topPosts(community.posts)} />
-        </TabPanel>
-      </TabPanels>
-      <CreatePost />
-    </Tabs>
-  ) : (
-    <Loading />
-  );
+  handleChangeTitle = event => this.setState({ title: event.target.value })
+  handleChangeContent = event => this.setState({ content: event.target.value })
+
+  onDrop = async picture => {
+    this.setState({ loading: true })
+    await this.setState({ picture, picture_name: picture[0].name })
+    this.setState({ loading: false })
+  }
+
+  showModal = () => this.setState({ modalVisible: true })
+
+  hideModal = () => {
+    this.setState({
+      modalVisible: false,
+      title: '',
+      content: '',
+      picture: null,
+      picture_name: 'Nenhuma imagem escolhida'
+    })
+  }
+
+  redirectToLogin = () => this.props.history.push('/login')
+
+  sendPost = async () => {
+    this.setState({ loading: true })
+    if (this.state.title && this.state.content) {
+      let url = null
+
+      if (this.state.picture) {
+        const dataFile = new FormData()
+        dataFile.append('file', this.state.picture[0])
+        dataFile.append('upload_preset', 'freeroom')
+
+        const file = await cloudinary.post(`/image/upload`, dataFile)
+
+        url = file.data.url
+      }
+
+      const data = {
+        title: this.state.title,
+        content: this.state.content,
+        image_url: url
+      }
+
+      try {
+        await api.post(
+          `/posts/${this.props.user.id}/create/${this.props.match.params.id}`,
+          data
+        )
+        this.props.dispatch(fetchCommunity(this.props.match.params.id))
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.hideModal()
+      }
+    }
+    this.setState({ loading: false })
+  }
+
+  /*<LoginBackground>
+          <Text fontSize="6xl" color="#FFF" fontWeight="700">{community.name}</Text>
+        </LoginBackground>*/
+
+  render() {
+    const { community } = this.props
+    return community ? (
+      <Tabs variantColor="purple" variant="soft-rounded">
+
+        {/* <Header></Header> */}
+
+        <TabList justifyContent="center" my="30px" >
+          <Tab>Calientes</Tab>
+          <Tab>Novos</Tab>
+          <Tab>Top</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <PostList posts={this.hotPosts(community.posts)}></PostList>
+          </TabPanel>
+          <TabPanel>
+            <PostList posts={this.newPosts(community.posts)}></PostList>
+          </TabPanel>
+          <TabPanel>
+            <PostList posts={this.topPosts(community.posts)}></PostList>
+          </TabPanel>
+        </TabPanels>
+
+        <div
+          onClick={this.props.isLogged ? this.showModal : this.redirectToLogin}
+        >
+          <ButtonCreatePost></ButtonCreatePost>
+        </div>
+        <Modal
+          blockScrollOnMount={false}
+          isOpen={this.state.modalVisible}
+          onClose={this.hideModal}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              Criar Post na comunidade "{community.name}"
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl isRequired>
+                <FormLabel>Título</FormLabel>
+                <Input
+                  value={this.state.title}
+                  onChange={this.handleChangeTitle}
+                  focusBorderColor="purple.500"
+                  placeholder="Digite um título..."
+                />
+              </FormControl>
+
+              <FormControl mt={4} mb={4} isRequired>
+                <FormLabel>Conteúdo</FormLabel>
+                <Textarea
+                  value={this.state.content}
+                  onChange={this.handleChangeContent}
+                  focusBorderColor="purple.500"
+                  placeholder="Digite o seu texto"
+                />
+              </FormControl>
+
+              <FormLabel>{this.state.picture_name}</FormLabel>
+              <ImageUploader
+                withIcon={true}
+                buttonText="Escolher Imagem"
+                onChange={this.onDrop}
+                imgExtension={['.jpg', '.jpeg', '.png', '.gif']}
+                maxFileSize={5242880}
+                fileTypeError="Esse tipo de arquivo não é permitido"
+                fileSizeError="Esse arquivo é muito grande"
+                label="Tamanho máximo: 5mb - Arquivos: jpg | png | gif"
+                singleImage={true}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={this.hideModal}>
+                Cancelar
+              </Button>
+              <Button
+                variantColor="purple"
+                isLoading={this.state.loading}
+                onClick={this.sendPost}
+              >
+                Publicar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Tabs>
+    ) : (
+      <Loading></Loading>
+    )
+  }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   community: state.community[0],
   user: state.user.user,
-  isLogged: state.user.isLogged,
-});
+  isLogged: state.user.isLogged
+})
 
-const mapDispatchToProps = {
-  fetchCommunity,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Community);
+export default connect(mapStateToProps)(Community)

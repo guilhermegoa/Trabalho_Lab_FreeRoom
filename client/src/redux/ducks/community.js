@@ -3,7 +3,7 @@ import api from '../../services/api';
 // Action Types
 
 export const Types = {
-  FETCH: 'community/fetch',
+  FETCH: 'communities/fetch',
 };
 
 // Reducer

@@ -13,7 +13,7 @@ export default class CommunitiesController {
       .where('id', community_id)
       .preload('posts', (query) => {
         query
-          .preload('user', (query) => query.select('id', 'name', 'avatar'))
+          .preload('user')
           .preload('likesArray')
           .preload('commentsArray', (query) => {
             query.preload('user')

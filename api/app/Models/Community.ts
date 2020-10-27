@@ -12,19 +12,10 @@ export default class Community extends BaseModel {
   @column()
   public name: string
 
-  @column()
-  public description: string
-
-  @column()
-  public color: string
-
-  @column()
-  public image_url: string
-
-  @column.dateTime({ autoCreate: true, serializeAs: null })
+  @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
   @hasMany(() => Post, {

@@ -20,15 +20,6 @@
     ],
     "rules": {
         "react/prop-types": "off",
-        "no-shadow": [0],
-        "camelcase": [
-            "off", 
-            {
-                "properties": "never", 
-                "ignoreDestructuring": true,
-                "ignoreImports": true
-            }
-            
-        ]
+        "no-shadow": [0]
     }
 }
