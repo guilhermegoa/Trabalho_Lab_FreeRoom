@@ -1,43 +1,91 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {
+  Box,
+  Text,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Icon,
+  Avatar,
+  Button,
+} from '@chakra-ui/core';
+import Register from './Modais/Register';
+import Login from './Modais/Login';
+import { userLogout } from '../../redux/ducks/user';
 
-import { Box, Grid, Avatar, Drawer, DrawerBody, useDisclosure, DrawerOverlay, DrawerContent,  DrawerCloseButton, Button } from "@chakra-ui/core"
-
-
-function Header() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
+function Header({ isLogged, userLogout }) {
+  const history = useHistory();
 
   return (
     <>
-    <Grid templateColumns="repeat(2, 1fr)" h="300px" gap={1} bg="blue.500">
-      <Box w="100%" h="100%" display="flex" alignItems="space-between" justifyContent="flex-start" pt="30px" pl="20px">
-        <Button ref={btnRef} variantColor="teal" onClick={onOpen}>
-          =
-        </Button>
-        <Drawer
-          isOpen={isOpen}
-          placement="left"
-          onClose={onClose}
-          finalFocusRef={btnRef}
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerBody>
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
-        <Box>
-          <h1>Olá Goa</h1>
-          <h3>Encontra topicos que você gosta de ler</h3>
+      <Box
+        as="header"
+        position="fixed"
+        backgroundColor="#1A365D"
+        display="flex"
+        justifyContent="space-evenly"
+        alignItems="center"
+        padding="0 32px"
+        width="100vw"
+        height="56px"
+        zIndex="10"
+      >
+        <Box marginRight="16px">
+          <Text
+            color="white"
+            onClick={() => history.push('/')}
+            cursor="pointer"
+          >
+            FREEROOM
+          </Text>
         </Box>
+        <Box marginRight="16px">
+          <InputGroup size="md">
+            <InputLeftElement>
+              <Icon name="search" color="blue.500" />
+            </InputLeftElement>
+            <Input minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="phone" placeholder="Phone number" />
+          </InputGroup>
+        </Box>
+        {isLogged ? (
+          <>
+            <Box>
+              <Avatar
+                size="md"
+                name="Segun Adebayo"
+              />
+            </Box>
+            <Button onClick={userLogout}>
+              <Text textAlign="center">Sair</Text>
+            </Button>
+          </>
+        )
+          : (
+            <>
+              <Box>
+                <Login />
+              </Box>
+              <Box>
+                <Register />
+              </Box>
+            </>
+          )}
+
       </Box>
-      <Box w="100%" h="100%" display="flex" justifyContent="flex-end" p="20px" >
-        <Avatar size="lg" name="Ryan Florence" src="https://bit.ly/ryan-florence" />
-      </Box>
-    </Grid>
     </>
-    );
+  );
 }
 
-export default Header;
+const mapStateToProps = ({ user }) => ({
+  user: user.user,
+  isLogged: user.isLogged,
+
+});
+
+const mapDispatchToProps = {
+  userLogout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

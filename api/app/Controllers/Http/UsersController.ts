@@ -1,4 +1,5 @@
 import User from '../../Models/User'
+import Community from '../../Models/Community'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
@@ -63,5 +64,45 @@ export default class UsersController {
       .preload('posts')
       .preload('likesArray')
     return user
+  }
+
+  public async followCommunity({ request, response }: HttpContextContract) {
+    const  user_id = request.input('user_id')
+    const community_id = request.input('community_id')
+    
+    try {
+        const user = await User.find(user_id)
+        const community = await Community.find(community_id)
+      
+        if(community === null){
+          return response.status(400).json('Community id not found')
+        }
+
+        await user?.related('user_community').attach([community.id])
+
+        return response.status(200)
+    } catch (error) {
+      response.status(500).json(error.messsage)
+    }
+  }
+
+  public async unfollowCommunity({ request, response }: HttpContextContract) {
+    const  user_id = request.input('user_id')
+    const community_id = request.input('community_id')
+    
+    try {
+        const user = await User.find(user_id)
+        const community = await Community.find(community_id)
+
+        if(community === null){
+          return response.status(400).json('Community id not found')
+        }
+
+        await user?.related('user_community').detach([community.id])
+
+        return response.status(200)
+    } catch (error) {
+      response.status(500).json(error.messsage)
+    }
   }
 }

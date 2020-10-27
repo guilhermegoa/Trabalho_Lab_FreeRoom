@@ -3,14 +3,12 @@ import api from '../../services/api';
 // Action Types
 
 export const Types = {
-  FETCH: 'community/fetch',
+  FETCH: 'communities/fetch',
 };
 
 // Reducer
 
-const initialState = {
-  community: {},
-};
+const initialState = null;
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -22,9 +20,9 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-const communityFetched = (data) => ({ type: Types.FETCH, payload: data });
+const communitiesFetched = (data) => ({ type: Types.FETCH, payload: data });
 
 // Thunk
-export const fetchCommunity = (id) => (dispatch) => api
-  .get(`/communities/${id}`)
-  .then(({ data }) => dispatch(communityFetched(data)));
+export const fetchCommunities = () => (dispatch) => api
+  .get('/communities')
+  .then(({ data }) => dispatch(communitiesFetched(data)));

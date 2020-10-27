@@ -15,7 +15,7 @@ export const Types = {
 const initialState = {
   isLogged: false,
   isValidToken: false,
-  user: {},
+  user: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -54,6 +54,18 @@ const validToken = () => ({ type: Types.VALIDTOKEN });
 const userFetched = (data) => ({ type: Types.FETCH, payload: data });
 
 // Thunk
+
+export const userLogged = () => (dispatch) => dispatch(loginUser());
+
+export const tokenValid = () => (dispatch) => dispatch(validToken());
+
+export const retriveUser = () => (dispatch) => api
+  .get('/retriveuser')
+  .then(({ data }) => {
+    dispatch(userFetched(data));
+    dispatch(loginUser());
+  });
+
 export const userLogin = (dataLogin) => (dispatch) => api
   .post('/login', dataLogin)
   .then(({ data }) => {
@@ -72,24 +84,16 @@ export const fetchUser = (id) => (dispatch) => api
   .get(`/users/${id}`)
   .then(({ data }) => dispatch(userFetched(data)));
 
-export const userLogged = () => (dispatch) => dispatch(loginUser());
-
-export const tokenValid = () => (dispatch) => dispatch(validToken());
-
 export const validedToken = () => (dispatch) => {
   api.get('checktoken')
     .then((res) => {
       if (res?.data === true) {
         dispatch(userLogged());
+        dispatch(retriveUser());
+        dispatch(tokenValid());
       }
-      dispatch(tokenValid());
     })
-    .catch((error) => {
+    .catch(() => {
       clearToken();
-      dispatch(tokenValid());
     });
 };
-
-export const retriveUser = () => (dispatch) => api
-  .get('/retriveuser')
-  .then(({ data }) => dispatch(userFetched(data)))

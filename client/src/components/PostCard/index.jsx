@@ -1,120 +1,126 @@
-import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   Box,
   Tag,
   Avatar,
   Image,
-  Modal,
-  Button,
-  FormLabel,
-  ModalFooter,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  Textarea,
-  useToast,
-  Text
-} from '@chakra-ui/core'
-import ImageUploader from 'react-images-upload'
+  // Modal,
+  // Button,
+  // FormLabel,
+  // ModalFooter,
+  // ModalOverlay,
+  // ModalContent,
+  // ModalHeader,
+  // ModalCloseButton,
+  // ModalBody,
+  // FormControl,
+  // Textarea,
+  // Text,
+  // useToast,
+} from '@chakra-ui/core';
 
-import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md'
+import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
-import LikeService from '../../services/LikeService'
-import CommentsService from '../../services/CommentsService'
+// import LikeService from '../../services/LikeService';
+// import CommentsService from '../../services/CommentsService';
 
-import { fetchCommunity } from '../../redux/ducks/community'
-import { retriveUser } from '../../redux/ducks/user'
+import { fetchCommunity } from '../../redux/ducks/community';
+import { retriveUser } from '../../redux/ducks/user';
 
-function PostCard({ user, isLogged, post, image, fetchUser, community }) {
-  const redirectToLogin = () => this.props.history.push('/login')
+function PostCard({
+  user, post, fetchUser, community,
+}) {
+  const history = useHistory();
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [loading, setIsLoading] = useState(false);
+  // const [text, setText] = useState('');
 
-  if (!isLogged) redirectToLogin()
+  // const toast = useToast();
 
-  const [modalVisible, setModalVisible] = useState(false)
-  const [loading, setIsLoading] = useState(false)
-  const [text, setText] = useState('')
+  // const commentFunc = {
+  //   hideModal: () => {
+  //     setModalVisible(false);
+  //     setText('');
+  //   },
+  //   handleChangeText: (e) => {
+  //     setText(e.target.value);
+  //   },
+  //   handleSubmit: async () => {
+  //     setIsLoading(true);
+  //     CommentsService.comment(post.id, user.id, text).then((res) => {
+  //       setIsLoading(false);
+  //       setText('');
 
-  const toast = useToast()
+  //       // eslint-disable-next-line no-unused-expressions
+  //       res.status === 201
+  //         ? toast({
+  //           title: 'Comentario enviado',
+  //           description: 'Seu comentário foi registrado',
+  //           status: 'success',
+  //           duration: 5000,
+  //           isClosable: true,
+  //         })
+  //         : toast({
+  //           title: 'Algo de errado ocorreu',
+  //           description: 'Seu comentário não foi registrado',
+  //           status: 'error',
+  //           duration: 5000,
+  //           isClosable: true,
+  //         });
 
-  const commentFunc = {
-    hideModal: () => {
-      setModalVisible(false)
-      setText('')
-    },
-    handleChangeText: e => {
-      setText(e.target.value)
-    },
-    handleSubmit: async () => {
-      setIsLoading(true)
-      CommentsService.comment(post.id, user.id, text).then(res => {
-        setIsLoading(false)
-        setText('')
+  //       community(post.community_id);
+  //     });
+  //   },
+  // };
 
-        res.status === 201
-          ? toast({
-              title: 'Comentario enviado',
-              description: 'Seu comentário foi registrado',
-              status: 'success',
-              duration: 5000,
-              isClosable: true
-            })
-          : toast({
-              title: 'Algo de errado ocorreu',
-              description: 'Seu comentário não foi registrado',
-              status: 'error',
-              duration: 5000,
-              isClosable: true
-            })
+  // const handleLike = async (post_id) => {
+  //   await LikeService.like(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
-        community(post.community_id)
-      })
-    }
-  }
+  // const handleUnlike = async (post_id) => {
+  //   await LikeService.unlike(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
-  const handleLike = async post_id => {
-    await LikeService.like(user.id, post_id)
-    await fetchUser()
-    community(post.community_id)
-  }
+  // const handleLikeDelete = async (post_id) => {
+  //   await LikeService.deleteLike(user.id, post_id);
+  //   await fetchUser();
+  //   community(post.community_id);
+  // };
 
-  const handleUnlike = async post_id => {
-    await LikeService.unlike(user.id, post_id)
-    await fetchUser()
-    community(post.community_id)
-  }
+  // const handleCommentClick = async () => {
+  //   setModalVisible(true);
+  // };
 
-  const handleLikeDelete = async post_id => {
-    await LikeService.deleteLike(user.id, post_id)
-    await fetchUser()
-    community(post.community_id)
-  }
-
-  const handleCommentClick = async post_id => {
-    setModalVisible(true)
-  }
-
-  const includesPostLike = is_like => {
-    for (var i = 0; i < post.likesArray.length; i++) {
-      if (
-        post.likesArray[i].user_id === user.id &&
-        post.likesArray[i].is_like === is_like
-      ) {
-        return true
-      }
-    }
-    return false
-  }
+  // const includesPostLike = (is_like) => {
+  //   for (let i = 0; i < post.likesArray.length; i++) {
+  //     if (
+  //       post.likesArray[i].user_id === user.id
+  //       && post.likesArray[i].is_like === is_like
+  //     ) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   return (
-    <Box borderWidth="1px" rounded="lg" overflow="hidden">
-      {post.image_url ? <Image src={post.image_url} alt={post.title} /> : <></>}
+    <Box
+      borderWidth="1px"
+      rounded="lg"
+      overflow="hidden"
+      cursor="pointer"
+      onClick={() => history.push(`${history.location.pathname}/post/${post.id}`)}
+    >
+      {post.image_url ? <Image src={post.image_url} alt={post.title} backgroundColor="white" /> : <></>}
 
-      <Box p="6">
+      <Box p="6" backgroundColor="white">
         <Box d="flex" alignItems="baseline">
           <Tag variantColor="purple" rounded="full">
             <Avatar
@@ -135,41 +141,37 @@ function PostCard({ user, isLogged, post, image, fetchUser, community }) {
             ml="2"
           >
             <Box
-              onClick={() =>
-                includesPostLike(true)
-                  ? handleLikeDelete(post.id)
-                  : handleLike(post.id)
-              }
-              disabled={includesPostLike(true)}
+              // onClick={() => (includesPostLike(true)
+              //   ? handleLikeDelete(post.id)
+              //   : handleLike(post.id))}
+              // disabled={includesPostLike(true)}
               cursor="pointer"
               display="inline"
               mr="3px"
               size="14px"
               as={MdThumbUp}
-              color={includesPostLike(true) ? 'red:800' : 'purple.800'}
+              // color={includesPostLike(true) ? 'red:800' : 'purple.800'}
             />
             {post.likes}
 
             <Box
-              onClick={() =>
-                includesPostLike(false)
-                  ? handleLikeDelete(post.id)
-                  : handleUnlike(post.id)
-              }
-              disabled={includesPostLike(false)}
+              // onClick={() => (includesPostLike(false)
+              //   ? handleLikeDelete(post.id)
+              //   : handleUnlike(post.id))}
+              // disabled={includesPostLike(false)}
               cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
               size="14px"
               as={MdThumbDown}
-              color={includesPostLike(false) ? 'red:800' : 'purple.800'}
+              // color={includesPostLike(false) ? 'red:800' : 'purple.800'}
             />
             {post.unlikes}
 
             <Box
-              onClick={() => handleCommentClick(post.id)}
-              cursor="pointer"
+              // onClick={() => handleCommentClick(post.id)}
+              // cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
@@ -198,69 +200,59 @@ function PostCard({ user, isLogged, post, image, fetchUser, community }) {
         </Box>
       </Box>
 
-      <Modal
-        //blockScrollOnMount={false}
+      {/* <Modal
         isOpen={modalVisible}
         onClose={commentFunc.hideModal}
         scrollBehavior="inside"
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Comentários '{post.title}'</ModalHeader>
+          <ModalHeader>
+            Comentários
+            {post.title}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {post.commentsArray.length > 0 ? (
-              post.commentsArray.map((comment, i) =>
-                comment.user_id === user.id ? (
-                  <Box
-                    key={comment.id}
-                    align="right"
-                    display="flex"
-                    flexDirection="row-reverse"
-                    bg="purple"
-                    w="100%"
-                    p={4}
-                    color="black"
-                  >
-                    <Avatar
-                      src={comment.user ? comment.user.avatar : ''}
-                      size="xs"
-                      name={comment.user ? comment.user.name : 'Desconhecido'}
-                      ml={-1}
-                      mr={2}
-                    />
-                    <Text paddingRight="8px">{comment.text}</Text>
-                  </Box>
-                ) : (
-                  <Box key={comment.id} w="100%" p={4} color="black">
-                    <Avatar
-                      src={comment.user ? comment.user.avatar : ''}
-                      size="xs"
-                      name={comment.user ? comment.user.name : 'Desconhecido'}
-                      ml={-1}
-                      mr={2}
-                    />
-                    {comment.text}
-                  </Box>
-                )
-              )
+              post.commentsArray.map((comment) => (comment.user_id === user.id ? (
+                <Box
+                  key={comment.id}
+                  align="right"
+                  display="flex"
+                  flexDirection="row-reverse"
+                  bg="purple"
+                  w="100%"
+                  p={4}
+                  color="black"
+                >
+                  <Avatar
+                    src={comment.user ? comment.user.avatar : ''}
+                    size="xs"
+                    name={comment.user ? comment.user.name : 'Desconhecido'}
+                    ml={-1}
+                    mr={2}
+                  />
+                  <Text paddingRight="8px">{comment.text}</Text>
+                </Box>
+              ) : (
+                <Box key={comment.id} w="100%" p={4} color="black">
+                  <Avatar
+                    src={comment.user ? comment.user.avatar : ''}
+                    size="xs"
+                    name={comment.user ? comment.user.name : 'Desconhecido'}
+                    ml={-1}
+                    mr={2}
+                  />
+                  {comment.text}
+                </Box>
+              )))
             ) : (
               <Box w="100%" p={4} color="black">
                 Ninguém comentou ainda
               </Box>
             )}
-            {/* */}
           </ModalBody>
           <ModalFooter>
-            {/* <FormControl isRequired>
-              <Input
-                value={title}
-                onChange={handleChangeTitle}
-                focusBorderColor="purple.500"
-                placeholder="Digite um título..."
-              />
-            </FormControl> */}
-
             <FormControl mt={4} mb={4} isRequired>
               <FormLabel>Comentário</FormLabel>
               <Textarea
@@ -283,20 +275,20 @@ function PostCard({ user, isLogged, post, image, fetchUser, community }) {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </Box>
-  )
+  );
 }
 
-const mapStateToProps = state => ({
-  user: state.user.user,
-  isLogged: state.user.isLogged,
-  community: state.community[0]
-})
+const mapStateToProps = ({ user, community }) => ({
+  user: user.user,
+  isLogged: user.isLogged,
+  community: community.community,
+});
 
 const mapDispatchToProps = {
   community: fetchCommunity,
-  fetchUser: retriveUser
-}
+  fetchUser: retriveUser,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostCard)
+export default connect(mapStateToProps, mapDispatchToProps)(PostCard);
