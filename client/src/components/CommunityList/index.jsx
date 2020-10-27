@@ -55,8 +55,8 @@ function CommunityList({
   };
 
   const handleButton = (community_id) => {
-    if (isLogged) {
-      if (user && user.user_community.includes(community_id)) {
+    if (isLogged && community_id) {
+      if (user && user?.user_community?.includes(community_id)) {
         return (
           <Button
             backgroundColor="#A0AEC0"

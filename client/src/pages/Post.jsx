@@ -16,6 +16,7 @@ function Post({ fetchPost, post }) {
     if (post?.id !== param) {
       fetchPost(param);
     }
+    // eslint-disable-next-line
   }, [post?.id, fetchPost]);
 
   return <div />;
