@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Tabs,
   TabList,
@@ -12,6 +13,8 @@ import PostList from '../components/PostList/index';
 import api from '../services/api'
 
 function PostSearch() {
+  const location = useLocation();
+  const [postsRetrieved, setPostsRetrieved] = useState()
 
   const calculateHot = (posts) => {
     const dateTime = new Date() - new Date(posts.created_at);
@@ -20,7 +23,6 @@ function PostSearch() {
   };
 
   const hotPosts = (posts) => {
-    console.log(posts)
     const newPosts = [...posts];
     newPosts.sort((a, b) => calculateHot(a) - calculateHot(b));
     return newPosts;
@@ -38,11 +40,11 @@ function PostSearch() {
     return newPosts;
   };
 
-  const retrievePosts = async () => await api.get(`/posts/oi`)
+  api.get(`/posts/${location.pathname.replace('/posts/', '')}`).then(res => {
+    setPostsRetrieved(res.data)
+  })
 
-  const postsRetrieved = retrievePosts()
-
-  return postsRetrieved.length ? (
+  return postsRetrieved ? (
     <Tabs variantColor="purple" variant="soft-rounded">
 
       <TabList justifyContent="center" my="30px">

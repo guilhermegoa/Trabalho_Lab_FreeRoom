@@ -13,6 +13,10 @@ export default class PostsController {
       return Post.query()
         .whereRaw('LOWER(content) LIKE ?', [`%${search.toLowerCase()}%`])
         .orWhereRaw('LOWER(title) LIKE ?', [`%${search.toLowerCase()}%`])
+        .preload('community')
+        .preload('user')
+        .preload('likesArray')
+        .preload('commentsArray')
     }
     console.log(params)
     return Post.query().preload('likesArray')
