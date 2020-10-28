@@ -1,30 +1,28 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
-import { Box, Text, Image } from '@chakra-ui/core';
-import { MdModeComment } from 'react-icons/md';
-import { fetchPost } from '../redux/ducks/post';
-import Loading from '../components/Loading';
-import LikeUnLike from '../components/Post/LikeUnLike';
-import Comment from '../components/Post/Comment';
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { Box, Text, Image } from '@chakra-ui/core'
+import { MdModeComment } from 'react-icons/md'
+import { fetchPost } from '../redux/ducks/post'
+import Loading from '../components/Loading'
+import LikeUnLike from '../components/Post/LikeUnLike'
+import Comment from '../components/Post/Comment'
 
-function Post({
-  fetchPost, post,
-}) {
-  const location = useLocation();
+function Post({ fetchPost, post }) {
+  const location = useLocation()
 
-  const POSTID = 2;
+  const POSTID = 2
 
   useEffect(() => {
-    const param = location.pathname
-      .replace('/communities/', '')
-      .split('/')[POSTID];
+    const param = location.pathname.replace('/communities/', '').split('/')[
+      POSTID
+    ]
 
     if (post?.id !== param) {
-      fetchPost(param);
+      fetchPost(param)
     }
     // eslint-disable-next-line
-  }, [post?.id, fetchPost]);
+  }, [post?.id, fetchPost])
 
   return post ? (
     <>
@@ -47,12 +45,8 @@ function Post({
               />
             </Box>
             <Box marginLeft="16px">
-              <Text>
-                {post[0].user.name}
-              </Text>
-              <Text>
-                {post[0].updated_at}
-              </Text>
+              <Text>{post[0].user.name}</Text>
+              <Text>{new Date(post[0].updated_at).toLocaleString()}</Text>
             </Box>
           </Box>
         </Box>
@@ -60,14 +54,13 @@ function Post({
           <Text fontSize="4xl">{post[0].title}</Text>
           <Text>{post[0].content}</Text>
           <Box margin="auto">
-            {post[0].image_url
-           && (
-           <Image
-             src={post[0].image_url}
-             alt={post[0].title}
-             backgroundColor="white"
-           />
-           )}
+            {post[0].image_url && (
+              <Image
+                src={post[0].image_url}
+                alt={post[0].title}
+                backgroundColor="white"
+              />
+            )}
           </Box>
         </Box>
         <Box
@@ -85,26 +78,25 @@ function Post({
               as={MdModeComment}
               color="purple.800"
             />
-            {post[0].comments}
-            {' '}
-            Comentarios
+            {post[0].comments} Comentarios
           </Box>
           <LikeUnLike />
         </Box>
       </Box>
       <Comment />
     </>
+  ) : (
+    <Loading />
   )
-    : <Loading />;
 }
 
 const mapStateToProps = ({ community, post }) => ({
   community: community.community,
-  post,
-});
+  post
+})
 
 const mapDispatchToProps = {
-  fetchPost,
-};
+  fetchPost
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default connect(mapStateToProps, mapDispatchToProps)(Post)

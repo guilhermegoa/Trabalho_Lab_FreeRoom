@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import {
-  Box, Text, Avatar, Spinner,
-} from '@chakra-ui/core';
-import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
-import api from '../../services/api';
+import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Box, Text, Avatar, Spinner } from '@chakra-ui/core'
+import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md'
+import api from '../../services/api'
 
 function CommunityList() {
-  const [recentPosts, setRecentPosts] = useState(null);
-  const history = useHistory();
+  const [recentPosts, setRecentPosts] = useState(null)
+  const history = useHistory()
 
   useEffect(() => {
     if (!recentPosts) {
-      api.get('/recentposts').then((res) => setRecentPosts(res.data));
+      api.get('/recentposts').then(res => setRecentPosts(res.data))
     }
-  }, [recentPosts]);
+  }, [recentPosts])
 
-  const handleOnClick = (post) => {
-    history.push(`/communities/${post.community.id}/posts/${post.id}`);
-  };
+  const handleOnClick = post => {
+    history.push(`/communities/${post.community.id}/post/${post.id}`)
+  }
 
   return (
     <Box
@@ -28,15 +26,11 @@ function CommunityList() {
       overflow="hidden"
       marginRight="8px"
     >
-      <Text
-        fontSize="2xl"
-        backgroundColor="white"
-        paddingLeft="8px"
-      >
+      <Text fontSize="2xl" backgroundColor="white" paddingLeft="8px">
         Recentes
       </Text>
-      {recentPosts
-        ? recentPosts.map((post) => (
+      {recentPosts ? (
+        recentPosts.map(post => (
           <Box
             display="flex"
             borderWidth="1px"
@@ -53,21 +47,15 @@ function CommunityList() {
           >
             <Box>
               <Avatar size="lg" name="Segun Adebayo" src={post.user.avatar} />
-              <Text fontSize="sm" textAlign="center" marginY="8px">{post.user.name}</Text>
+              <Text fontSize="sm" textAlign="center" marginY="8px">
+                {post.user.name}
+              </Text>
             </Box>
             <Box marginLeft="16px" width="100%">
-              <Text
-                fontSize="xl"
-                marginBottom="8px"
-                fontWeight="bold"
-              >
+              <Text fontSize="xl" marginBottom="8px" fontWeight="bold">
                 {post.title}
               </Text>
-              <Text
-                fontSize="sm"
-              >
-                {`${post.content.substring(0, 30)}...`}
-              </Text>
+              <Text fontSize="sm">{`${post.content.substring(0, 30)}...`}</Text>
               <Box
                 display="flex"
                 justifyContent="flex-end"
@@ -109,20 +97,13 @@ function CommunityList() {
             </Box>
           </Box>
         ))
-        : (
-          <Box margin="32px auto">
-            <Spinner
-              thickness="4px"
-              speed="0.65s"
-              size="md"
-              color="blue.800"
-            />
-          </Box>
-        )}
-
+      ) : (
+        <Box margin="32px auto">
+          <Spinner thickness="4px" speed="0.65s" size="md" color="blue.800" />
+        </Box>
+      )}
     </Box>
-
-  );
+  )
 }
 
-export default CommunityList;
+export default CommunityList

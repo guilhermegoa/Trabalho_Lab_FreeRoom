@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Box,
   useToast,
@@ -7,68 +7,64 @@ import {
   InputRightElement,
   IconButton,
   Image,
-  Text,
-} from '@chakra-ui/core';
-import { MdSend } from 'react-icons/md';
-import { connect } from 'react-redux';
-import CommentsService from '../../../services/CommentsService';
-import { fetchCommunity } from '../../../redux/ducks/community';
-import { fetchPost } from '../../../redux/ducks/post';
+  Text
+} from '@chakra-ui/core'
+import { MdSend } from 'react-icons/md'
+import { connect } from 'react-redux'
+import CommentsService from '../../../services/CommentsService'
+import { fetchCommunity } from '../../../redux/ducks/community'
+import { fetchPost } from '../../../redux/ducks/post'
 
-function Comment({
-  post, user, fetchCommunity, fetchPost,
-}) {
-  const [text, setText] = useState('');
-  const toast = useToast();
+function Comment({ post, user, fetchCommunity, fetchPost }) {
+  const [text, setText] = useState('')
+  const toast = useToast()
 
-  const handleChangeText = (e) => {
-    setText(e.target.value);
-  };
+  const handleChangeText = e => {
+    setText(e.target.value)
+  }
 
   const handleSubmitComment = async () => {
     // setIsLoading(true);
-    CommentsService.comment(post[0].id, user.id, text).then((res) => {
+    CommentsService.comment(post[0].id, user.id, text).then(res => {
       // setIsLoading(false);
       // setText('');
 
       // eslint-disable-next-line no-unused-expressions
       res.status === 201
         ? toast({
-          title: 'Comentario enviado',
-          description: 'Seu comentário foi registrado',
-          status: 'success',
-          duration: 5000,
-          isClosable: true,
-        })
+            title: 'Comentario enviado',
+            description: 'Seu comentário foi registrado',
+            status: 'success',
+            duration: 5000,
+            isClosable: true
+          })
         : toast({
-          title: 'Algo de errado ocorreu',
-          description: 'Seu comentário não foi registrado',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        });
+            title: 'Algo de errado ocorreu',
+            description: 'Seu comentário não foi registrado',
+            status: 'error',
+            duration: 5000,
+            isClosable: true
+          })
 
-      fetchCommunity(post[0].community_id);
-      fetchPost(post[0].id);
-      setText('');
-    });
-  };
+      fetchCommunity(post[0].community_id)
+      fetchPost(post[0].id)
+      setText('')
+    })
+  }
 
   const handleOnClickComment = () => {
     if (!user) {
-      return (
-        toast({
-          title: 'Usuario não logado.',
-          description: 'Necessario estar logado.',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-        })
-      );
+      return toast({
+        title: 'Usuario não logado.',
+        description: 'Necessario estar logado.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true
+      })
     }
 
-    return handleSubmitComment();
-  };
+    return handleSubmitComment()
+  }
 
   return (
     <>
@@ -86,6 +82,7 @@ function Comment({
             pr="4.5rem"
             type="text"
             placeholder="Digite seu comentário"
+            value={text}
             onChange={handleChangeText}
           />
           <InputRightElement width="4.5rem" height="100%">
@@ -100,7 +97,7 @@ function Comment({
         </InputGroup>
       </Box>
 
-      {post[0].commentsArray.map((comment) => (
+      {post[0].commentsArray.map(comment => (
         <Box
           maxW="800px"
           margin="0 auto"
@@ -121,7 +118,9 @@ function Comment({
                 rounded="8px"
               />
             </Box>
-            <Text textAlign="center" color="Gray">{comment.user.name}</Text>
+            <Text textAlign="center" color="Gray">
+              {comment.user.name}
+            </Text>
           </Box>
           <Box
             margin="8px"
@@ -136,17 +135,17 @@ function Comment({
         </Box>
       ))}
     </>
-  );
+  )
 }
 
 const mapStateToProps = ({ user, post }) => ({
   user: user.user,
-  post,
-});
+  post
+})
 
 const mapDispatchToProps = {
   fetchCommunity,
-  fetchPost,
-};
+  fetchPost
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+export default connect(mapStateToProps, mapDispatchToProps)(Comment)
