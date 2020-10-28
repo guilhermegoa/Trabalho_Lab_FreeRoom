@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, HasMany, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Post from 'App/Models/Post'
+import User from 'App/Models/User'
 
 export default class Community extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -31,4 +32,9 @@ export default class Community extends BaseModel {
     foreignKey: 'community_id',
   })
   public posts: HasMany<typeof Post>
+
+  @manyToMany(() => User, {
+    pivotTable: 'pivot_user_communities',
+  })
+  public community_user: ManyToMany<typeof User>
 }

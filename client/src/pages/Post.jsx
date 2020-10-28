@@ -1,12 +1,19 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { Box, Text, Image } from '@chakra-ui/core';
+import { MdModeComment } from 'react-icons/md';
 import { fetchPost } from '../redux/ducks/post';
+import Loading from '../components/Loading';
+import LikeUnLike from '../components/Post/LikeUnLike';
+import Comment from '../components/Post/Comment';
 
-function Post({ fetchPost, post }) {
-  const POSTID = 2;
-
+function Post({
+  fetchPost, post,
+}) {
   const location = useLocation();
+
+  const POSTID = 2;
 
   useEffect(() => {
     const param = location.pathname
@@ -19,12 +26,79 @@ function Post({ fetchPost, post }) {
     // eslint-disable-next-line
   }, [post?.id, fetchPost]);
 
-  return <div />;
+  return post ? (
+    <>
+      <Box
+        maxW="800px"
+        margin="0 auto"
+        rounded="lg"
+        overflow="hidden"
+        backgroundColor="white"
+        padding="8px"
+      >
+        <Box display="flex" justifyContent="space-between">
+          <Box display="flex">
+            <Box size="56px">
+              <Image
+                objectFit="cover"
+                src="https://bit.ly/sage-adebayo"
+                alt="Segun Adebayo"
+                rounded="8px"
+              />
+            </Box>
+            <Box marginLeft="16px">
+              <Text>
+                {post[0].user.name}
+              </Text>
+              <Text>
+                {post[0].updated_at}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+        <Box padding="32px" display="flex" flexDirection="column">
+          <Text fontSize="4xl">{post[0].title}</Text>
+          <Text>{post[0].content}</Text>
+          <Box margin="auto">
+            {post[0].image_url
+           && (
+           <Image
+             src={post[0].image_url}
+             alt={post[0].title}
+             backgroundColor="white"
+           />
+           )}
+          </Box>
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="space-around"
+          marginX="32px"
+          marginY="16px"
+        >
+          <Box cursor="pointer">
+            <Box
+              display="inline"
+              mr="3px"
+              ml="10px"
+              size="32px"
+              as={MdModeComment}
+              color="purple.800"
+            />
+            Comentarios
+            {' '}
+            {post[0].comments}
+          </Box>
+          <LikeUnLike />
+        </Box>
+      </Box>
+      <Comment />
+    </>
+  )
+    : <Loading />;
 }
 
-const mapStateToProps = ({ user, community, post }) => ({
-  user: user.user,
-  isLogged: user.isLogged,
+const mapStateToProps = ({ community, post }) => ({
   community: community.community,
   post,
 });

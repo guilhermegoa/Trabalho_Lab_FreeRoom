@@ -4,7 +4,9 @@ import Community from 'App/Models/Community'
 
 export default class CommunitiesController {
   public async index() {
-    return Community.all()
+    return Community.query()
+      .select('*')
+      .preload('community_user')
   }
 
   public async show({ params }: HttpContextContract) {
