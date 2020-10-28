@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex } from '@chakra-ui/core';
-import CommunityList from '../components/CommunityList';
-import PostsRecentes from '../components/PostsRecentes';
+import CommunityList from '../components/Community/CommunityList';
+import PostsRecentes from '../components/Community/PostsRecentes';
 
 function Main() {
   return (

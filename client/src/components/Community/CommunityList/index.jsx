@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import {
-  Box, Text, Avatar, Button, useToast,
+  Box, Text, Image, Button, useToast,
 } from '@chakra-ui/core';
-import { fetchCommunities } from '../../redux/ducks/communities';
-import { retriveUser } from '../../redux/ducks/user';
-import api from '../../services/api';
+import { fetchCommunities } from '../../../redux/ducks/communities';
+import { retriveUser } from '../../../redux/ducks/user';
+import api from '../../../services/api';
 
 function CommunityList({
   retriveUser, communities, fetchCommunities, user, isLogged,
@@ -111,10 +111,11 @@ function CommunityList({
           marginBottom="8px"
           key={`${community.name}_${community.id}`}
         >
-          <Box>
-            <Avatar
-              size="2xl"
-              name="Segun Adebayo"
+          <Box size="320px">
+            <Image
+              objectFit="fill"
+              rounded="8px"
+              name={community.name}
               src={community.image_url}
               onClick={() => handleOnClick(community.id)}
             />

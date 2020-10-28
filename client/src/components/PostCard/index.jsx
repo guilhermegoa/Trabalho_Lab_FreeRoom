@@ -48,10 +48,6 @@ function PostCard({ post }) {
             ml="2"
           >
             <Box
-              // onClick={() => (includesPostLike(true)
-              //   ? handleLikeDelete(post.id)
-              //   : handleLike(post.id))}
-              // disabled={includesPostLike(true)}
               cursor="pointer"
               display="inline"
               mr="3px"
@@ -96,83 +92,6 @@ function PostCard({ post }) {
           {post.content}
         </Box>
       </Box>
-
-      {/* <Modal
-        isOpen={modalVisible}
-        onClose={commentFunc.hideModal}
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            Comentários
-            {post.title}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {post.commentsArray.length > 0 ? (
-              post.commentsArray.map((comment) => (comment.user_id === user.id ? (
-                <Box
-                  key={comment.id}
-                  align="right"
-                  display="flex"
-                  flexDirection="row-reverse"
-                  bg="purple"
-                  w="100%"
-                  p={4}
-                  color="black"
-                >
-                  <Avatar
-                    src={comment.user ? comment.user.avatar : ''}
-                    size="xs"
-                    name={comment.user ? comment.user.name : 'Desconhecido'}
-                    ml={-1}
-                    mr={2}
-                  />
-                  <Text paddingRight="8px">{comment.text}</Text>
-                </Box>
-              ) : (
-                <Box key={comment.id} w="100%" p={4} color="black">
-                  <Avatar
-                    src={comment.user ? comment.user.avatar : ''}
-                    size="xs"
-                    name={comment.user ? comment.user.name : 'Desconhecido'}
-                    ml={-1}
-                    mr={2}
-                  />
-                  {comment.text}
-                </Box>
-              )))
-            ) : (
-              <Box w="100%" p={4} color="black">
-                Ninguém comentou ainda
-              </Box>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            <FormControl mt={4} mb={4} isRequired>
-              <FormLabel>Comentário</FormLabel>
-              <Textarea
-                value={text}
-                onChange={commentFunc.handleChangeText}
-                focusBorderColor="purple.500"
-                placeholder="Digite o seu comentário"
-              />
-            </FormControl>
-
-            <Button variant="ghost" mr={3} onClick={commentFunc.hideModal}>
-              Cancelar
-            </Button>
-            <Button
-              variantColor="purple"
-              isLoading={loading}
-              onClick={commentFunc.handleSubmit}
-            >
-              Publicar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal> */}
     </Box>
   );
 }

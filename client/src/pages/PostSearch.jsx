@@ -1,44 +1,46 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/core'
-import Loading from '../components/Loading/index'
-import PostList from '../components/PostList/index'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import {
+  Tabs, TabList, TabPanels, Tab, TabPanel,
+} from '@chakra-ui/core';
+import Loading from '../components/Loading/index';
+import PostList from '../components/PostList/index';
 
-import SearchService from '../services/SearchService'
+import SearchService from '../services/SearchService';
 
 function PostSearch() {
-  const { search } = useParams()
-  const [postsRetrieved, setPostsRetrieved] = useState()
+  const { search } = useParams();
+  const [postsRetrieved, setPostsRetrieved] = useState();
 
   useEffect(() => {
     SearchService.searchPosts(search).then(({ data }) => {
-      setPostsRetrieved(data)
-    })
-  }, [search])
+      setPostsRetrieved(data);
+    });
+  }, [search]);
 
-  const calculateHot = posts => {
-    const dateTime = new Date() - new Date(posts.created_at)
-    const likes = posts.likes === 0 ? 1 : posts.likes
-    return dateTime / likes
-  }
+  const calculateHot = (posts) => {
+    const dateTime = new Date() - new Date(posts.created_at);
+    const likes = posts.likes === 0 ? 1 : posts.likes;
+    return dateTime / likes;
+  };
 
-  const hotPosts = posts => {
-    const newPosts = [...posts]
-    newPosts.sort((a, b) => calculateHot(a) - calculateHot(b))
-    return newPosts
-  }
+  const hotPosts = (posts) => {
+    const newPosts = [...posts];
+    newPosts.sort((a, b) => calculateHot(a) - calculateHot(b));
+    return newPosts;
+  };
 
-  const newPosts = posts => {
-    const newPosts = [...posts]
-    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    return newPosts
-  }
+  const newPosts = (posts) => {
+    const newPosts = [...posts];
+    newPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    return newPosts;
+  };
 
-  const topPosts = posts => {
-    const newPosts = [...posts]
-    newPosts.sort((a, b) => b.likes - a.likes)
-    return newPosts
-  }
+  const topPosts = (posts) => {
+    const newPosts = [...posts];
+    newPosts.sort((a, b) => b.likes - a.likes);
+    return newPosts;
+  };
 
   return postsRetrieved ? (
     <Tabs variantColor="purple" variant="soft-rounded">
@@ -62,7 +64,7 @@ function PostSearch() {
     </Tabs>
   ) : (
     <Loading />
-  )
+  );
 }
 
-export default PostSearch
+export default PostSearch;

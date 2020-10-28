@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Box, Text, Avatar, Spinner } from '@chakra-ui/core'
-import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md'
-import api from '../../services/api'
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import {
+  Box, Text, Avatar, Spinner,
+} from '@chakra-ui/core';
+import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
+import api from '../../../services/api';
 
 function CommunityList() {
-  const [recentPosts, setRecentPosts] = useState(null)
-  const history = useHistory()
+  const [recentPosts, setRecentPosts] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     if (!recentPosts) {
-      api.get('/recentposts').then(res => setRecentPosts(res.data))
+      api.get('/recentposts').then((res) => setRecentPosts(res.data));
     }
-  }, [recentPosts])
+  }, [recentPosts]);
 
-  const handleOnClick = post => {
-    history.push(`/communities/${post.community.id}/post/${post.id}`)
-  }
+  const handleOnClick = (post) => {
+    history.push(`/communities/${post.community.id}/post/${post.id}`);
+  };
 
   return (
     <Box
@@ -30,7 +32,7 @@ function CommunityList() {
         Recentes
       </Text>
       {recentPosts ? (
-        recentPosts.map(post => (
+        recentPosts.map((post) => (
           <Box
             display="flex"
             borderWidth="1px"
@@ -103,7 +105,7 @@ function CommunityList() {
         </Box>
       )}
     </Box>
-  )
+  );
 }
 
-export default CommunityList
+export default CommunityList;
