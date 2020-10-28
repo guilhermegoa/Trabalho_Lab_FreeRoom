@@ -85,9 +85,9 @@ function Post({
               as={MdModeComment}
               color="purple.800"
             />
-            Comentarios
-            {' '}
             {post[0].comments}
+            {' '}
+            Comentarios
           </Box>
           <LikeUnLike />
         </Box>

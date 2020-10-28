@@ -121,7 +121,7 @@ function Comment({
                 rounded="8px"
               />
             </Box>
-            <Text textAlign="center" color="Gray">Nome</Text>
+            <Text textAlign="center" color="Gray">{comment.user.name}</Text>
           </Box>
           <Box
             margin="8px"
