@@ -23,25 +23,36 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.post('/register', 'UsersController.register')
 Route.post('/login', 'AuthController.login')
 
+Route.get('/communities', 'CommunitiesController.index')
+Route.get('/communities/:community_id', 'CommunitiesController.show')
+
+Route.get('/posts/:post_id', 'PostsController.show')
+Route.get('/recentposts', 'PostsController.recentPosts')
+
 Route.group(() => {
   Route.get('/users', 'UsersController.index')
   Route.get('/logout', 'AuthController.logout')
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
 
-}).middleware('auth:api')
+  
+  Route.get('/users/:user_id', 'UsersController.show')
 
-Route.get('/users/:user_id', 'UsersController.show')
-
-Route.get('/communities', 'CommunitiesController.index')
-Route.get('/communities/:community_id', 'CommunitiesController.show')
-Route.post('/communities', 'CommunitiesController.store')
-Route.delete('/communities/:community_id', 'CommunitiesController.delete')
+  Route.post('/followcommunity', 'UsersController.followCommunity')
+  Route.post('/unfollowcommunity', 'UsersController.unfollowCommunity')
+  
+  // Route.post('/communities', 'CommunitiesController.store')
+  // Route.delete('/communities/:community_id', 'CommunitiesController.delete')
+  
+  Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
+  // Route.get('/posts', 'PostsController.index')
+  // Route.delete('/posts/:post_id', 'PostsController.delete')
 
 Route.get('/posts/:search?', 'PostsController.index')
 Route.get('/posts/:post_id', 'PostsController.show')
 Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
 Route.delete('/posts/:post_id', 'PostsController.delete')
+}).middleware('auth:api')
 
 Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
 Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')

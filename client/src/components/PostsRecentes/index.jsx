@@ -1,22 +1,23 @@
-import React, { useEffect, useCallback } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import {
+  Box, Text, Avatar, Spinner,
+} from '@chakra-ui/core';
+import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
+import api from '../../services/api';
 
-import { Box, Text, Avatar } from '@chakra-ui/core';
-import { fetchCommunities } from '../../redux/ducks/communities';
-
-function PostsRecentes({ communities, fetchCommunities }) {
-  const getCommunities = useCallback(fetchCommunities, []);
+function CommunityList() {
+  const [recentPosts, setRecentPosts] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
-    if (!communities) {
-      getCommunities();
+    if (!recentPosts) {
+      api.get('/recentposts').then((res) => setRecentPosts(res.data));
     }
-  }, [communities, getCommunities]);
+  }, [recentPosts]);
 
-  const handleOnClick = (id) => {
-    history.push(`/communities/${id}`);
+  const handleOnClick = (post) => {
+    history.push(`/communities/${post.community.id}/posts/${post.id}`);
   };
 
   return (
@@ -25,6 +26,7 @@ function PostsRecentes({ communities, fetchCommunities }) {
       flexDirection="column"
       justifyContent="center"
       overflow="hidden"
+      marginRight="8px"
     >
       <Text
         fontSize="2xl"
@@ -33,53 +35,94 @@ function PostsRecentes({ communities, fetchCommunities }) {
       >
         Recentes
       </Text>
-      {communities
-      && communities.map((community) => (
-        <Box
-          borderWidth="1px"
-          overflow="hidden"
-          backgroundColor="white"
-          height="120px"
-          width="400px"
-          display="flex"
-          padding="16px"
-          borderLeft="4px"
-          borderLeftColor="Black"
-          cursor="pointer"
-          onClick={() => handleOnClick(community.id)}
-          key={`${community.name}_${community.id}`}
-        >
-          <Box>
-            <Avatar size="lg" name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
+      {recentPosts
+        ? recentPosts.map((post) => (
+          <Box
+            display="flex"
+            borderWidth="1px"
+            overflow="hidden"
+            backgroundColor="white"
+            height="120px"
+            width="400px"
+            padding="16px"
+            borderLeft="4px"
+            borderLeftColor={post.community.color}
+            cursor="pointer"
+            onClick={() => handleOnClick(post)}
+            key={`${post.name}_${post.id}`}
+          >
+            <Box>
+              <Avatar size="lg" name="Segun Adebayo" src={post.user.avatar} />
+              <Text fontSize="sm" textAlign="center" marginY="8px">{post.user.name}</Text>
+            </Box>
+            <Box marginLeft="16px" width="100%">
+              <Text
+                fontSize="xl"
+                marginBottom="8px"
+                fontWeight="bold"
+              >
+                {post.title}
+              </Text>
+              <Text
+                fontSize="sm"
+              >
+                {`${post.content.substring(0, 30)}...`}
+              </Text>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                alignItems="center"
+                cursor="default"
+                marginTop="16px"
+              >
+                <Box
+                  display="inline"
+                  mr="3px"
+                  ml="10px"
+                  size="14px"
+                  as={MdThumbUp}
+                  color="purple.800"
+                  cursor="default"
+                />
+                {post.likes}
+                <Box
+                  display="inline"
+                  mr="3px"
+                  ml="10px"
+                  size="14px"
+                  as={MdThumbDown}
+                  color="purple.800"
+                  cursor="default"
+                />
+                {post.unlikes}
+                <Box
+                  display="inline"
+                  mr="3px"
+                  ml="10px"
+                  size="14px"
+                  as={MdModeComment}
+                  color="purple.800"
+                  cursor="default"
+                />
+                {post.comments}
+              </Box>
+            </Box>
           </Box>
-          <Box marginLeft="16px">
-            <Text
-              fontSize="xl"
-              marginBottom="8px"
-              fontWeight="bold"
-            >
-              {community.name}
-            </Text>
-            <Text
-              fontSize="sm"
-            >
-              {community.description}
-            </Text>
+        ))
+        : (
+          <Box margin="32px auto">
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              size="md"
+              color="blue.800"
+            />
           </Box>
-        </Box>
-      ))}
+        )}
 
     </Box>
 
   );
 }
 
-const mapStateToProps = ({ communities }) => ({
-  communities,
-});
-
-const mapDispatchToProps = {
-  fetchCommunities,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostsRecentes);
+export default CommunityList;

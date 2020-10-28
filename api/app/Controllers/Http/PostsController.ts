@@ -26,8 +26,8 @@ export default class PostsController {
     const { post_id } = params
     const post = await Post.query()
       .where('id', post_id)
-      .preload('community')
-      .preload('user')
+      // .preload('community')
+      .preload('user', (query) => query.select('id', 'name', 'avatar'))
       .preload('likesArray')
       .preload('commentsArray')
 
@@ -59,7 +59,7 @@ export default class PostsController {
       await post.related('user').associate(user)
       await post.related('community').associate(community)
     } catch (error) {
-      throw new Error('Ocorreu algum erro ao criar o post')
+      throw new Error(error)
     }
 
     response.json('Post publicado com sucesso')
@@ -69,5 +69,17 @@ export default class PostsController {
     const { post_id } = params
     const post = await Post.findOrFail(post_id)
     await post.delete()
+  }
+
+  public async recentPosts() {
+    const posts = await Post
+      .query()
+      .select('*')
+      .orderBy('updated_at', 'desc')
+      .limit(10)
+      .preload('user', (query) => query.select('id', 'name', 'avatar'))
+      .preload('community', (query) => query.select('id', 'color'))
+
+    return posts
   }
 }
