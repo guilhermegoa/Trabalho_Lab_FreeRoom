@@ -7,7 +7,18 @@ import Community from 'App/Models/Community'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class PostsController {
-  public async index() {
+  public async index({ params }: HttpContextContract) {
+    const { search } = params
+    if (search) {
+      return Post.query()
+        .whereRaw('LOWER(content) LIKE ?', [`%${search.toLowerCase()}%`])
+        .orWhereRaw('LOWER(title) LIKE ?', [`%${search.toLowerCase()}%`])
+        .preload('community')
+        .preload('user')
+        .preload('likesArray')
+        .preload('commentsArray')
+    }
+    console.log(params)
     return Post.query().preload('likesArray')
   }
 

@@ -34,6 +34,7 @@ Route.group(() => {
   Route.get('/logout', 'AuthController.logout')
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
+
   
   Route.get('/users/:user_id', 'UsersController.show')
 
@@ -47,6 +48,10 @@ Route.group(() => {
   // Route.get('/posts', 'PostsController.index')
   // Route.delete('/posts/:post_id', 'PostsController.delete')
 
+Route.get('/posts/:search?', 'PostsController.index')
+Route.get('/posts/:post_id', 'PostsController.show')
+Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
+Route.delete('/posts/:post_id', 'PostsController.delete')
 }).middleware('auth:api')
 
 Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')

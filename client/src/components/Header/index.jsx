@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
@@ -17,6 +17,12 @@ import { userLogout } from '../../redux/ducks/user';
 
 function Header({ isLogged, userLogout }) {
   const history = useHistory();
+
+  const [search, setSearch] = useState('')
+
+  const searchPost = () => {
+    history.push(`/posts/${search}`)
+  }
 
   return (
     <>
@@ -42,12 +48,14 @@ function Header({ isLogged, userLogout }) {
           </Text>
         </Box>
         <Box marginRight="16px">
-          <InputGroup size="md">
-            <InputLeftElement>
-              <Icon name="search" color="blue.500" />
-            </InputLeftElement>
-            <Input minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="phone" placeholder="Phone number" />
-          </InputGroup>
+          <form onSubmit={searchPost}>
+            <InputGroup size="md">
+              <InputLeftElement>
+                <Icon name="search" color="blue.500" cursor='pointer' onClick={searchPost} />
+              </InputLeftElement>
+              <Input onChange={(e) => { setSearch(e.target.value) }} minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="text" placeholder="Pesquisar post" />
+            </InputGroup>
+          </form>
         </Box>
         {isLogged ? (
           <>
