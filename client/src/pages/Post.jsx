@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Box, Text, Image } from '@chakra-ui/core'
 import { MdModeComment } from 'react-icons/md'
 import { fetchPost } from '../redux/ducks/post'
@@ -9,17 +9,12 @@ import LikeUnLike from '../components/Post/LikeUnLike'
 import Comment from '../components/Post/Comment'
 
 function Post({ fetchPost, post }) {
-  const location = useLocation()
 
-  const POSTID = 2
+  const { id } = useParams()
 
   useEffect(() => {
-    const param = location.pathname.replace('/communities/', '').split('/')[
-      POSTID
-    ]
-
-    if (post?.id !== param) {
-      fetchPost(param)
+    if (post?.id !== id) {
+      fetchPost(id)
     }
     // eslint-disable-next-line
   }, [post?.id, fetchPost])

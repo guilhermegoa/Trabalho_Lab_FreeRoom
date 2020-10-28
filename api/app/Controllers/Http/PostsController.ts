@@ -18,7 +18,6 @@ export default class PostsController {
         .preload('likesArray')
         .preload('commentsArray')
     }
-    console.log(params)
     return Post.query().preload('likesArray')
   }
 
