@@ -19,9 +19,9 @@ import {
 import ImageUploader from 'react-images-upload';
 import { MdAdd } from 'react-icons/md';
 import { connect } from 'react-redux';
-import api from '../../services/api';
-import cloudinary from '../../services/cloudinary';
-import { fetchCommunity } from '../../redux/ducks/community';
+import api from '../../../services/api';
+import cloudinary from '../../../services/cloudinary';
+import { fetchCommunity } from '../../../redux/ducks/community';
 
 function CreatePost({
   community, user, fetchCommunity, isLogged,

@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/core';
 import Loading from '../components/Loading/index';
 import PostList from '../components/PostList/index';
-import CreatePost from '../components/CreatePost';
+import CreatePost from '../components/Post/CreatePost';
 
 import { fetchCommunity } from '../redux/ducks/community';
 

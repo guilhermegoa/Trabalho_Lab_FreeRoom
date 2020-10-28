@@ -29,7 +29,9 @@ export default class PostsController {
       // .preload('community')
       .preload('user', (query) => query.select('id', 'name', 'avatar'))
       .preload('likesArray')
-      .preload('commentsArray')
+      .preload('commentsArray', (query) => {
+        query.preload('user', (query) => query.select('id', 'name', 'avatar'))
+      })
 
     return post
   }

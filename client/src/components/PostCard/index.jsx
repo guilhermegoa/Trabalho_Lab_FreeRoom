@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -7,108 +7,15 @@ import {
   Tag,
   Avatar,
   Image,
-  // Modal,
-  // Button,
-  // FormLabel,
-  // ModalFooter,
-  // ModalOverlay,
-  // ModalContent,
-  // ModalHeader,
-  // ModalCloseButton,
-  // ModalBody,
-  // FormControl,
-  // Textarea,
-  // Text,
-  // useToast,
 } from '@chakra-ui/core';
 
 import { MdThumbUp, MdModeComment, MdThumbDown } from 'react-icons/md';
 
-// import LikeService from '../../services/LikeService';
-// import CommentsService from '../../services/CommentsService';
-
 import { fetchCommunity } from '../../redux/ducks/community';
 import { retriveUser } from '../../redux/ducks/user';
 
-function PostCard({
-  user, post, fetchUser, community,
-}) {
+function PostCard({ post }) {
   const history = useHistory();
-  // const [modalVisible, setModalVisible] = useState(false);
-  // const [loading, setIsLoading] = useState(false);
-  // const [text, setText] = useState('');
-
-  // const toast = useToast();
-
-  // const commentFunc = {
-  //   hideModal: () => {
-  //     setModalVisible(false);
-  //     setText('');
-  //   },
-  //   handleChangeText: (e) => {
-  //     setText(e.target.value);
-  //   },
-  //   handleSubmit: async () => {
-  //     setIsLoading(true);
-  //     CommentsService.comment(post.id, user.id, text).then((res) => {
-  //       setIsLoading(false);
-  //       setText('');
-
-  //       // eslint-disable-next-line no-unused-expressions
-  //       res.status === 201
-  //         ? toast({
-  //           title: 'Comentario enviado',
-  //           description: 'Seu comentário foi registrado',
-  //           status: 'success',
-  //           duration: 5000,
-  //           isClosable: true,
-  //         })
-  //         : toast({
-  //           title: 'Algo de errado ocorreu',
-  //           description: 'Seu comentário não foi registrado',
-  //           status: 'error',
-  //           duration: 5000,
-  //           isClosable: true,
-  //         });
-
-  //       community(post.community_id);
-  //     });
-  //   },
-  // };
-
-  // const handleLike = async (post_id) => {
-  //   await LikeService.like(user.id, post_id);
-  //   await fetchUser();
-  //   community(post.community_id);
-  // };
-
-  // const handleUnlike = async (post_id) => {
-  //   await LikeService.unlike(user.id, post_id);
-  //   await fetchUser();
-  //   community(post.community_id);
-  // };
-
-  // const handleLikeDelete = async (post_id) => {
-  //   await LikeService.deleteLike(user.id, post_id);
-  //   await fetchUser();
-  //   community(post.community_id);
-  // };
-
-  // const handleCommentClick = async () => {
-  //   setModalVisible(true);
-  // };
-
-  // const includesPostLike = (is_like) => {
-  //   for (let i = 0; i < post.likesArray.length; i++) {
-  //     if (
-  //       post.likesArray[i].user_id === user.id
-  //       && post.likesArray[i].is_like === is_like
-  //     ) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // };
 
   return (
     <Box
@@ -150,28 +57,18 @@ function PostCard({
               mr="3px"
               size="14px"
               as={MdThumbUp}
-              // color={includesPostLike(true) ? 'red:800' : 'purple.800'}
             />
             {post.likes}
-
             <Box
-              // onClick={() => (includesPostLike(false)
-              //   ? handleLikeDelete(post.id)
-              //   : handleUnlike(post.id))}
-              // disabled={includesPostLike(false)}
               cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
               size="14px"
               as={MdThumbDown}
-              // color={includesPostLike(false) ? 'red:800' : 'purple.800'}
             />
             {post.unlikes}
-
             <Box
-              // onClick={() => handleCommentClick(post.id)}
-              // cursor="pointer"
               display="inline"
               mr="3px"
               ml="10px"
