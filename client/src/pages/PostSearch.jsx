@@ -40,7 +40,7 @@ function PostSearch() {
     return newPosts;
   };
 
-  api.get(`/posts/${location.pathname.replace('/posts/', '')}`).then(res => {
+  api.get(`/search/posts/${location.pathname.replace('/posts/', '')}`).then(res => {
     setPostsRetrieved(res.data)
   })
 
