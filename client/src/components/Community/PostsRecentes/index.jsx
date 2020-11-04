@@ -8,17 +8,44 @@ import api from '../../../services/api';
 
 function CommunityList() {
   const [recentPosts, setRecentPosts] = useState(null);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
     if (!recentPosts) {
-      api.get('/recentposts').then((res) => setRecentPosts(res.data));
+      setLoading(true);
+      api.get('/recentposts')
+        .then((res) => setRecentPosts(res.data))
+        .finally(setLoading(false));
     }
   }, [recentPosts]);
 
   const handleOnClick = (post) => {
     history.push(`/communities/${post.community.id}/post/${post.id}`);
   };
+
+  const renderContestLoadingOrNotFound = () => (
+    loading
+      ? (
+        <Box margin="32px auto">
+          <Spinner thickness="4px" speed="0.65s" size="md" color="blue.800" />
+        </Box>
+      )
+      : (
+        <Box
+          display="flex"
+          borderWidth="1px"
+          overflow="hidden"
+          backgroundColor="white"
+          height="120px"
+          width="400px"
+          justifyContent="center"
+          alignItems="center"
+        >
+          Nenhum post encontrado
+        </Box>
+      )
+  );
 
   return (
     <Box
@@ -99,11 +126,7 @@ function CommunityList() {
             </Box>
           </Box>
         ))
-      ) : (
-        <Box margin="32px auto">
-          <Spinner thickness="4px" speed="0.65s" size="md" color="blue.800" />
-        </Box>
-      )}
+      ) : renderContestLoadingOrNotFound() }
     </Box>
   );
 }

@@ -1,11 +1,11 @@
-import api from './api'
+import api from './api';
 
-const searchPath = 'search'
+const searchPath = 'search';
 
 const SearchService = {
   searchPath,
 
-  searchPosts: search => api.get(`${searchPath}/posts/${search}`)
-}
+  searchPosts: (search) => api.get(`${searchPath}/posts/${search}`),
+};
 
-export default SearchService
+export default SearchService;

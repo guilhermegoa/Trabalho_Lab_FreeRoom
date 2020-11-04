@@ -5,13 +5,11 @@ const commentPath = 'comments';
 const CommentsService = {
   commentPath,
 
-  comment: (post_id, user_id, text) => {
-    return api.post(commentPath, {
-      post_id,
-      user_id,
-      text,
-    });
-  },
+  comment: (post_id, user_id, text) => api.post(commentPath, {
+    post_id,
+    user_id,
+    text,
+  }),
 };
 
 export default CommentsService;

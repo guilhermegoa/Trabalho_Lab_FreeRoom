@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Tabs, TabList, TabPanels, Tab, TabPanel,
+  Tabs, TabList, TabPanels, Tab, TabPanel, Box,
 } from '@chakra-ui/core';
 import Loading from '../components/Loading/index';
 import PostList from '../components/PostList/index';
@@ -11,11 +11,15 @@ import SearchService from '../services/SearchService';
 function PostSearch() {
   const { search } = useParams();
   const [postsRetrieved, setPostsRetrieved] = useState();
+  const [loading, setLoading] = useState();
 
   useEffect(() => {
-    SearchService.searchPosts(search).then(({ data }) => {
-      setPostsRetrieved(data);
-    });
+    setLoading(true);
+    SearchService.searchPosts(search)
+      .then(({ data }) => {
+        setPostsRetrieved(data);
+      })
+      .finally(setLoading(false));
   }, [search]);
 
   const calculateHot = (posts) => {
@@ -42,6 +46,24 @@ function PostSearch() {
     return newPosts;
   };
 
+  const renderContestLoadingOrNotFound = () => (
+    loading
+      ? (
+        <Loading />
+      )
+      : (
+        <Box
+          width="100vw"
+          height="100vh"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          Nenhum post encontrado
+        </Box>
+      )
+  );
+
   return postsRetrieved ? (
     <Tabs variantColor="purple" variant="soft-rounded">
       <TabList justifyContent="center" my="30px">
@@ -63,7 +85,7 @@ function PostSearch() {
       </TabPanels>
     </Tabs>
   ) : (
-    <Loading />
+    renderContestLoadingOrNotFound()
   );
 }
 

@@ -96,55 +96,75 @@ function CommunityList({
         Categorias
       </Text>
       {communities
-      && communities.map((community) => (
-        <Box
-          borderWidth="1px"
-          overflow="hidden"
-          backgroundColor="white"
-          height="160px"
-          width="600px"
-          display="flex"
-          padding="16px"
-          borderLeft="4px"
-          borderLeftColor={community.color}
-          cursor="pointer"
-          marginBottom="8px"
-          key={`${community.name}_${community.id}`}
-        >
-          <Box size="320px">
-            <Image
-              objectFit="fill"
-              rounded="8px"
-              name={community.name}
-              src={community.image_url}
-              onClick={() => handleOnClick(community.id)}
-            />
-          </Box>
-          <Box marginLeft="16px" width="100%">
-            <Text
-              fontSize="xl"
-              marginBottom="8px"
-              fontWeight="bold"
-              onClick={() => handleOnClick(community.id)}
-            >
-              {community.name}
-            </Text>
-            <Text
-              fontSize="sm"
-            >
-              {community.description}
-            </Text>
-            <Text
-              fontSize="sm"
-            >
-              {`Seguidores: ${community.followers}`}
-            </Text>
-            <Box display="flex" justifyContent="flex-end">
-              {handleButton(community.id)}
+        ? communities.map((community) => (
+          <Box
+            borderWidth="1px"
+            overflow="hidden"
+            backgroundColor="white"
+            height="160px"
+            width="600px"
+            display="flex"
+            padding="16px"
+            borderLeft="4px"
+            borderLeftColor={community.color}
+            cursor="pointer"
+            marginBottom="8px"
+            key={`${community.name}_${community.id}`}
+          >
+            <Box size="320px">
+              <Image
+                objectFit="fill"
+                rounded="8px"
+                name={community.name}
+                src={community.image_url}
+                onClick={() => handleOnClick(community.id)}
+              />
+            </Box>
+            <Box marginLeft="16px" width="100%">
+              <Text
+                fontSize="xl"
+                marginBottom="8px"
+                fontWeight="bold"
+                onClick={() => handleOnClick(community.id)}
+              >
+                {community.name}
+              </Text>
+              <Text
+                fontSize="sm"
+              >
+                {community.description}
+              </Text>
+              <Text
+                fontSize="sm"
+              >
+                {`Seguidores: ${community.followers}`}
+              </Text>
+              <Box display="flex" justifyContent="flex-end">
+                {handleButton(community.id)}
+              </Box>
             </Box>
           </Box>
-        </Box>
-      ))}
+        ))
+        : (
+          <Box
+            borderWidth="1px"
+            overflow="hidden"
+            backgroundColor="white"
+            height="160px"
+            width="600px"
+            display="flex"
+            padding="16px"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Text
+              fontSize="24px"
+              fontWeight="bold"
+            >
+              Comunidades não encontarada
+            </Text>
+          </Box>
+        )}
 
     </Box>
 
