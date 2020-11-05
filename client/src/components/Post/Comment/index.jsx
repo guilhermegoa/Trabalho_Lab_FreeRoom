@@ -70,35 +70,6 @@ function Comment({
 
   return (
     <>
-      <Box
-        maxW="800px"
-        margin="0 auto"
-        rounded="lg"
-        overflow="hidden"
-        backgroundColor="white"
-        padding="8px"
-        marginY="16px"
-      >
-        <InputGroup size="md">
-          <Textarea
-            pr="4.5rem"
-            type="text"
-            placeholder="Digite seu comentário"
-            value={text}
-            onChange={handleChangeText}
-          />
-          <InputRightElement width="4.5rem" height="100%">
-            <IconButton
-              aria-label="Send commnent"
-              icon={MdSend}
-              onClick={handleOnClickComment}
-              width="100%"
-              height="100%"
-            />
-          </InputRightElement>
-        </InputGroup>
-      </Box>
-
       {post[0].commentsArray.map((comment) => (
         <Box
           maxW="800px"
@@ -136,6 +107,36 @@ function Comment({
           </Box>
         </Box>
       ))}
+
+      <Box
+        maxW="800px"
+        margin="0 auto"
+        rounded="lg"
+        overflow="hidden"
+        backgroundColor="white"
+        padding="8px"
+        marginY="16px"
+      >
+        <InputGroup size="md">
+          <Textarea
+            pr="4.5rem"
+            type="text"
+            placeholder="Digite seu comentário"
+            value={text}
+            onChange={handleChangeText}
+          />
+          <InputRightElement width="4.5rem" height="100%">
+            <IconButton
+              aria-label="Send commnent"
+              icon={MdSend}
+              onClick={handleOnClickComment}
+              width="100%"
+              height="100%"
+            />
+          </InputRightElement>
+        </InputGroup>
+      </Box>
+
     </>
   );
 }

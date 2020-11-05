@@ -15,7 +15,7 @@ function CommunityList() {
     if (!recentPosts) {
       setLoading(true);
       api.get('/recentposts')
-        .then((res) => setRecentPosts(res.data))
+        .then((res) => res.data.length !== 0 && setRecentPosts(res.data))
         .finally(setLoading(false));
     }
   }, [recentPosts]);
@@ -24,7 +24,7 @@ function CommunityList() {
     history.push(`/communities/${post.community.id}/post/${post.id}`);
   };
 
-  const renderContestLoadingOrNotFound = () => (
+  const renderContentLoadingOrNotFound = () => (
     loading
       ? (
         <Box margin="32px auto">
@@ -126,7 +126,7 @@ function CommunityList() {
             </Box>
           </Box>
         ))
-      ) : renderContestLoadingOrNotFound() }
+      ) : renderContentLoadingOrNotFound() }
     </Box>
   );
 }

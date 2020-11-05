@@ -8,9 +8,6 @@ export default class Community extends BaseModel {
   public id: number
 
   @column()
-  public followers: number
-
-  @column()
   public name: string
 
   @column()

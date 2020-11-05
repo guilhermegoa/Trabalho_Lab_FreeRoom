@@ -6,7 +6,9 @@ export default class CommunitiesController {
   public async index() {
     return Community.query()
       .select('*')
-      .preload('community_user')
+      .preload('community_user', (query) => query
+        .select('id')
+      )
   }
 
   public async show({ params }: HttpContextContract) {
