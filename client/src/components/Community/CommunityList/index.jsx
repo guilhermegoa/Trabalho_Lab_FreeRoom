@@ -8,6 +8,7 @@ import {
 import { fetchCommunities } from '../../../redux/ducks/communities';
 import { retriveUser } from '../../../redux/ducks/user';
 import api from '../../../services/api';
+import { FiUsers } from "react-icons/fi";
 
 function CommunityList({
   retriveUser, communities, fetchCommunities, user, isLogged,
@@ -32,6 +33,7 @@ function CommunityList({
         user_id: user.id,
         community_id,
       });
+      getCommunities();
       return retriveUser();
     }
 
@@ -51,6 +53,7 @@ function CommunityList({
       user_id: user.id,
       community_id,
     });
+    getCommunities();
     return retriveUser();
   };
 
@@ -101,7 +104,7 @@ function CommunityList({
             borderWidth="1px"
             overflow="hidden"
             backgroundColor="white"
-            height="160px"
+            height="168px"
             width="600px"
             display="flex"
             padding="16px"
@@ -134,12 +137,11 @@ function CommunityList({
               >
                 {community.description}
               </Text>
-              <Text
-                fontSize="sm"
-              >
-                {`Seguidores: ${community.followers}`}
-              </Text>
-              <Box display="flex" justifyContent="flex-end">
+              <Box display="flex" justifyContent="space-between" alignItems="center" marginTop="16px">
+                <Box display="flex" alignItems="center">
+                  < FiUsers/> 
+                  <Text marginLeft="8px" >{community.followers}</Text>
+                </Box>
                 {handleButton(community.id)}
               </Box>
             </Box>
