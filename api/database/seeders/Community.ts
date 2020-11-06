@@ -26,7 +26,7 @@ export default class CommunitySeeder extends BaseSeeder {
           name: 'Análises e dicas',
           description:'Aqui você encontra dicas e lê as análises dos últimos jogos, elaboradas pelos membros da comunidade.', 
           color: '#48BB78',
-          image_url: 'https://images.unsplash.com/photo-1485115905815-74a5c9fda2f5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=661&q=80'
+          image_url: 'https://images.unsplash.com/photo-1456324504439-367cee3b3c32?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'
         },
         { 
           name: 'Desenvolvimento de jogos',
