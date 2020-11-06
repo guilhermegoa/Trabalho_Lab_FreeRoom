@@ -4,7 +4,21 @@ import Community from 'App/Models/Community'
 
 export default class CommunitiesController {
   public async index() {
-    return Community.all()
+    const communities = await Community
+      .query()
+      .select('*')
+      .preload('community_user', (query) => query
+        .select('id')
+      )
+
+    let communitiesFormated = communities.map((community) => {
+      let communityJson = community.toJSON()
+      const followers = communityJson.community_user.length
+      delete communityJson.community_user
+      return Object.assign(communityJson, {"followers": followers})
+    })
+
+    return communitiesFormated
   }
 
   public async show({ params }: HttpContextContract) {
@@ -13,7 +27,7 @@ export default class CommunitiesController {
       .where('id', community_id)
       .preload('posts', (query) => {
         query
-          .preload('user')
+          .preload('user', (query) => query.select('id', 'name', 'avatar'))
           .preload('likesArray')
           .preload('commentsArray', (query) => {
             query.preload('user')

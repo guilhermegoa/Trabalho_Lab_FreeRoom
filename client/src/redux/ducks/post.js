@@ -8,9 +8,7 @@ export const Types = {
 
 // Reducer
 
-const initialState = {
-  post: {}
-}
+const initialState = null
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -26,7 +24,4 @@ const postFetched = data => ({ type: Types.FETCH, payload: data })
 
 // Thunk
 export const fetchPost = id => dispatch =>
-  api.get(`/posts/${id}`).then(({ data }) => {
-    console.log(data)
-    return dispatch(postFetched(data))
-  })
+  api.get(`/posts/${id}`).then(({ data }) => dispatch(postFetched(data)))

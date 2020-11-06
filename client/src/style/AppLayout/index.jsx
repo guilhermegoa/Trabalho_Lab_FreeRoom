@@ -1,18 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 
-import { Container, Content } from './styles'
+import { Container, Content, Layout } from './styles';
 
 function AppLayout({ children }) {
   return (
     <Container>
       <Content>
-        {/* <Header /> */}
-        {children}
+        <Header />
+        <Layout>
+          {children}
+        </Layout>
       </Content>
     </Container>
-  )
+  );
 }
 
-export default AppLayout
+export default AppLayout;

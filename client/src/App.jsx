@@ -1,16 +1,14 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-
-import Authentication from './components/Authentication';
 import ThemeContainer from './style/theme/ThemeContainer';
 import Routes from './routes';
-
 import store from './redux/store';
+import ValidToken from './components/ValidToken';
 
 function App() {
   return (
     <Provider store={store}>
-      <Authentication />
+      <ValidToken />
       <ThemeContainer>
         <Routes />
       </ThemeContainer>
