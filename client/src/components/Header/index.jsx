@@ -15,7 +15,7 @@ import Register from './Modais/Register';
 import Login from './Modais/Login';
 import { userLogout } from '../../redux/ducks/user';
 
-function Header({ isLogged, userLogout }) {
+function Header({ isLogged, userLogout, user }) {
   const history = useHistory();
 
   const [search, setSearch] = useState('')
@@ -62,7 +62,8 @@ function Header({ isLogged, userLogout }) {
             <Box>
               <Avatar
                 size="md"
-                name="Segun Adebayo"
+                name={user?.name}
+                src={user?.avatar}
               />
             </Box>
             <Button onClick={userLogout}>

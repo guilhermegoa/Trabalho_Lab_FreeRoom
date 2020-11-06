@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Box, Text, Image } from '@chakra-ui/core'
+import { Box, Text, Image, Avatar } from '@chakra-ui/core'
 import { MdModeComment } from 'react-icons/md'
 import { fetchPost } from '../redux/ducks/post'
 import Loading from '../components/Loading'
@@ -32,11 +32,10 @@ function Post({ fetchPost, post }) {
         <Box display="flex" justifyContent="space-between">
           <Box display="flex">
             <Box size="56px">
-              <Image
-                objectFit="cover"
-                src="https://bit.ly/sage-adebayo"
-                alt="Segun Adebayo"
-                rounded="8px"
+              <Avatar
+                size="lg"
+                name={post[0].user.name}
+                src={post[0].user.avatar}
               />
             </Box>
             <Box marginLeft="16px">

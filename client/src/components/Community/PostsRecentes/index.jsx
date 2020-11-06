@@ -75,7 +75,7 @@ function CommunityList() {
             key={`${post.name}_${post.id}`}
           >
             <Box>
-              <Avatar size="lg" name="Segun Adebayo" src={post.user.avatar} />
+              <Avatar size="lg" name={post.user.name} src={post.user.avatar} />
               <Text fontSize="sm" textAlign="center" marginY="8px">
                 {post.user.name}
               </Text>

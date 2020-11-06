@@ -6,7 +6,7 @@ import {
   Textarea,
   InputRightElement,
   IconButton,
-  Image,
+  Avatar,
   Text,
 } from '@chakra-ui/core';
 import { MdSend } from 'react-icons/md';
@@ -83,12 +83,11 @@ function Comment({
           key={`commnet-${comment.id}`}
         >
           <Box>
-            <Box size="56px">
-              <Image
-                objectFit="cover"
-                src="https://bit.ly/sage-adebayo"
-                alt="Segun Adebayo"
-                rounded="8px"
+            <Box size="56px" display="flex" justifyContent="center">
+              <Avatar
+                size="md"
+                name={comment.user.name}
+                src={comment.user.avatar}
               />
             </Box>
             <Text textAlign="center" color="Gray">
