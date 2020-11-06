@@ -26,6 +26,7 @@ Route.post('/login', 'AuthController.login')
 Route.get('/communities', 'CommunitiesController.index')
 Route.get('/communities/:community_id', 'CommunitiesController.show')
 
+Route.get('/search/posts/:search?', 'PostsController.index')
 Route.get('/posts/:post_id', 'PostsController.show')
 Route.get('/recentposts', 'PostsController.recentPosts')
 
@@ -48,27 +49,27 @@ Route.group(() => {
   // Route.get('/posts', 'PostsController.index')
   // Route.delete('/posts/:post_id', 'PostsController.delete')
 
+  // Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
+  // Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')
+  // Route.get(
+  //   '/likes/user/:user_id/post/:post_id',
+  //   'LikesController.retriveByPostAndUser'
+  // )
+  // Route.get('/likes', 'LikesController.retriveAll')
+  Route.post('/likes', 'LikesController.create')
+  Route.delete('/likes/user/:user_id/post/:post_id', 'LikesController.delete')
+
+  // Route.get('/comments/post/:post_id', 'CommentsController.retriveByPost')
+  // Route.get('/comments/user/:user_id', 'CommentsController.retriveByUser')
+  // Route.get(
+  //   '/comments/user/:user_id/post/:post_id',
+  //   'CommentsController.retriveByPostAndUser'
+  // )
+  // Route.get('/comments', 'CommentsController.retriveAll')
+  Route.post('/comments', 'CommentsController.create')
+  Route.delete('/comments/:id', 'CommentsController.delete')
 }).middleware('auth:api')
 
-Route.get('/search/posts/:search?', 'PostsController.index')
 
-Route.get('/likes/post/:post_id', 'LikesController.retriveByPost')
-Route.get('/likes/user/:user_id', 'LikesController.retriveByUser')
-Route.get(
-  '/likes/user/:user_id/post/:post_id',
-  'LikesController.retriveByPostAndUser'
-)
-Route.get('/likes', 'LikesController.retriveAll')
-Route.post('/likes', 'LikesController.create')
-Route.delete('/likes/user/:user_id/post/:post_id', 'LikesController.delete')
 
-Route.get('/comments/post/:post_id', 'CommentsController.retriveByPost')
-Route.get('/comments/user/:user_id', 'CommentsController.retriveByUser')
-Route.get(
-  '/comments/user/:user_id/post/:post_id',
-  'CommentsController.retriveByPostAndUser'
-)
-Route.get('/comments', 'CommentsController.retriveAll')
-Route.post('/comments', 'CommentsController.create')
-Route.delete('/comments/:id', 'CommentsController.delete')
 

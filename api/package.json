@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@adonisjs/assembler": "^2.0.0",
+    "@types/socket.io": "^2.1.11",
     "adonis-preset-ts": "^1.0.4",
     "eslint": "^7.8.1",
     "eslint-plugin-adonis": "^1.0.15",
@@ -29,6 +30,7 @@
     "phc-bcrypt": "^1.0.3",
     "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
+    "socket.io": "^3.0.0",
     "source-map-support": "^0.5.19",
     "sqlite3": "^5.0.0"
   }
