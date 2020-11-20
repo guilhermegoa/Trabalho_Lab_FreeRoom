@@ -7,7 +7,7 @@ export default class CommunitySeeder extends BaseSeeder {
     await Community.createMany([
       {
         name: RECOMENDATION_COMMUNITY_NAME,
-        description: 'Faça posts nessa comunidade caso queira que uma nova comunidade seja criada no sistema. Os posts mais curtidos irão gerar comunidades com seus respectivos títulos, imagens e conteúdos',
+        description: 'Faça posts nessa comunidade caso queira que uma nova comunidade seja criada no sistema.',
         color: '#FFFFFF',
         image_url: 'https://images.unsplash.com/photo-1512314889357-e157c22f938d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1051&q=80'
       },

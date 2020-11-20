@@ -135,11 +135,11 @@ function CommunityList({
               <Text
                 fontSize="sm"
               >
-                {community.description}
+                {community.description.length > 100 ? community.description.substring(0, 97) + "..." : community.description}
               </Text>
               <Box display="flex" justifyContent="space-between" alignItems="center" marginTop="16px">
                 <Box display="flex" alignItems="center">
-                  < FiUsers/> 
+                  < FiUsers />
                   <Text marginLeft="8px" >{community.followers}</Text>
                 </Box>
                 {handleButton(community.id)}

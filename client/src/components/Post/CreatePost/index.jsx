@@ -17,7 +17,7 @@ import {
   useToast,
 } from '@chakra-ui/core';
 import ImageUploader from 'react-images-upload';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdLightbulbOutline } from 'react-icons/md';
 import { connect } from 'react-redux';
 import api from '../../../services/api';
 import cloudinary from '../../../services/cloudinary';
@@ -111,7 +111,7 @@ function CreatePost({
         fontSize="40px"
         size="lg"
         isRound="true"
-        icon={MdAdd}
+        icon={community.name === "Recomendar Comunidades" ? MdLightbulbOutline : MdAdd}
         position="fixed"
         bottom="20px"
         right="20px"
@@ -122,8 +122,8 @@ function CreatePost({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Criar Post na comunidade
-            {community.name}
+            {community.name === "Recomendar Comunidades" ? "Recomendar comunidade" :
+              "Criar Post na comunidade " + community.name}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -169,7 +169,7 @@ function CreatePost({
               isLoading={loading}
               onClick={sendPost}
             >
-              Publicar
+              {community.name === "Recomendar Comunidades" ? "Recomendar" : "Publicar"}
             </Button>
           </ModalFooter>
         </ModalContent>
