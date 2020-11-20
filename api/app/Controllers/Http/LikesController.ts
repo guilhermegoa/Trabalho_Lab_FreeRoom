@@ -3,7 +3,9 @@
 import Post from 'App/Models/Post'
 import Like from 'App/Models/Like'
 import User from 'App/Models/User'
+import Community from 'App/Models/Community'
 
+import { RECOMENDATION_COMMUNITY_NAME } from "../../../database/seeders/Community"
 export default class LikesController {
   public async create({ request, response }) {
     try {
@@ -68,11 +70,47 @@ export default class LikesController {
         post.unlikes += 1
       }
 
+      this.verifyCommunity(post)
+
       await post.save()
       return response.status(201).json(like)
     } catch (e) {
       return response.status(500).json(e.message)
     }
+  }
+
+  async verifyCommunity(post) {
+    const jsonPost = post.toJSON()
+    const community_id = post.community_id
+    const postCommunity = await Community.find(community_id)
+
+    if (postCommunity?.name !== RECOMENDATION_COMMUNITY_NAME) {
+      return false
+    }
+
+    const title = jsonPost.title
+    const communityExists = await Community.query().where({ name: title }).first()
+
+    if (!communityExists) {
+      const likes = jsonPost.likes
+      const users = (await User.all()).length
+      const reach = users < 1000 ? Math.round(users * 0.6) : 1000
+
+      if (likes >= reach) {
+        const community = new Community()
+        community.name = title
+        community.description = jsonPost.content
+        community.image_url = jsonPost.image_url
+
+        try {
+          await community.save()
+          return true
+        } catch (error) {
+          return false
+        }
+      }
+    }
+    return false
   }
 
   public async retriveAll({ response }) {
