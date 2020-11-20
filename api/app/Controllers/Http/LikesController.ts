@@ -96,14 +96,15 @@ export default class LikesController {
 
     if (!communityExists) {
       const likes = jsonPost.likes
-      const users = (await User.all()).length
-      const reach = users < MAX_LIKES ? Math.round(users * 0.6) : MAX_LIKES
+      const users = Math.round((await User.all()).length * 0.6)
+      const reach = users < MAX_LIKES ? users : MAX_LIKES
 
       if (likes >= reach) {
         const community = new Community()
         community.name = title
         community.description = jsonPost.content
         community.image_url = jsonPost.image_url
+        community.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
         try {
           await community.save()
