@@ -6,6 +6,9 @@ import User from 'App/Models/User'
 import Community from 'App/Models/Community'
 
 import { RECOMENDATION_COMMUNITY_NAME } from "../../../database/seeders/Community"
+
+const MAX_LIKES = 200
+
 export default class LikesController {
   public async create({ request, response }) {
     try {
@@ -94,7 +97,7 @@ export default class LikesController {
     if (!communityExists) {
       const likes = jsonPost.likes
       const users = (await User.all()).length
-      const reach = users < 1000 ? Math.round(users * 0.6) : 1000
+      const reach = users < MAX_LIKES ? Math.round(users * 0.6) : MAX_LIKES
 
       if (likes >= reach) {
         const community = new Community()
