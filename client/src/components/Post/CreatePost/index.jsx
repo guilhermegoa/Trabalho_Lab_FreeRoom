@@ -17,7 +17,7 @@ import {
   useToast,
 } from '@chakra-ui/core';
 import ImageUploader from 'react-images-upload';
-import { MdAdd } from 'react-icons/md';
+import { MdAdd, MdLightbulbOutline } from 'react-icons/md';
 import { connect } from 'react-redux';
 import api from '../../../services/api';
 import cloudinary from '../../../services/cloudinary';
@@ -28,7 +28,7 @@ function CreatePost({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
+  const COMMUNITY_RECOMMENDATION = "Recomendar Comunidades"
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -50,6 +50,7 @@ function CreatePost({
   };
 
   const sendPost = async () => {
+    let success = false;
     setLoading(true);
     if (title && content) {
       let url = null;
@@ -77,6 +78,7 @@ function CreatePost({
         );
         fetchCommunity(community.id);
         clearFields();
+        success = true
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
@@ -85,7 +87,27 @@ function CreatePost({
       }
     }
     setLoading(false);
+    return showMessage(success)
   };
+
+  const showMessage = (success) => {
+    return success ?
+      toast({
+        title: 'Post publicado',
+        description: community.name === COMMUNITY_RECOMMENDATION ?
+          'Sua recomendação de comunidade foi publicada com sucesso' : 'Seu novo post foi publicado com sucesso',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      }) :
+      toast({
+        title: 'Ocorreu um erro',
+        description: 'Não foi possível salvar seu post, tente novamente mais tarde',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+      })
+  }
 
   const handleOnCLick = () => {
     if (isLogged) {
@@ -111,7 +133,7 @@ function CreatePost({
         fontSize="40px"
         size="lg"
         isRound="true"
-        icon={MdAdd}
+        icon={community.name === COMMUNITY_RECOMMENDATION ? MdLightbulbOutline : MdAdd}
         position="fixed"
         bottom="20px"
         right="20px"
@@ -122,8 +144,8 @@ function CreatePost({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Criar Post na comunidade
-            {community.name}
+            {community.name === COMMUNITY_RECOMMENDATION ? "Recomendar comunidade" :
+              "Criar Post na comunidade " + community.name}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -169,7 +191,7 @@ function CreatePost({
               isLoading={loading}
               onClick={sendPost}
             >
-              Publicar
+              {community.name === COMMUNITY_RECOMMENDATION ? "Recomendar" : "Publicar"}
             </Button>
           </ModalFooter>
         </ModalContent>
