@@ -68,14 +68,16 @@ export default class UsersController {
 
   public async update({ params, request, response }: HttpContextContract) {
     const { id } = params
-    const data = request.only(['email', 'name', 'nick', 'bio'])
+    const data = request
+      .only(['email', 'name', 'nick', 'bio', 'avatar'])
 
 
-    const user = User.updateOrCreate( {id: id} ,{
+    const user = await User.updateOrCreate( {id: id} ,{
       email: data.email,
       name: data.name,
       nick: data.nick,
       biografia: data.bio,
+      avatar: data.avatar,
     })
 
     response.status(200).json(user)

@@ -15,15 +15,26 @@ import {
   InputLeftElement,
   FormControl,
   FormErrorMessage,
+  FormLabel,
 } from '@chakra-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
+import ImageUploader from 'react-images-upload';
 import { updateLogin } from '../../../redux/ducks/user';
+import cloudinary from '../../../services/cloudinary';
 
 function Login({ user, updateLogin }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
+
+  const [picture, setPicture] = useState(null);
+  const [picture_name, setPicture_name] = useState('Nenhuma imagem escolhida');
+
+  const onDrop = (picture) => {
+    setPicture(picture);
+    setPicture_name(picture[0].name);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +52,19 @@ function Login({ user, updateLogin }) {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await updateLogin(user?.id, values);
+        let url = null;
+
+        if (picture) {
+          const dataFile = new FormData();
+          dataFile.append('file', picture[0]);
+          dataFile.append('upload_preset', 'freeroom');
+
+          const file = await cloudinary.post('/image/upload', dataFile);
+
+          url = file.data.url;
+        }
+
+        await updateLogin(user?.id, { ...values, avatar: url });
         onClose();
         window.location.reload();
       } catch (error) {
@@ -114,7 +137,6 @@ function Login({ user, updateLogin }) {
               </FormControl>
               <FormControl
                 minHeight="70px"
-                // isInvalid={formik.touched.nick && formik.errors.nick}
               >
                 <InputGroup size="md">
                   <InputLeftElement>
@@ -131,11 +153,9 @@ function Login({ user, updateLogin }) {
                     value={formik.values.nick}
                   />
                 </InputGroup>
-                {/* <FormErrorMessage>{formik.errors.nick}</FormErrorMessage> */}
               </FormControl>
               <FormControl
                 minHeight="70px"
-                // isInvalid={formik.touched.bio && formik.errors.bio}
               >
                 <InputGroup size="md">
                   <InputLeftElement>
@@ -152,7 +172,20 @@ function Login({ user, updateLogin }) {
                     value={formik.values.bio}
                   />
                 </InputGroup>
-                {/* <FormErrorMessage>{formik.errors.bio}</FormErrorMessage> */}
+
+                <FormLabel>{picture_name}</FormLabel>
+                <ImageUploader
+                  defaultImage={picture && picture[0]}
+                  withIcon
+                  buttonText="Escolher Imagem"
+                  onChange={onDrop}
+                  imgExtension={['.jpg', '.jpeg', '.png', '.gif']}
+                  maxFileSize={5242880}
+                  fileTypeError="Esse tipo de arquivo não é permitido"
+                  fileSizeError="Esse arquivo é muito grande"
+                  label="Tamanho máximo: 5mb - Arquivos: jpg | png | gif"
+                  singleImage
+                />
               </FormControl>
               <Button
                 type="submit"
@@ -162,7 +195,7 @@ function Login({ user, updateLogin }) {
                 isLoading={isLoading}
                 loadingText="Submitting"
               >
-                Entrar
+                Atualizar
               </Button>
             </form>
           </ModalBody>
