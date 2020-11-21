@@ -5,7 +5,7 @@ import User from 'App/Models/User'
 import Community from 'App/Models/Community'
 
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
+import { RECOMENDATION_COMMUNITY_NAME } from '../../../database/seeders/Community'
 export default class PostsController {
   public async index({ params }: HttpContextContract) {
     const { search } = params
@@ -48,7 +48,13 @@ export default class PostsController {
     if (!community) {
       throw new Error('Não existe a comunidade')
     }
-
+    console.log(community.name)
+    if (community.name === RECOMENDATION_COMMUNITY_NAME) {
+      const communityExists = await Community.query().where({ name: data.title }).first()
+      if (communityExists) {
+        throw new Error('Já existe uma comunidade com esse nome')
+      }
+    }
     const post = new Post()
     post.title = data.title
     post.content = data.content

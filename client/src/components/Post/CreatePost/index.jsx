@@ -102,8 +102,10 @@ function CreatePost({
       }) :
       toast({
         title: 'Ocorreu um erro',
-        description: 'Não foi possível salvar seu post, tente novamente mais tarde',
-        status: 'success',
+        description: community.name === COMMUNITY_RECOMMENDATION ?
+          'Verifique se já não existe uma comunidade com esse nome e tente novamente' :
+          'Não foi possível salvar seu post, tente novamente mais tarde',
+        status: 'error',
         duration: 5000,
         isClosable: true,
       })
@@ -117,7 +119,7 @@ function CreatePost({
     return (
       toast({
         title: 'Usuario não logado.',
-        description: 'Necessario estar logado.',
+        description: 'Necessário estar logado.',
         status: 'error',
         duration: 5000,
         isClosable: true,
