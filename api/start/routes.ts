@@ -38,6 +38,7 @@ Route.group(() => {
 
   
   Route.get('/users/:user_id', 'UsersController.show')
+  Route.post('/users/update/:id', 'UsersController.update')
 
   Route.post('/followcommunity', 'UsersController.followCommunity')
   Route.post('/unfollowcommunity', 'UsersController.unfollowCommunity')
