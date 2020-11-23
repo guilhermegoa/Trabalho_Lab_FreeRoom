@@ -8,21 +8,21 @@ import {
   InputLeftElement,
   Input,
   Icon,
-  Avatar,
   Button,
 } from '@chakra-ui/core';
 import Register from './Modais/Register';
 import Login from './Modais/Login';
+import UpdateUser from './Modais/updateUser';
 import { userLogout } from '../../redux/ducks/user';
 
 function Header({ isLogged, userLogout, user }) {
   const history = useHistory();
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
 
   const searchPost = () => {
-    history.push(`/posts/${search}`)
-  }
+    history.push(`/posts/${search}`);
+  };
 
   return (
     <>
@@ -51,20 +51,21 @@ function Header({ isLogged, userLogout, user }) {
           <form onSubmit={searchPost}>
             <InputGroup size="md">
               <InputLeftElement>
-                <Icon name="search" color="blue.500" cursor='pointer' onClick={searchPost} />
+                <Icon name="search" color="blue.500" cursor="pointer" onClick={searchPost} />
               </InputLeftElement>
-              <Input onChange={(e) => { setSearch(e.target.value) }} minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="text" placeholder="Pesquisar post" />
+              <Input onChange={(e) => { setSearch(e.target.value); }} minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="text" placeholder="Pesquisar post" />
             </InputGroup>
           </form>
         </Box>
         {isLogged ? (
           <>
             <Box>
-              <Avatar
+              {/* <Avatar
                 size="md"
                 name={user?.name}
                 src={user?.avatar}
-              />
+              /> */}
+              <UpdateUser name={user?.name} src={user?.avatar} />
             </Box>
             <Button onClick={userLogout}>
               <Text textAlign="center">Sair</Text>

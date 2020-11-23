@@ -97,3 +97,7 @@ export const validedToken = () => (dispatch) => {
       clearToken();
     });
 };
+
+export const updateLogin = (id, data) => (dispatch) => api
+  .post(`/users/update/${id}`, data)
+  .then(((res) => dispatch(userFetched(res.data))));

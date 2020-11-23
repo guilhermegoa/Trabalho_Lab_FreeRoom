@@ -28,7 +28,7 @@ function CreatePost({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const COMMUNITY_RECOMMENDATION = "Recomendar Comunidades"
+  const COMMUNITY_RECOMMENDATION = 'Recomendar Comunidades';
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -78,7 +78,7 @@ function CreatePost({
         );
         fetchCommunity(community.id);
         clearFields();
-        success = true
+        success = true;
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error);
@@ -87,29 +87,27 @@ function CreatePost({
       }
     }
     setLoading(false);
-    return showMessage(success)
+    return showMessage(success);
   };
 
-  const showMessage = (success) => {
-    return success ?
-      toast({
-        title: 'Post publicado',
-        description: community.name === COMMUNITY_RECOMMENDATION ?
-          'Sua recomendação de comunidade foi publicada com sucesso' : 'Seu novo post foi publicado com sucesso',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-      }) :
-      toast({
-        title: 'Ocorreu um erro',
-        description: community.name === COMMUNITY_RECOMMENDATION ?
-          'Verifique se já não existe uma comunidade com esse nome e tente novamente' :
-          'Não foi possível salvar seu post, tente novamente mais tarde',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-      })
-  }
+  const showMessage = (success) => (success
+    ? toast({
+      title: 'Post publicado',
+      description: community.name === COMMUNITY_RECOMMENDATION
+        ? 'Sua recomendação de comunidade foi publicada com sucesso' : 'Seu novo post foi publicado com sucesso',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    })
+    : toast({
+      title: 'Ocorreu um erro',
+      description: community.name === COMMUNITY_RECOMMENDATION
+        ? 'Verifique se já não existe uma comunidade com esse nome e tente novamente'
+        : 'Não foi possível salvar seu post, tente novamente mais tarde',
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    }));
 
   const handleOnCLick = () => {
     if (isLogged) {
@@ -146,8 +144,8 @@ function CreatePost({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            {community.name === COMMUNITY_RECOMMENDATION ? "Recomendar comunidade" :
-              "Criar Post na comunidade " + community.name}
+            {community.name === COMMUNITY_RECOMMENDATION ? 'Recomendar comunidade'
+              : `Criar Post na comunidade ${community.name}`}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -193,7 +191,7 @@ function CreatePost({
               isLoading={loading}
               onClick={sendPost}
             >
-              {community.name === COMMUNITY_RECOMMENDATION ? "Recomendar" : "Publicar"}
+              {community.name === COMMUNITY_RECOMMENDATION ? 'Recomendar' : 'Publicar'}
             </Button>
           </ModalFooter>
         </ModalContent>
