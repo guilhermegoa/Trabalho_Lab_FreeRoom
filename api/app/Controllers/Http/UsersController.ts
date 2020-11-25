@@ -63,44 +63,73 @@ export default class UsersController {
       .where('id', user_id)
       .preload('posts')
       .preload('likesArray')
+      .preload('notifications')
+      .preload('postAlerts')
     return user
   }
 
+  public async update({ params, request, response }: HttpContextContract) {
+    const { id } = params
+    const data = request.only(['email', 'name', 'nick', 'bio', 'avatar'])
+
+    const user = await User.query()
+      .where({ id })
+      .preload('posts')
+      .preload('likesArray')
+      .preload('notifications')
+      .preload('postAlerts')
+      .first()
+
+    if (!user) {
+      return response.status(404)
+    }
+
+    user.email = data.email
+    user.name = data.name
+    user.nick = data.nick
+    user.biografia = data.bio
+    user.avatar = data.avatar
+
+    await user.save()
+
+    response.status(200).json(user)
+  }
+
   public async followCommunity({ request, response }: HttpContextContract) {
-    const  user_id = request.input('user_id')
+    const user_id = request.input('user_id')
     const community_id = request.input('community_id')
-    
+
     try {
-        const user = await User.find(user_id)
-        const community = await Community.find(community_id)
-      
-        if(community === null){
-          return response.status(400).json('Community id not found')
-        }
+      const user = await User.find(user_id)
+      const community = await Community.find(community_id)
 
-        await user?.related('user_community').attach([community.id])
+      if (community === null) {
+        return response.status(400).json('Community id not found')
+      }
 
-        return response.status(200)
+      await user?.related('user_community').attach([community.id])
+
+      return response.status(200)
     } catch (error) {
       response.status(500).json(error.messsage)
     }
   }
 
   public async unfollowCommunity({ request, response }: HttpContextContract) {
-    const  user_id = request.input('user_id')
+    const user_id = request.input('user_id')
     const community_id = request.input('community_id')
-    
+
     try {
-        const user = await User.find(user_id)
-        const community = await Community.find(community_id)
+      const user = await User.find(user_id)
+      const community = await Community.find(community_id)
 
-        if(community === null){
-          return response.status(400).json('Community id not found')
-        }
+      if (community === null) {
+        return response.status(400).json('Community id not found')
+      }
 
-        await user?.related('user_community').detach([community.id])
+      await user?.related('user_community').detach([community.id])
 
-        return response.status(200)
+      return response.status(200)
     } catch (error) {
       response.status(500).json(error.messsage)
     }
