@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Box, Text, Image, Avatar, Icon } from '@chakra-ui/core'
+import { Box, Text, Image, Avatar, Icon, useToast } from '@chakra-ui/core'
 import { MdModeComment, MdVolumeOff, MdVolumeUp } from 'react-icons/md'
 import { fetchPost } from '../redux/ducks/post'
 import { mutePost, activeNotifications } from '../redux/ducks/user'
@@ -17,6 +17,7 @@ function Post({
   anctiNotifications,
   isLogged
 }) {
+  const toast = useToast()
   const [shouldNotify, setIfShouldNotify] = useState(false)
   const { id: idString } = useParams()
   const id = parseInt(idString)
@@ -35,6 +36,12 @@ function Post({
   const handleNotify = () => {
     anctiNotifications({ post_id: id, user_id: user.id })
     setIfShouldNotify(true)
+    toast({
+      title: 'Você irá ser notificado assim que tiver atualizações.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true
+    })
   }
 
   useEffect(() => {

@@ -72,16 +72,25 @@ export default class UsersController {
     const { id } = params
     const data = request.only(['email', 'name', 'nick', 'bio', 'avatar'])
 
-    const user = await User.updateOrCreate(
-      { id: id },
-      {
-        email: data.email,
-        name: data.name,
-        nick: data.nick,
-        biografia: data.bio,
-        avatar: data.avatar,
-      }
-    )
+    const user = await User.query()
+      .where({ id })
+      .preload('posts')
+      .preload('likesArray')
+      .preload('notifications')
+      .preload('postAlerts')
+      .first()
+
+    if (!user) {
+      return response.status(404)
+    }
+
+    user.email = data.email
+    user.name = data.name
+    user.nick = data.nick
+    user.biografia = data.bio
+    user.avatar = data.avatar
+
+    await user.save()
 
     response.status(200).json(user)
   }
