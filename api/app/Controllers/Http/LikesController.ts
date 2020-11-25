@@ -4,8 +4,11 @@ import Post from 'App/Models/Post'
 import Like from 'App/Models/Like'
 import User from 'App/Models/User'
 import Community from 'App/Models/Community'
+import Notification from 'App/Models/Notification'
 
-import { RECOMENDATION_COMMUNITY_NAME } from "../../../database/seeders/Community"
+import socketIo from 'App/Services/Ws'
+
+import { RECOMENDATION_COMMUNITY_NAME } from '../../../database/seeders/Community'
 
 const MAX_LIKES = 200
 
@@ -33,9 +36,18 @@ export default class LikesController {
         .where({ user_id, post_id, is_like: !is_like })
         .first()
 
-      const post = await Post.find(post_id)
+      const post = await Post.query()
+        .where({ id: post_id })
+        .preload('userAlerts')
+        .preload('community')
+        .first()
       if (!post) {
         return response.status(404).json('Não existe o post')
+      }
+
+      const likeOwner = await User.find(user_id)
+      if (!likeOwner) {
+        return response.status(404).json('Não existe o usuário')
       }
 
       if (unLike) {
@@ -51,6 +63,24 @@ export default class LikesController {
 
         await post.save()
         await unLike.save()
+
+        post.userAlerts.forEach(async (com_user) => {
+          const notification = new Notification()
+          notification.user_id = com_user.id
+
+          notification.text = `${likeOwner.name}
+          ${is_like ? ' ' : ' não '}
+          curtiu o post "${post.title}" na comunidade ${post.community.name}.`
+
+          notification.post_id = post.id
+          notification.is_new = true
+
+          await notification.related('user').associate(com_user)
+          await notification.related('post').associate(post)
+
+          socketIo.emit(`new-notify-${com_user.id}`, notification)
+        })
+
         return response.status(201).json(unLike)
       }
 
@@ -76,6 +106,24 @@ export default class LikesController {
       this.verifyCommunity(post)
 
       await post.save()
+
+      post.userAlerts.forEach(async (com_user) => {
+        const notification = new Notification()
+        notification.user_id = com_user.id
+
+        notification.text = `${likeOwner.name}
+        ${is_like ? ' ' : ' não '}
+        curtiu o post "${post.title}" na comunidade ${post.community.name}.`
+
+        notification.post_id = post.id
+        notification.is_new = true
+
+        await notification.related('user').associate(com_user)
+        await notification.related('post').associate(post)
+
+        socketIo.emit(`new-notify-${com_user.id}`, notification)
+      })
+
       return response.status(201).json(like)
     } catch (e) {
       return response.status(500).json(e.message)
@@ -92,7 +140,9 @@ export default class LikesController {
     }
 
     const title = jsonPost.title
-    const communityExists = await Community.query().where({ name: title }).first()
+    const communityExists = await Community.query()
+      .where({ name: title })
+      .first()
 
     if (!communityExists) {
       const likes = jsonPost.likes
@@ -104,7 +154,8 @@ export default class LikesController {
         community.name = title
         community.description = jsonPost.content
         community.image_url = jsonPost.image_url
-        community.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        community.color =
+          '#' + Math.floor(Math.random() * 16777215).toString(16)
 
         try {
           await community.save()

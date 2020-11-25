@@ -36,16 +36,15 @@ Route.group(() => {
   Route.get('/checktoken', 'AuthController.checkToken')
   Route.get('/retriveuser', 'AuthController.retriveUserByToken')
 
-  
   Route.get('/users/:user_id', 'UsersController.show')
   Route.post('/users/update/:id', 'UsersController.update')
 
   Route.post('/followcommunity', 'UsersController.followCommunity')
   Route.post('/unfollowcommunity', 'UsersController.unfollowCommunity')
-  
+
   // Route.post('/communities', 'CommunitiesController.store')
   // Route.delete('/communities/:community_id', 'CommunitiesController.delete')
-  
+
   Route.post('/posts/:user_id/create/:community_id', 'PostsController.store')
   // Route.get('/posts', 'PostsController.index')
   // Route.delete('/posts/:post_id', 'PostsController.delete')
@@ -69,8 +68,17 @@ Route.group(() => {
   // Route.get('/comments', 'CommentsController.retriveAll')
   Route.post('/comments', 'CommentsController.create')
   Route.delete('/comments/:id', 'CommentsController.delete')
+
+  Route.get('/notifications/:user_id', 'NotificationsController.retriveByUser')
+  Route.put(
+    '/notifications/read/:user_id',
+    'NotificationsController.markAllNotificationAsRead'
+  )
+  Route.post('/notifications', 'NotificationsController.create')
+
+  Route.post('/posts/registerAlert', 'PostsController.registerAlert')
+  Route.delete(
+    '/posts/registerAlert/post/:post_id/user/:user_id',
+    'PostsController.unregisterAlert'
+  )
 }).middleware('auth:api')
-
-
-
-

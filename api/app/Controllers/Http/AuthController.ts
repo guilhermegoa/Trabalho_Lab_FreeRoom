@@ -39,10 +39,11 @@ export default class AuthController {
 
     const user = await User.query()
       .where('id', user_id)
-      .preload('user_community', (query) => query
-        .select('id'))
+      .preload('user_community', (query) => query.select('id'))
       .preload('posts')
       .preload('likesArray')
+      .preload('notifications')
+      .preload('postAlerts')
       .first()
 
     if (!user) return response.status(404).json('User not found')
@@ -54,12 +55,13 @@ export default class AuthController {
       is_like,
     }))
 
-    userJSON.user_community = userJSON
-      .user_community
-      .map(id => Object.values(id))
+    userJSON.user_community = userJSON.user_community
+      .map((id) => Object.values(id))
       .flat()
-      
+
     userJSON.user_community = [...new Set(userJSON.user_community)]
+
+    userJSON.postAlerts = userJSON.postAlerts.map((item) => item.id)
 
     return response.json(userJSON)
   }

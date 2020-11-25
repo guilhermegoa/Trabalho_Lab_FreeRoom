@@ -6,12 +6,15 @@ import {
   column,
   HasMany,
   hasMany,
+  ManyToMany,
+  manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import User from 'App/Models/User'
 import Community from 'App/Models/Community'
 import Like from './Like'
 import Comment from './Comment'
+import Notification from './Notification'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -62,8 +65,18 @@ export default class Post extends BaseModel {
   })
   public likesArray: HasMany<typeof Like>
 
+  @hasMany(() => Notification, {
+    foreignKey: 'post_id',
+  })
+  public notification: HasMany<typeof Notification>
+
   @hasMany(() => Comment, {
     foreignKey: 'post_id',
   })
   public commentsArray: HasMany<typeof Comment>
+
+  @manyToMany(() => User, {
+    pivotTable: 'post_alerts',
+  })
+  public userAlerts: ManyToMany<typeof User>
 }

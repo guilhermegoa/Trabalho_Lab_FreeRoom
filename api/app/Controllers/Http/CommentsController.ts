@@ -1,8 +1,11 @@
 // import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Comment from 'App/Models/Comment'
+import Notification from 'App/Models/Notification'
 import Post from 'App/Models/Post'
 import User from 'App/Models/User'
+
+import socketIo from 'App/Services/Ws'
 
 export default class CommentsController {
   public async retriveByPostAndUser({ params, response }) {
@@ -77,7 +80,11 @@ export default class CommentsController {
           ${text ? '' : 'missing text\n'}`
         )
 
-      const post = await Post.find(post_id)
+      const post = await Post.query()
+        .where({ id: post_id })
+        .preload('community')
+        .preload('userAlerts')
+        .first()
       if (!post) {
         return response.status(404).json('Não existe o post')
       }
@@ -96,6 +103,21 @@ export default class CommentsController {
 
       post.comments++
       await post.save()
+
+      post.userAlerts.forEach(async (com_user) => {
+        const notification = new Notification()
+        notification.user_id = com_user.id
+
+        notification.text = `${user.name} comentou "${comment.text}" no post "${post.title}" na comunidade ${post.community.name}.`
+
+        notification.post_id = post.id
+        notification.is_new = true
+
+        await notification.related('user').associate(com_user)
+        await notification.related('post').associate(post)
+
+        socketIo.emit(`new-notify-${com_user.id}`, notification)
+      })
 
       return response.status(201).json(comment)
     } catch (e) {

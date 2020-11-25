@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Button,
   Modal,
@@ -15,71 +15,71 @@ import {
   InputLeftElement,
   FormControl,
   FormErrorMessage,
-  FormLabel,
-} from '@chakra-ui/core';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { connect } from 'react-redux';
-import ImageUploader from 'react-images-upload';
-import { updateLogin } from '../../../redux/ducks/user';
-import cloudinary from '../../../services/cloudinary';
+  FormLabel
+} from '@chakra-ui/core'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { connect } from 'react-redux'
+import ImageUploader from 'react-images-upload'
+import { updateLogin } from '../../../redux/ducks/user'
+import cloudinary from '../../../services/cloudinary'
 
 function Login({ user, updateLogin }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const [picture, setPicture] = useState(null);
-  const [picture_name, setPicture_name] = useState('Nenhuma imagem escolhida');
+  const [picture, setPicture] = useState(null)
+  const [picture_name, setPicture_name] = useState('Nenhuma imagem escolhida')
 
-  const onDrop = (picture) => {
-    setPicture(picture);
-    setPicture_name(picture[0].name);
-  };
+  const onDrop = picture => {
+    setPicture(picture)
+    setPicture_name(picture[0].name)
+  }
 
   const formik = useFormik({
     initialValues: {
       email: user?.email,
       name: user?.name,
       nick: user?.nick,
-      bio: user?.biografia,
+      bio: user?.biografia
     },
     validationSchema: Yup.object({
       email: Yup.string()
         .email('Email invalido')
         .required('Necessario preencher este campo.'),
-      name: Yup.string().required('Necessario preencher este campo.'),
+      name: Yup.string().required('Necessario preencher este campo.')
     }),
-    onSubmit: async (values) => {
-      setIsLoading(true);
+    onSubmit: async values => {
+      setIsLoading(true)
       try {
-        let url = null;
+        let url = null
 
         if (picture) {
-          const dataFile = new FormData();
-          dataFile.append('file', picture[0]);
-          dataFile.append('upload_preset', 'freeroom');
+          const dataFile = new FormData()
+          dataFile.append('file', picture[0])
+          dataFile.append('upload_preset', 'freeroom')
 
-          const file = await cloudinary.post('/image/upload', dataFile);
+          const file = await cloudinary.post('/image/upload', dataFile)
 
-          url = file.data.url;
+          url = file.data.url
         }
 
-        await updateLogin(user?.id, { ...values, avatar: url });
-        onClose();
-        window.location.reload();
+        await updateLogin(user?.id, { ...values, avatar: url })
+        onClose()
+        window.location.reload()
       } catch (error) {
         // eslint-disable-next-line no-console
-        console.log(error);
+        console.log(error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    },
-  });
+    }
+  })
 
   return (
     <>
-
       <Avatar
+        cursor="pointer"
         size="md"
         name={user?.name}
         src={user?.avatar}
@@ -135,9 +135,7 @@ function Login({ user, updateLogin }) {
                 </InputGroup>
                 <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
               </FormControl>
-              <FormControl
-                minHeight="70px"
-              >
+              <FormControl minHeight="70px">
                 <InputGroup size="md">
                   <InputLeftElement>
                     <Icon name="at-sign" color="blue.500" />
@@ -154,9 +152,7 @@ function Login({ user, updateLogin }) {
                   />
                 </InputGroup>
               </FormControl>
-              <FormControl
-                minHeight="70px"
-              >
+              <FormControl minHeight="70px">
                 <InputGroup size="md">
                   <InputLeftElement>
                     <Icon name="at-sign" color="blue.500" />
@@ -191,7 +187,7 @@ function Login({ user, updateLogin }) {
                 type="submit"
                 marginBottom="16px"
                 variantColor="blue"
-                minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+                minWidth={['xs', 'sm', 'md', 'lg']}
                 isLoading={isLoading}
                 loadingText="Submitting"
               >
@@ -202,15 +198,15 @@ function Login({ user, updateLogin }) {
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 }
 
 const mapStateToProps = ({ user }) => ({
-  user: user.user,
-});
+  user: user.user
+})
 
 const mapDispatchToProps = {
-  updateLogin,
-};
+  updateLogin
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

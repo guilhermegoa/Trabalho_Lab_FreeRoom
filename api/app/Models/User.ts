@@ -11,7 +11,8 @@ import {
 import Hash from '@ioc:Adonis/Core/Hash'
 import Post from 'App/Models/Post'
 import Like from './Like'
-import Community from "./Community";
+import Community from './Community'
+import Notifications from './Notification'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true, columnName: 'id' })
@@ -58,9 +59,18 @@ export default class User extends BaseModel {
   })
   public likesArray: HasMany<typeof Like>
 
+  @hasMany(() => Notifications, {
+    foreignKey: 'user_id',
+  })
+  public notifications: HasMany<typeof Notifications>
+
   @manyToMany(() => Community, {
     pivotTable: 'pivot_user_communities',
   })
   public user_community: ManyToMany<typeof Community>
 
+  @manyToMany(() => Post, {
+    pivotTable: 'post_alerts',
+  })
+  public postAlerts: ManyToMany<typeof Post>
 }
