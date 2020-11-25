@@ -1,23 +1,51 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { Box, Text, Image, Avatar } from '@chakra-ui/core'
-import { MdModeComment } from 'react-icons/md'
+import { Box, Text, Image, Avatar, Icon } from '@chakra-ui/core'
+import { MdModeComment, MdVolumeOff, MdVolumeUp } from 'react-icons/md'
 import { fetchPost } from '../redux/ducks/post'
+import { mutePost, activeNotifications } from '../redux/ducks/user'
 import Loading from '../components/Loading'
 import LikeUnLike from '../components/Post/LikeUnLike'
 import Comment from '../components/Post/Comment'
 
-function Post({ fetchPost, post }) {
+function Post({
+  user,
+  fetchPost,
+  post,
+  mutePost,
+  anctiNotifications,
+  isLogged
+}) {
+  const [shouldNotify, setIfShouldNotify] = useState(false)
+  const { id: idString } = useParams()
+  const id = parseInt(idString)
 
-  const { id } = useParams()
+  const isRegister = () => {
+    return !!user.postAlerts.find(item => {
+      return id === item
+    })
+  }
+
+  const handleMute = () => {
+    mutePost({ post_id: id, user_id: user.id })
+    setIfShouldNotify(false)
+  }
+
+  const handleNotify = () => {
+    anctiNotifications({ post_id: id, user_id: user.id })
+    setIfShouldNotify(true)
+  }
 
   useEffect(() => {
-    if (post?.id !== id) {
+    if (!post || post[0].id !== id) {
       fetchPost(id)
     }
+    if (user) {
+      setIfShouldNotify(isRegister())
+    }
     // eslint-disable-next-line
-  }, [post?.id, fetchPost])
+  }, [post, fetchPost, user])
 
   return post ? (
     <>
@@ -30,18 +58,41 @@ function Post({ fetchPost, post }) {
         padding="8px"
       >
         <Box display="flex" justifyContent="space-between">
-          <Box display="flex">
-            <Box size="56px">
+          <Box width="100%" display="flex">
+            <Box>
               <Avatar
                 size="lg"
                 name={post[0].user.name}
                 src={post[0].user.avatar}
               />
             </Box>
-            <Box marginLeft="16px">
+            <Box
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
+              marginLeft="16px"
+            >
               <Text>{post[0].user.name}</Text>
               <Text>{new Date(post[0].updated_at).toLocaleString()}</Text>
             </Box>
+            {isLogged ? (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
+                paddingRight="24px"
+                flex="auto"
+              >
+                <Icon
+                  name="bell"
+                  color={shouldNotify ? 'red.500' : 'blue.900'}
+                  cursor="pointer"
+                  size="1.5em"
+                  as={shouldNotify ? MdVolumeUp : MdVolumeOff}
+                  onClick={shouldNotify ? handleMute : handleNotify}
+                />
+              </Box>
+            ) : null}
           </Box>
         </Box>
         <Box padding="32px" display="flex" flexDirection="column">
@@ -70,7 +121,7 @@ function Post({ fetchPost, post }) {
               ml="10px"
               size="32px"
               as={MdModeComment}
-              color="purple.800"
+              color="blue.800"
             />
             {post[0].comments} Comentarios
           </Box>
@@ -84,13 +135,17 @@ function Post({ fetchPost, post }) {
   )
 }
 
-const mapStateToProps = ({ community, post }) => ({
+const mapStateToProps = ({ community, post, user }) => ({
   community: community.community,
-  post
+  post,
+  user: user.user,
+  isLogged: user.isLogged
 })
 
 const mapDispatchToProps = {
-  fetchPost
+  fetchPost,
+  mutePost,
+  anctiNotifications: activeNotifications
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post)

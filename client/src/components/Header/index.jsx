@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { connect } from 'react-redux'
 import {
   Box,
   Text,
@@ -9,20 +9,48 @@ import {
   Input,
   Icon,
   Button,
-} from '@chakra-ui/core';
-import Register from './Modais/Register';
-import Login from './Modais/Login';
-import UpdateUser from './Modais/updateUser';
-import { userLogout } from '../../redux/ducks/user';
+  useDisclosure
+} from '@chakra-ui/core'
+import Register from './Modais/Register'
+import Login from './Modais/Login'
+import UpdateUser from './Modais/updateUser'
+import {
+  userLogout,
+  retriveUser,
+  markAllNotificationAsRead
+} from '../../redux/ducks/user'
+import socket from '../../services/socket'
+import Notifications from './Modais/Notifications'
 
-function Header({ isLogged, userLogout, user }) {
-  const history = useHistory();
+function Header({
+  isLogged,
+  userLogout,
+  user,
+  retriveUser,
+  markAllNotificationAsRead
+}) {
+  const history = useHistory()
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('')
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [notifications, setNotifications] = useState(
+    user ? user.notifications : []
+  )
 
   const searchPost = () => {
-    history.push(`/posts/${search}`);
-  };
+    history.push(`/posts/${search}`)
+  }
+
+  useEffect(() => {
+    if (user) {
+      debugger
+      socket.on(`new-notify-${user.id}`, data => {
+        retriveUser()
+      })
+    }
+    setNotifications(user ? user.notifications : [])
+  }, [user, retriveUser])
 
   return (
     <>
@@ -51,9 +79,21 @@ function Header({ isLogged, userLogout, user }) {
           <form onSubmit={searchPost}>
             <InputGroup size="md">
               <InputLeftElement>
-                <Icon name="search" color="blue.500" cursor="pointer" onClick={searchPost} />
+                <Icon
+                  name="search"
+                  color="blue.500"
+                  cursor="pointer"
+                  onClick={searchPost}
+                />
               </InputLeftElement>
-              <Input onChange={(e) => { setSearch(e.target.value); }} minWidth={['xs', 'sm', 'md', 'lg', 'xl']} type="text" placeholder="Pesquisar post" />
+              <Input
+                onChange={e => {
+                  setSearch(e.target.value)
+                }}
+                minWidth={['xs', 'sm', 'md', 'lg', 'xl']}
+                type="text"
+                placeholder="Pesquisar post"
+              />
             </InputGroup>
           </form>
         </Box>
@@ -67,35 +107,60 @@ function Header({ isLogged, userLogout, user }) {
               /> */}
               <UpdateUser name={user?.name} src={user?.avatar} />
             </Box>
+
+            <Icon
+              name="bell"
+              color={
+                notifications.filter(notification => {
+                  return notification.is_new
+                }).length > 0
+                  ? 'red.500'
+                  : 'gray.100'
+              }
+              cursor="pointer"
+              onClick={() => {
+                onOpen()
+              }}
+              size="1.5em"
+            />
+
+            <Notifications
+              notifications={notifications}
+              isOpen={isOpen}
+              onClose={() => {
+                onClose()
+                markAllNotificationAsRead(user.id)
+              }}
+            />
+
             <Button onClick={userLogout}>
               <Text textAlign="center">Sair</Text>
             </Button>
           </>
-        )
-          : (
-            <>
-              <Box>
-                <Login />
-              </Box>
-              <Box>
-                <Register />
-              </Box>
-            </>
-          )}
-
+        ) : (
+          <>
+            <Box>
+              <Login />
+            </Box>
+            <Box>
+              <Register />
+            </Box>
+          </>
+        )}
       </Box>
     </>
-  );
+  )
 }
 
 const mapStateToProps = ({ user }) => ({
   user: user.user,
-  isLogged: user.isLogged,
-
-});
+  isLogged: user.isLogged
+})
 
 const mapDispatchToProps = {
   userLogout,
-};
+  retriveUser,
+  markAllNotificationAsRead
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
