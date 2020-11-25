@@ -14,7 +14,6 @@ import {
 
 function Notifications({ notifications, isOpen, onClose }) {
   const firstField = React.useRef()
-  debugger
   return (
     <Drawer
       isOpen={isOpen}

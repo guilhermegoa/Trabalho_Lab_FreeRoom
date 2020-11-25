@@ -44,7 +44,7 @@ function Header({
 
   useEffect(() => {
     if (user) {
-      debugger
+      
       socket.on(`new-notify-${user.id}`, data => {
         retriveUser()
       })
